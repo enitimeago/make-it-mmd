@@ -1,11 +1,31 @@
-using System;
+using nadena.dev.ndmf;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using VRC.SDK3.Avatars.Components;
 
-namespace eni.NonDestructiveMMD
+[assembly: ExportsPlugin(typeof(enitimeago.NonDestructiveMMD.NonDestructiveMMDPlugin))]
+
+namespace enitimeago.NonDestructiveMMD
 {
+    public class NonDestructiveMMDPlugin : Plugin<NonDestructiveMMDPlugin>
+    {
+        public override string QualifiedName => "enitimeago.non-destructive-mmd";
+        public override string DisplayName => "Non-Destructive MMD";
+
+        protected override void Configure()
+        {
+            InPhase(BuildPhase.Transforming).Run("Create MMD mesh", ctx =>
+            {
+                var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
+                var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
+                Debug.Log("Still alive");
+                Debug.Log(faceSkinnedMeshRenderer);
+            });
+        }
+    }
+
     [System.Serializable]
     public class MMDToAvatarBlendShape
     {
@@ -23,6 +43,7 @@ namespace eni.NonDestructiveMMD
     [DisallowMultipleComponent]
     public class NonDestructiveMMD : MonoBehaviour
     {
+        public int dataVersion; // TODO: implement this
         public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
 
         public void RemoveBlendShapeMapping(string mmdKey)
@@ -100,6 +121,12 @@ namespace eni.NonDestructiveMMD
             _hasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.0f, 0.5f, 1f, 1f));
             _selectedHasValueStyle = new GUIStyle(GUI.skin.button);
             _selectedHasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.75f, 1f, 1f));
+
+            if (_dataSource == null)
+            {
+                GUILayout.Label("No data. Maybe you are in play mode?");
+                return;
+            }
 
             if (_dataSource.gameObject != null)
             {
