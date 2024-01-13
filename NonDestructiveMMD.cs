@@ -22,14 +22,35 @@ namespace enitimeago.NonDestructiveMMD
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
 
                 var mesh = faceSkinnedMeshRenderer.sharedMesh;
+                var deltaVertices = new Vector3[mesh.vertexCount];
+                var deltaNormals = new Vector3[mesh.vertexCount];
+                var deltaTangents = new Vector3[mesh.vertexCount];
+
                 // TODO: i accidentally modified mesh directly and it seemed to not persist BUT NOT SURE IF THIS IS INTENTIONAL WITH NDMF
                 // so if NDMF is intended to allow destructive changes and encapsulate those, then don't bother copying.
                 var meshCopy = Object.Instantiate(mesh);
-                meshCopy.AddBlendShapeFrame("------Non-Destructive MMD------", 0, new Vector3[mesh.vertexCount], new Vector3[mesh.vertexCount], new Vector3[mesh.vertexCount]);
+
+                // Make divider dummy shape key.
+                meshCopy.AddBlendShapeFrame("------Non-Destructive MMD------", 0, deltaVertices, deltaNormals, deltaTangents);
                 faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
+                // Make shape key copies.
+                var mmdComponent = ctx.AvatarRootObject.GetComponent<NonDestructiveMMD>();
+                foreach (var mapping in mmdComponent.blendShapeMappings)
+                {
+                    int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKey);
+                    Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKey + " (found " + mapping.avatarKey + " as index " + blendShapeIndex + ")");
+                    int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
+                    for (int f = 0; f < frameCount; f++)
+                    {
+                        float weight = mesh.GetBlendShapeFrameWeight(blendShapeIndex, f);
+                        mesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
+                        meshCopy.AddBlendShapeFrame(mapping.mmdKey, weight, deltaVertices, deltaNormals, deltaTangents);
+                    }
+                }
+
                 Debug.Log("Still alive");
-                Debug.Log(faceSkinnedMeshRenderer);
+                Debug.Log(mmdComponent);
             });
         }
     }
@@ -138,7 +159,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_dataSource.gameObject != null)
             {
-                var smr = _dataSource.gameObject.GetComponent<SkinnedMeshRenderer>();
+                var smr = _dataSource.gameObject.GetComponent<VRCAvatarDescriptor>().VisemeSkinnedMesh;
                 if (smr)
                 {
                     faceBlendShapes = new string[smr.sharedMesh.blendShapeCount];
