@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -23,6 +24,17 @@ namespace eni.NonDestructiveMMD
     public class NonDestructiveMMD : MonoBehaviour
     {
         public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
+
+        public void RemoveBlendShapeMapping(string mmdKey)
+        {
+            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
+        }
+
+        public void SetBlendShapeMapping(string mmdKey, string avatarKey)
+        {
+            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
+            blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, avatarKey));
+        }
     }
 
     [CustomEditor(typeof(NonDestructiveMMD))]
@@ -44,9 +56,13 @@ namespace eni.NonDestructiveMMD
     public class NonDestructiveMMDWindow : EditorWindow
     {
         private NonDestructiveMMD _dataSource = null;
+        // Local copy of mappings using int => string to avoid recalculating mappings List<MMDToAvatarBlendShape>.
+        // This should only be initialized when the window is created.
+        // TODO: Support refreshing mappings if they are changed in the inspector.
+        // TODO: Consider whether to only mutate the data source and have this be an immutable representation (i.e. a ViewModel-like representation) of the underlying data.
+        private Dictionary<int, string> _knownBlendShapeMappings = new Dictionary<int, string>();
 
-        private int _currentMmdKey = -1;
-        private Dictionary<int, string> _blendShapeForMmdKey = new Dictionary<int, string>(); // TODO: save back
+        private int _currentMmdKeyIndex = -1;
         private Vector2 leftPaneScroll;
         private Vector2 rightPaneScroll;
         private string[] faceBlendShapes;
@@ -60,6 +76,19 @@ namespace eni.NonDestructiveMMD
         {
             NonDestructiveMMDWindow window = GetWindow<NonDestructiveMMDWindow>("Non-Destructive MMD");
             window._dataSource = data;
+            foreach (var mapping in data.blendShapeMappings)
+            {
+                // Every 3rd item is Japanese, for now only care about Japanese MMD keys.
+                int index = MmdBlendShapeNames
+                    .Select((name, i) => name == mapping.mmdKey ? i : -1)
+                    .Where(i => i >= 0 && (i + 1) % 3 == 0)
+                    .DefaultIfEmpty(-1)
+                    .First();
+                if (index >= 0)
+                {
+                    window._knownBlendShapeMappings.Add(index, mapping.avatarKey);
+                }
+            }
         }
 
         private void OnGUI()
@@ -105,15 +134,15 @@ namespace eni.NonDestructiveMMD
 
             for (int i = 2; i < MmdBlendShapeNames.Length; i += 3)
             {
-                var buttonStyle = _blendShapeForMmdKey.ContainsKey(i) ? _hasValueStyle : _defaultStyle;
-                if (i == _currentMmdKey)
+                var buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _hasValueStyle : _defaultStyle;
+                if (i == _currentMmdKeyIndex)
                 {
-                    buttonStyle = _blendShapeForMmdKey.ContainsKey(i) ? _selectedHasValueStyle : _selectedStyle;
+                    buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _selectedHasValueStyle : _selectedStyle;
                 }
 
                 if (GUILayout.Button(MmdBlendShapeNames[i], buttonStyle))
                 {
-                    _currentMmdKey = i;
+                    _currentMmdKeyIndex = i;
                 }
             }
 
@@ -128,17 +157,18 @@ namespace eni.NonDestructiveMMD
 
             rightPaneScroll = GUILayout.BeginScrollView(rightPaneScroll);
 
-            if (_currentMmdKey >= 0 && faceBlendShapes != null)
+            if (_currentMmdKeyIndex >= 0 && faceBlendShapes != null)
             {
-                GUILayout.Label("Select blendshape for " + MmdBlendShapeNames[_currentMmdKey]);
+                GUILayout.Label("Select blendshape for " + MmdBlendShapeNames[_currentMmdKeyIndex]);
 
                 string selectedBlendShape;
-                _blendShapeForMmdKey.TryGetValue(_currentMmdKey, out selectedBlendShape);
+                _knownBlendShapeMappings.TryGetValue(_currentMmdKeyIndex, out selectedBlendShape);
 
                 if (GUILayout.Button("None", string.IsNullOrEmpty(selectedBlendShape) ? _selectedStyle : _defaultStyle))
                 {
                     Debug.Log("Unselected blendshape");
-                    _blendShapeForMmdKey.Remove(_currentMmdKey);
+                    _knownBlendShapeMappings.Remove(_currentMmdKeyIndex);
+                    _dataSource.RemoveBlendShapeMapping(MmdBlendShapeNames[_currentMmdKeyIndex]);
                 }
 
                 foreach (var blendShapeName in faceBlendShapes)
@@ -146,7 +176,8 @@ namespace eni.NonDestructiveMMD
                     if (GUILayout.Button(blendShapeName, blendShapeName == selectedBlendShape ? _hasValueStyle : _defaultStyle))
                     {
                         Debug.Log("Selected blendshape: " + blendShapeName);
-                        _blendShapeForMmdKey[_currentMmdKey] = blendShapeName;
+                        _knownBlendShapeMappings[_currentMmdKeyIndex] = blendShapeName;
+                        _dataSource.SetBlendShapeMapping(MmdBlendShapeNames[_currentMmdKeyIndex], blendShapeName);
                     }
                 }
             }
