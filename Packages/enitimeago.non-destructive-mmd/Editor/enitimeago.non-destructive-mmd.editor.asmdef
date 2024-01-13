@@ -1,6 +1,10 @@
 {
-    "name": "VRChatPackageTemplate.Editor",
-    "references": [],
+    "name": "enitimeago.non-destructive-mmd.editor",
+    "references": [
+        "enitimeago.non-destructive-mmd.runtime",
+        "nadena.dev.ndmf",
+        "VRC.SDKBase"
+    ],
     "includePlatforms": [
         "Editor"
     ],

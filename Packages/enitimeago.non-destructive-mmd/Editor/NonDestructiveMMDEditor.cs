@@ -68,25 +68,6 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
-    [AddComponentMenu("Scripts/Non-Destructive MMD")]
-    [DisallowMultipleComponent]
-    public class NonDestructiveMMD : MonoBehaviour, VRC.SDKBase.IEditorOnly
-    {
-        public int dataVersion; // TODO: implement this
-        public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
-
-        public void RemoveBlendShapeMapping(string mmdKey)
-        {
-            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
-        }
-
-        public void SetBlendShapeMapping(string mmdKey, string avatarKey)
-        {
-            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
-            blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, avatarKey));
-        }
-    }
-
     [CustomEditor(typeof(NonDestructiveMMD))]
     public class NonDestructiveMMDEditor : Editor
     {
