@@ -1,7 +1,9 @@
 using nadena.dev.ndmf;
+using nadena.dev.ndmf.fluent;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
@@ -16,7 +18,12 @@ namespace enitimeago.NonDestructiveMMD
 
         protected override void Configure()
         {
-            InPhase(BuildPhase.Transforming).Run("Create MMD mesh", ctx =>
+            Sequence seq = InPhase(BuildPhase.Transforming);
+            // rely on Modular Avatar cloning all animator controllers to make it safe for us to make destructive edits.
+            // it seems like we are already safe, but maybe it was because Modular Avatar happened to run before and we weren't unlucky during testing.
+            // TODO: this is really not a great idea, but Modular Avatar's clone utils are also not public and aren't trivial. figure something out.
+            seq.AfterPlugin("nadena.dev.modular-avatar")
+            .Run("Create MMD mesh", ctx =>
             {
                 var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
@@ -46,6 +53,32 @@ namespace enitimeago.NonDestructiveMMD
                         float weight = mesh.GetBlendShapeFrameWeight(blendShapeIndex, f);
                         mesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
                         meshCopy.AddBlendShapeFrame(mapping.mmdKey, weight, deltaVertices, deltaNormals, deltaTangents);
+                    }
+                }
+
+                // Find the FX controller from the avatar.
+                // TODO: avoid potential NPE.
+                AnimatorController animatorController = null;
+                foreach (var layer in descriptor.baseAnimationLayers)
+                {
+                    if (layer.type == VRCAvatarDescriptor.AnimLayerType.FX && layer.animatorController != null)
+                    {
+                        animatorController = layer.animatorController as AnimatorController;
+                        break;
+                    }
+                }
+
+                // State machine of every FX layer needs to have Write Default ON.
+                // TODO: avoid potential NPE.
+                // TODO: this is probably going to cause unintended consequences for more advanced users. figure out how to mitigate?
+                if (animatorController != null)
+                {
+                    foreach (var layer in animatorController.layers)
+                    {
+                        foreach (var state in layer.stateMachine.states)
+                        {
+                            state.state.writeDefaultValues = true;
+                        }
                     }
                 }
 
