@@ -28,9 +28,9 @@ using UnityEngine;
 
 namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
 {
-    internal class BlendshapeViewerEditorWindow : EditorWindow
+    internal abstract class BlendshapeViewerEditorWindowBase : EditorWindow
     {
-        private const int MinWidth = 150;
+        protected const int MinWidth = 150;
         public SkinnedMeshRenderer skinnedMesh;
         public bool showDifferences = true;
         public bool autoUpdateOnFocus = true;
@@ -39,29 +39,29 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
         public bool useComputeShader = true;
         public Texture2D[] tex2ds = new Texture2D[0];
 
-        private string _search;
+        protected string _search;
         
-        private Vector2 _scrollPos;
-        private SkinnedMeshRenderer _generatedFor;
-        private int _generatedSize;
+        protected Vector2 _scrollPos;
+        protected SkinnedMeshRenderer _generatedFor;
+        protected int _generatedSize;
 
-        private Vector3 _generatedTransformPosition;
-        private Quaternion _generatedTransformRotation;
-        private float _generatedFieldOfView;
-        private bool _generatedOrthographic;
-        private float _generatedNearClipPlane;
-        private float _generatedFarClipPlane;
-        private float _generatedOrthographicSize;
-        private Rect m_area;
+        protected Vector3 _generatedTransformPosition;
+        protected Quaternion _generatedTransformRotation;
+        protected float _generatedFieldOfView;
+        protected bool _generatedOrthographic;
+        protected float _generatedNearClipPlane;
+        protected float _generatedFarClipPlane;
+        protected float _generatedOrthographicSize;
+        protected Rect m_area;
         
-        private const string SearchLabel = "Search";
+        protected const string SearchLabel = "Search";
 
-        public BlendshapeViewerEditorWindow()
+        public BlendshapeViewerEditorWindowBase()
         {
             titleContent = new GUIContent("BlendshapeViewer");
         }
 
-        private void OnFocus()
+        protected void OnFocus()
         {
             if (!autoUpdateOnFocus) return;
             if (skinnedMesh == null) return;
@@ -70,7 +70,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             TryExecuteUpdate();
         }
 
-        private void OnGUI()
+        protected void OnGUI()
         {
             var serializedObject = new SerializedObject(this);
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(skinnedMesh)));
@@ -170,7 +170,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             }
         }
 
-        private void TryExecuteUpdate()
+        protected void TryExecuteUpdate()
         {
             if (AnimationMode.InAnimationMode()) return;
 
@@ -178,7 +178,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             SaveGenerationParams();
         }
 
-        private void SaveGenerationParams()
+        protected void SaveGenerationParams()
         {
             _generatedFor = skinnedMesh;
             _generatedSize = thumbnailSize;
@@ -194,7 +194,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             _generatedOrthographicSize = sceneCamera.orthographicSize;
         }
 
-        private bool HasGenerationParamsChanged()
+        protected bool HasGenerationParamsChanged()
         {
             var sceneCamera = SceneView.lastActiveSceneView.camera;
             if (_generatedTransformPosition != sceneCamera.transform.position) return true;
@@ -208,12 +208,12 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             return false;
         }
 
-        private void UsingSkinnedMesh(SkinnedMeshRenderer inSkinnedMesh)
+        protected void UsingSkinnedMesh(SkinnedMeshRenderer inSkinnedMesh)
         {
             skinnedMesh = inSkinnedMesh;
         }
 
-        private void Generate()
+        protected void Generate()
         {
             var module = new BlendshapeViewerGenerator();
             try
@@ -295,7 +295,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             }
         }
 
-        private static void Colored(bool isActive, Color bgColor, Action inside)
+        protected static void Colored(bool isActive, Color bgColor, Action inside)
         {
             var col = GUI.contentColor;
             try
@@ -309,7 +309,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             }
         }
 
-        private static AnimationClip EmptyClip()
+        protected static AnimationClip EmptyClip()
         {
             var emptyClip = new AnimationClip();
             AnimationUtility.SetEditorCurve(
@@ -325,37 +325,26 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             return emptyClip;
         }
 
-        private Texture2D NewTexture()
+        protected Texture2D NewTexture()
         {
             var newTexture = new Texture2D(Mathf.Max(thumbnailSize, MinWidth), thumbnailSize, TextureFormat.RGB24, false);
             newTexture.wrapMode = TextureWrapMode.Clamp;
             return newTexture;
         }
         
-        private bool IsMatch(string thatName)
+        protected bool IsMatch(string thatName)
         {
             var propertyName = thatName.ToLowerInvariant();
             return _search.ToLowerInvariant().Split(' ').All(needle => propertyName.Contains(needle));
         }
 
-        [MenuItem("Window/Haï/BlendshapeViewer")]
-        public static void ShowWindow()
-        {
-            Obtain().Show();
-        }
+        
 
-        [MenuItem("CONTEXT/SkinnedMeshRenderer/Haï BlendshapeViewer")]
-        public static void OpenEditor(MenuCommand command)
-        {
-            var window = Obtain();
-            window.UsingSkinnedMesh((SkinnedMeshRenderer) command.context);
-            window.Show();
-            window.TryExecuteUpdate();
-        }
+        
 
-        private static BlendshapeViewerEditorWindow Obtain()
+        protected static BlendshapeViewerEditorWindowBase Obtain()
         {
-            var editor = GetWindow<BlendshapeViewerEditorWindow>(false, null, false);
+            var editor = GetWindow<BlendshapeViewerEditorWindowBase>(false, null, false);
             editor.titleContent = new GUIContent("BlendshapeViewer");
             return editor;
         }
