@@ -20,6 +20,14 @@ namespace enitimeago.NonDestructiveMMD
             {
                 var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
+
+                var mesh = faceSkinnedMeshRenderer.sharedMesh;
+                // TODO: i accidentally modified mesh directly and it seemed to not persist BUT NOT SURE IF THIS IS INTENTIONAL WITH NDMF
+                // so if NDMF is intended to allow destructive changes and encapsulate those, then don't bother copying.
+                var meshCopy = Object.Instantiate(mesh);
+                meshCopy.AddBlendShapeFrame("------Non-Destructive MMD------", 0, new Vector3[mesh.vertexCount], new Vector3[mesh.vertexCount], new Vector3[mesh.vertexCount]);
+                faceSkinnedMeshRenderer.sharedMesh = meshCopy;
+
                 Debug.Log("Still alive");
                 Debug.Log(faceSkinnedMeshRenderer);
             });
