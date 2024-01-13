@@ -70,7 +70,7 @@ namespace enitimeago.NonDestructiveMMD
 
     [AddComponentMenu("Scripts/Non-Destructive MMD")]
     [DisallowMultipleComponent]
-    public class NonDestructiveMMD : MonoBehaviour
+    public class NonDestructiveMMD : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {
         public int dataVersion; // TODO: implement this
         public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
