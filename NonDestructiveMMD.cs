@@ -5,28 +5,62 @@ using UnityEngine;
 
 namespace eni.NonDestructiveMMD
 {
-    public class NonDestructiveMMDMenuItem
+    [System.Serializable]
+    public class MMDToAvatarBlendShape
     {
-        [MenuItem("GameObject/Non-Destructive MMD", false, 20)]
-        private static void ShowNonDestructiveMMD()
+        public string mmdKey;
+        public string avatarKey;
+
+        public MMDToAvatarBlendShape(string mmdKey, string avatarKey)
         {
-            EditorWindow.GetWindow(typeof(NonDestructiveMMDWindow), false, "Non-Destructive MMD");
+            this.mmdKey = mmdKey;
+            this.avatarKey = avatarKey;
+        }
+    }
+
+    [AddComponentMenu("Scripts/Non-Destructive MMD")]
+    [DisallowMultipleComponent]
+    public class NonDestructiveMMD : MonoBehaviour
+    {
+        public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
+    }
+
+    [CustomEditor(typeof(NonDestructiveMMD))]
+    public class NonDestructiveMMDEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            NonDestructiveMMD data = (NonDestructiveMMD)target;
+
+            if (GUILayout.Button("Open Editor"))
+            {
+                NonDestructiveMMDWindow.ShowWindow(data);
+            }
         }
     }
 
     public class NonDestructiveMMDWindow : EditorWindow
     {
+        private NonDestructiveMMD _dataSource = null;
+
         private int _currentMmdKey = -1;
-        private Dictionary<int, string> _blendShapeForMmdKey = new Dictionary<int, string>();
+        private Dictionary<int, string> _blendShapeForMmdKey = new Dictionary<int, string>(); // TODO: save back
         private Vector2 leftPaneScroll;
         private Vector2 rightPaneScroll;
-        private GameObject _faceObject;
-        private string[] blendShapeNames;
+        private string[] faceBlendShapes;
 
         private GUIStyle _defaultStyle;
         private GUIStyle _selectedStyle;
         private GUIStyle _hasValueStyle;
         private GUIStyle _selectedHasValueStyle;
+
+        public static void ShowWindow(NonDestructiveMMD data)
+        {
+            NonDestructiveMMDWindow window = GetWindow<NonDestructiveMMDWindow>("Non-Destructive MMD");
+            window._dataSource = data;
+        }
 
         private void OnGUI()
         {
@@ -38,24 +72,20 @@ namespace eni.NonDestructiveMMD
             _selectedHasValueStyle = new GUIStyle(GUI.skin.button);
             _selectedHasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.75f, 1f, 1f));
 
-            // GameObject selector
-            _faceObject = (GameObject)EditorGUILayout.ObjectField("Select face", _faceObject, typeof(GameObject), true);
-
-            // Update blend shapes when a new GameObject is selected
-            if (GUI.changed && _faceObject != null)
+            if (_dataSource.gameObject != null)
             {
-                SkinnedMeshRenderer smr = _faceObject.GetComponent<SkinnedMeshRenderer>();
+                var smr = _dataSource.gameObject.GetComponent<SkinnedMeshRenderer>();
                 if (smr)
                 {
-                    blendShapeNames = new string[smr.sharedMesh.blendShapeCount];
+                    faceBlendShapes = new string[smr.sharedMesh.blendShapeCount];
                     for (int i = 0; i < smr.sharedMesh.blendShapeCount; i++)
                     {
-                        blendShapeNames[i] = smr.sharedMesh.GetBlendShapeName(i);
+                        faceBlendShapes[i] = smr.sharedMesh.GetBlendShapeName(i);
                     }
                 }
                 else
                 {
-                    blendShapeNames = null;
+                    faceBlendShapes = null;
                 }
             }
 
@@ -98,7 +128,7 @@ namespace eni.NonDestructiveMMD
 
             rightPaneScroll = GUILayout.BeginScrollView(rightPaneScroll);
 
-            if (_currentMmdKey >= 0 && blendShapeNames != null)
+            if (_currentMmdKey >= 0 && faceBlendShapes != null)
             {
                 GUILayout.Label("Select blendshape for " + MmdBlendShapeNames[_currentMmdKey]);
 
@@ -111,7 +141,7 @@ namespace eni.NonDestructiveMMD
                     _blendShapeForMmdKey.Remove(_currentMmdKey);
                 }
 
-                foreach (var blendShapeName in blendShapeNames)
+                foreach (var blendShapeName in faceBlendShapes)
                 {
                     if (GUILayout.Button(blendShapeName, blendShapeName == selectedBlendShape ? _hasValueStyle : _defaultStyle))
                     {
@@ -122,14 +152,14 @@ namespace eni.NonDestructiveMMD
             }
             else
             {
-                GUILayout.Label("Select a MMD shapekey and a GameObject with SkinnedMeshRenderer");
+                GUILayout.Label("Select a MMD shapekey");
             }
 
             GUILayout.EndScrollView();
 
             GUILayout.EndVertical();
         }
-
+        
         private Texture2D MakeBackgroundTexture(int width, int height, Color col)
         {
             Color[] pix = new Color[width * height];
