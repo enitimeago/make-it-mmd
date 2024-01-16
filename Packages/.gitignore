@@ -1,3 +1,4 @@
 /*/
 !com.vrchat.core.*
+com.vrchat.core.vpm-resolver
 !enitimeago.non-destructive-mmd
