@@ -19,9 +19,9 @@ namespace enitimeago.NonDestructiveMMD
         private Dictionary<int, string> _knownBlendShapeMappings = new Dictionary<int, string>();
 
         private int _currentMmdKeyIndex = -1;
-        private Vector2 leftPaneScroll;
-        private Vector2 rightPaneScroll;
-        private string[] faceBlendShapes;
+        private Vector2 _leftPaneScroll;
+        private Vector2 _rightPaneScroll;
+        private string[] _faceBlendShapes;
 
         private GUIStyle _defaultStyle;
         private GUIStyle _selectedStyle;
@@ -68,15 +68,15 @@ namespace enitimeago.NonDestructiveMMD
                 var smr = _dataSource.gameObject.GetComponent<VRCAvatarDescriptor>().VisemeSkinnedMesh;
                 if (smr)
                 {
-                    faceBlendShapes = new string[smr.sharedMesh.blendShapeCount];
+                    _faceBlendShapes = new string[smr.sharedMesh.blendShapeCount];
                     for (int i = 0; i < smr.sharedMesh.blendShapeCount; i++)
                     {
-                        faceBlendShapes[i] = smr.sharedMesh.GetBlendShapeName(i);
+                        _faceBlendShapes[i] = smr.sharedMesh.GetBlendShapeName(i);
                     }
                 }
                 else
                 {
-                    faceBlendShapes = null;
+                    _faceBlendShapes = null;
                 }
             }
 
@@ -92,7 +92,7 @@ namespace enitimeago.NonDestructiveMMD
         {
             GUILayout.BeginVertical("box", GUILayout.Width(150), GUILayout.ExpandHeight(true));
 
-            leftPaneScroll = GUILayout.BeginScrollView(leftPaneScroll);
+            _leftPaneScroll = GUILayout.BeginScrollView(_leftPaneScroll);
 
             for (int i = 2; i < MmdBlendShapeNames.Length; i += 3)
             {
@@ -117,9 +117,9 @@ namespace enitimeago.NonDestructiveMMD
         {
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
-            rightPaneScroll = GUILayout.BeginScrollView(rightPaneScroll);
+            _rightPaneScroll = GUILayout.BeginScrollView(_rightPaneScroll);
 
-            if (_currentMmdKeyIndex >= 0 && faceBlendShapes != null)
+            if (_currentMmdKeyIndex >= 0 && _faceBlendShapes != null)
             {
                 GUILayout.Label("Select blendshape for " + MmdBlendShapeNames[_currentMmdKeyIndex]);
 
@@ -133,7 +133,7 @@ namespace enitimeago.NonDestructiveMMD
                     _dataSource.RemoveBlendShapeMapping(MmdBlendShapeNames[_currentMmdKeyIndex]);
                 }
 
-                foreach (var blendShapeName in faceBlendShapes)
+                foreach (var blendShapeName in _faceBlendShapes)
                 {
                     if (GUILayout.Button(blendShapeName, blendShapeName == selectedBlendShape ? _hasValueStyle : _defaultStyle))
                     {
