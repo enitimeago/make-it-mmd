@@ -30,7 +30,7 @@ namespace enitimeago.NonDestructiveMMD
 
         public static void ShowWindow(BlendShapeMappings data)
         {
-            var window = GetWindow<MappingsEditorWindow>("Non-Destructive MMD");
+            var window = GetWindow<MappingsEditorWindow>("Make It MMD");
             window._dataSource = data;
             foreach (var mapping in data.blendShapeMappings)
             {

@@ -1,4 +1,4 @@
-# Non-Destructive MMD
+# Make It MMD
 
 MIT License
 

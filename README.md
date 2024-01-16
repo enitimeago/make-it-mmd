@@ -1,10 +1,18 @@
-# Non-Destructive MMD
+# Make It MMD
 
-An experimental package for VRChat avatars to add MMD blendshapes without affecting avatar files.
+Make It MMD is a **non-destructive** tool (using NDMF) for adding MMD world compatibility to your VRChat avatars.
 
-Requires Modular Avatar and NDMF to be installed.
+It's currently experimental, so please be aware it may not function as expected, and may undergo breaking changes.
 
-This package is currently subject to breaking changes.
+Make It MMDは、NDMFを利用して、**非破壊な**VRChatアバターをMMDワールド対応するツールです。
+
+本ツールは実験的なものであり、期待どおりに動かない可能性があり、動作が変更される可能性もあります。予めご了承下さい。
+
+## Current Status
+
+This tool has only been minimally tested with Sue v1.3.6 by mio3io at time of writing.
+
+現時点は、mio3ioさんの「透羽」v1.3.6のみで動作することをわずかに確認されておりました。
 
 ## Development
 

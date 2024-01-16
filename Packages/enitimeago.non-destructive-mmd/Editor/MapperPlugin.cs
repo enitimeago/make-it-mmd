@@ -38,7 +38,7 @@ namespace enitimeago.NonDestructiveMMD
                 var meshCopy = Object.Instantiate(mesh);
 
                 // Make divider dummy shape key.
-                meshCopy.AddBlendShapeFrame("------Non-Destructive MMD------", 0, deltaVertices, deltaNormals, deltaTangents);
+                meshCopy.AddBlendShapeFrame("------Make It MMD------", 0, deltaVertices, deltaNormals, deltaTangents);
                 faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
                 // Make shape key copies.

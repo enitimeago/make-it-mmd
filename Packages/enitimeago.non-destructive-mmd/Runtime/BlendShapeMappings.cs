@@ -19,7 +19,7 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
-    [AddComponentMenu("Scripts/Non-Destructive MMD")]
+    [AddComponentMenu("Scripts/Make It MMD")]
     [DisallowMultipleComponent]
     public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {
