@@ -9,18 +9,18 @@ using VRC.SDK3.Avatars.Components;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    [CustomEditor(typeof(NonDestructiveMMD))]
-    public class NonDestructiveMMDEditor : Editor
+    [CustomEditor(typeof(BlendShapeMappings))]
+    public class MappingsEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
-            NonDestructiveMMD data = (NonDestructiveMMD)target;
+            var data = (BlendShapeMappings)target;
 
             if (GUILayout.Button("Open Editor"))
             {
-                NonDestructiveMMDEditorWindow.ShowWindow(data);
+                MappingsEditorWindow.ShowWindow(data);
             }
         }
     }

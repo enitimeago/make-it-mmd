@@ -9,9 +9,9 @@ using VRC.SDK3.Avatars.Components;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    public class NonDestructiveMMDEditorWindow : EditorWindow
+    public class MappingsEditorWindow : EditorWindow
     {
-        private NonDestructiveMMD _dataSource = null;
+        private BlendShapeMappings _dataSource = null;
         // Local copy of mappings using int => string to avoid recalculating mappings List<MMDToAvatarBlendShape>.
         // This should only be initialized when the window is created.
         // TODO: Support refreshing mappings if they are changed in the inspector.
@@ -28,9 +28,9 @@ namespace enitimeago.NonDestructiveMMD
         private GUIStyle _hasValueStyle;
         private GUIStyle _selectedHasValueStyle;
 
-        public static void ShowWindow(NonDestructiveMMD data)
+        public static void ShowWindow(BlendShapeMappings data)
         {
-            var window = GetWindow<NonDestructiveMMDEditorWindow>("Non-Destructive MMD");
+            var window = GetWindow<MappingsEditorWindow>("Non-Destructive MMD");
             window._dataSource = data;
             foreach (var mapping in data.blendShapeMappings)
             {

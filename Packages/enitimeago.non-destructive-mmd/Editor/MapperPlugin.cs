@@ -7,11 +7,11 @@ using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
-[assembly: ExportsPlugin(typeof(enitimeago.NonDestructiveMMD.NonDestructiveMMDPlugin))]
+[assembly: ExportsPlugin(typeof(enitimeago.NonDestructiveMMD.MapperPlugin))]
 
 namespace enitimeago.NonDestructiveMMD
 {
-    public class NonDestructiveMMDPlugin : Plugin<NonDestructiveMMDPlugin>
+    public class MapperPlugin : Plugin<MapperPlugin>
     {
         public override string QualifiedName => "enitimeago.non-destructive-mmd";
         public override string DisplayName => "Non-Destructive MMD";
@@ -42,7 +42,7 @@ namespace enitimeago.NonDestructiveMMD
                 faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
                 // Make shape key copies.
-                var mmdComponent = ctx.AvatarRootObject.GetComponent<NonDestructiveMMD>();
+                var mmdComponent = ctx.AvatarRootObject.GetComponent<BlendShapeMappings>();
                 foreach (var mapping in mmdComponent.blendShapeMappings)
                 {
                     int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKey);
