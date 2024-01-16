@@ -1,7 +1,7 @@
+﻿using System.Collections.Generic;
+using System.Linq;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.fluent;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -152,7 +152,7 @@ namespace enitimeago.NonDestructiveMMD
 
             GUILayout.EndVertical();
         }
-        
+
         private Texture2D MakeBackgroundTexture(int width, int height, Color col)
         {
             Color[] pix = new Color[width * height];
@@ -167,7 +167,7 @@ namespace enitimeago.NonDestructiveMMD
         }
 
         // https://github.com/anatawa12/AvatarOptimizer/blob/083142dc37538d6812f0a5d9a49b4e278c47c164/Editor/AnimatorParsers/AnimatorParser.cs#L600
-        private static readonly string[] MmdBlendShapeNames = new [] {
+        private static readonly string[] MmdBlendShapeNames = new[] {
             // New EN by Yi MMD World
             //  https://docs.google.com/spreadsheets/d/1mfE8s48pUfjP_rBIPN90_nNkAIBUNcqwIxAdVzPBJ-Q/edit?usp=sharing
             // Old EN by Xoriu
@@ -188,7 +188,7 @@ namespace enitimeago.NonDestructiveMMD
             "Mouse_1",      "▲",                "▲",
             "MouseUP",      "Mouth Horn Raise", "口角上げ",
             "MouseDW",      "Mouth Horn Lower", "口角下げ",
-            "MouseWD",      "Mouth Side Widen", "口横広げ", 
+            "MouseWD",      "Mouth Side Widen", "口横広げ",
             "n",            null,               "ん",
             "Niyari2",      null,               "にやり２",
             // by Xoriu only
