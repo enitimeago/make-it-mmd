@@ -10,9 +10,35 @@ Make It MMDは、NDMFを利用して、**非破壊な**VRChatアバターをMMD�
 
 ## Current Status
 
-This tool has only been minimally tested with Sue v1.3.6 by mio3io at time of writing.
+This tool has only been minimally tested with Unity 2019 and Sue v1.3.6 by mio3io at time of writing.
 
-現時点は、mio3ioさんの「透羽」v1.3.6のみで動作することをわずかに確認されておりました。
+現時点は、Unity 2019で、mio3ioさんの「透羽」v1.3.6のみで動作することをわずかに確認されておりました。
+
+## Installation
+
+🚨**Please do not use this** unless you have a backup and understand the above!🚨
+
+🚨上記を理解したうえで、バックアップがない場合は**ご利用をお控えください**！🚨
+
+📦 Add VPM repo: https://enitimeago.github.io/vpm-repos/vpm.json
+
+## Usage
+
+以下は日本語の場合はGoogle TranslateまたはDeepLなどでお願いします。
+
+Please be aware this tool will not work if the face has any name other than "Body". It will force all FX animators to Write Defaults ON. This may cause unexpected behavior. (Usage with FaceEmo is recommended.)
+
+- Select your avatar in the hierarchy, i.e. it should have the script "VRC Avatar Descriptor"
+- Click "Add Component"
+- Search for "Make It MMD", or select "Scripts/Make It MMD"
+- Click Open Editor
+- On the left, you will see a list of MMD blend shapes. Select a blend shape to continue
+- On the right, you will see the list of your avatar's blend shapes. Select a blend shape that corresponds to the MMD blend shape.
+- Repeat for all MMD blend shapes you wish to support. The most important are generally あ　い　う　え　お.
+- Click the Play button in the toolbar. Check that your avatar builds.
+- Click on "Body" on your hierarchy, and check the blend shapes in the inspector. You should see the MMD blend shapes listed at the bottom.
+- Adjust the MMD blend shapes to confirm that they function correctly.
+- Exit the Play mode
 
 ## Development
 
