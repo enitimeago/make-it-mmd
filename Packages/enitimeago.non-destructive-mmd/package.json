@@ -10,7 +10,7 @@
     "email": "129673786+enitimeago@users.noreply.github.com",
     "url": "https://github.com/enitimeago"
   },
-	"vpmDependencies": {
-		"nadena.dev.ndmf": "^1.0.0"
-	}
+  "vpmDependencies": {
+    "nadena.dev.ndmf": "^1.0.0"
+  }
 }
