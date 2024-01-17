@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#if NDMMD_VRCSDK3_AVATARS
+
+using System.Collections.Generic;
 using System.Linq;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.fluent;
@@ -88,3 +90,5 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 }
+
+#endif
