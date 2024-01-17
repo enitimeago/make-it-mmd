@@ -1,5 +1,6 @@
 ﻿#if NDMMD_VRCSDK3_AVATARS
 
+using enitimeago.NonDestructiveMMD.vendor;
 using System.Collections.Generic;
 using System.Linq;
 using nadena.dev.ndmf;
@@ -20,12 +21,14 @@ namespace enitimeago.NonDestructiveMMD
 
         protected override void Configure()
         {
-            Sequence seq = InPhase(BuildPhase.Transforming);
-            // rely on Modular Avatar cloning all animator controllers to make it safe for us to make destructive edits.
-            // it seems like we are already safe, but maybe it was because Modular Avatar happened to run before and we weren't unlucky during testing.
-            // TODO: this is really not a great idea, but Modular Avatar's clone utils are also not public and aren't trivial. figure something out.
-            seq.AfterPlugin("nadena.dev.modular-avatar")
-            .Run("Create MMD mesh", ctx =>
+            Sequence seq = InPhase(BuildPhase.Resolving);
+            // Clone animator controllers first to allow safe mutation.
+            // Modular Avatar does this, but unless this is moved into somewhere common
+            // then it's not ideal to rely on it just to clone all animators.
+            seq.Run("Clone animators", AnimationUtil.CloneAllControllers);
+
+            seq = InPhase(BuildPhase.Transforming);
+            seq.Run("Create MMD mesh", ctx =>
             {
                 var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
@@ -35,8 +38,7 @@ namespace enitimeago.NonDestructiveMMD
                 var deltaNormals = new Vector3[mesh.vertexCount];
                 var deltaTangents = new Vector3[mesh.vertexCount];
 
-                // TODO: i accidentally modified mesh directly and it seemed to not persist BUT NOT SURE IF THIS IS INTENTIONAL WITH NDMF
-                // so if NDMF is intended to allow destructive changes and encapsulate those, then don't bother copying.
+                // Duplicate the mesh to allow safe mutation.
                 var meshCopy = Object.Instantiate(mesh);
 
                 // Make divider dummy shape key.
@@ -59,28 +61,31 @@ namespace enitimeago.NonDestructiveMMD
                 }
 
                 // Find the FX controller from the avatar.
-                // TODO: avoid potential NPE.
-                AnimatorController animatorController = null;
+                // This has already been cloned, so it should be safe to mutate directly.
+                VRCAvatarDescriptor.CustomAnimLayer fxLayer;
+                AnimatorController fxController = null;
                 foreach (var layer in descriptor.baseAnimationLayers)
                 {
                     if (layer.type == VRCAvatarDescriptor.AnimLayerType.FX && layer.animatorController != null)
                     {
-                        animatorController = layer.animatorController as AnimatorController;
+                        fxLayer = layer;
+                        fxController = layer.animatorController as AnimatorController;
                         break;
                     }
                 }
+                if (fxController == null)
+                {
+                    Debug.LogError("Avatar has no FX controller");
+                    return;
+                }
 
                 // State machine of every FX layer needs to have Write Default ON.
-                // TODO: avoid potential NPE.
                 // TODO: this is probably going to cause unintended consequences for more advanced users. figure out how to mitigate?
-                if (animatorController != null)
+                foreach (var layer in fxController.layers)
                 {
-                    foreach (var layer in animatorController.layers)
+                    foreach (var state in layer.stateMachine.states)
                     {
-                        foreach (var state in layer.stateMachine.states)
-                        {
-                            state.state.writeDefaultValues = true;
-                        }
+                        state.state.writeDefaultValues = true;
                     }
                 }
 
