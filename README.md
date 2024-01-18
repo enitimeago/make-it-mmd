@@ -20,7 +20,9 @@ This tool has only been minimally tested with Unity 2019 and Sue v1.3.6 by mio3i
 
 🚨上記を理解したうえで、バックアップがない場合は**ご利用をお控えください**！🚨
 
-📦 Add VPM repo: https://enitimeago.github.io/vpm-repos/vpm.json
+📦 Install using VPM: [enitimeago/vpm-repos](https://enitimeago.github.io/vpm-repos/)
+
+📦 Install using .unitypackage: [See Releases](https://github.com/enitimeago/make-it-mmd/releases)
 
 ## Usage
 
@@ -40,6 +42,7 @@ Please be aware this tool will not work if the face has any name other than "Bod
 - Click on "Body" on your hierarchy, and check the blend shapes in the inspector. You should see the MMD blend shapes listed at the bottom.
 - Adjust the MMD blend shapes to confirm that they function correctly.
 - Exit the Play mode
+- Build and publish your avatar!
 
 ## Development
 
