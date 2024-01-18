@@ -30,10 +30,28 @@ namespace enitimeago.NonDestructiveMMD
             seq = InPhase(BuildPhase.Transforming);
             seq.Run("Create MMD mesh", ctx =>
             {
+                // Find the mappings component in the avatar.
+                // Intentionally search for all instances to allow it to be placed anywhere,
+                // as well as enforcing a restriction of one instance per avatar.
+                // TODO: should this not be in the transforming phase?
+                var mappingsComponents = ctx.AvatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
+                if (mappingsComponents.Length > 1)
+                {
+                    Debug.LogError("More than one Make It MMD component found in avatar. Aborting.");
+                    return;
+                }
+                if (mappingsComponents.Length == 0)
+                {
+                    Debug.Log("No Make It MMD component found in avatar. Nothing to do");
+                    return;
+                }
+                var mappingsComponent = mappingsComponents.First();
+
+                // Find the avatar's face mesh.
                 var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
-
                 var mesh = faceSkinnedMeshRenderer.sharedMesh;
+
                 var deltaVertices = new Vector3[mesh.vertexCount];
                 var deltaNormals = new Vector3[mesh.vertexCount];
                 var deltaTangents = new Vector3[mesh.vertexCount];
@@ -46,8 +64,7 @@ namespace enitimeago.NonDestructiveMMD
                 faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
                 // Make shape key copies.
-                var mmdComponent = ctx.AvatarRootObject.GetComponent<BlendShapeMappings>();
-                foreach (var mapping in mmdComponent.blendShapeMappings)
+                foreach (var mapping in mappingsComponent.blendShapeMappings)
                 {
                     int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKey);
                     Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKey + " (found " + mapping.avatarKey + " as index " + blendShapeIndex + ")");
@@ -90,7 +107,6 @@ namespace enitimeago.NonDestructiveMMD
                 }
 
                 Debug.Log("Still alive");
-                Debug.Log(mmdComponent);
             });
         }
     }

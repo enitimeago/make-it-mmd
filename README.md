@@ -28,8 +28,9 @@ This tool has only been minimally tested with Unity 2019 and Sue v1.3.6 by mio3i
 
 Please be aware this tool will not work if the face has any name other than "Body". It will force all FX animators to Write Defaults ON. This may cause unexpected behavior. (Usage with FaceEmo is recommended.)
 
-- Select your avatar in the hierarchy, i.e. it should have the script "VRC Avatar Descriptor"
-- Click "Add Component"
+- Right-click your avatar in the hierarchy and select "Create Empty", and name your new object "MMD"
+  - **Advanced users:** This is just the recommended approach. You can use any object underneath your avatar, or even your avatar itself.
+- Click on "Add Component" in your new object's inspector
 - Search for "Make It MMD", or select "Scripts/Make It MMD"
 - Click Open Editor
 - On the left, you will see a list of MMD blend shapes. Select a blend shape to continue
