@@ -65,7 +65,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_dataSource.gameObject != null)
             {
-                var smr = _dataSource.gameObject.GetComponent<VRCAvatarDescriptor>().VisemeSkinnedMesh;
+                var smr = _dataSource.gameObject.GetComponentInParent<VRCAvatarDescriptor>().VisemeSkinnedMesh;
                 if (smr)
                 {
                     _faceBlendShapes = new string[smr.sharedMesh.blendShapeCount];
