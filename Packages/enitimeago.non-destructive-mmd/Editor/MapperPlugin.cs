@@ -37,7 +37,7 @@ namespace enitimeago.NonDestructiveMMD
                 var mappingsComponents = ctx.AvatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
                 if (mappingsComponents.Length > 1)
                 {
-                    Debug.LogError("More than one Make It MMD component found in avatar. Aborting.");
+                    Debug.LogWarning("More than one Make It MMD component found in avatar. Aborting.");
                     return;
                 }
                 if (mappingsComponents.Length == 0)
@@ -51,6 +51,15 @@ namespace enitimeago.NonDestructiveMMD
                 var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
                 var mesh = faceSkinnedMeshRenderer.sharedMesh;
+                for (int i = 0; i < mesh.blendShapeCount; i++)
+                {
+                    string blendShapeName = mesh.GetBlendShapeName(i);
+                    if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
+                    {
+                        Debug.LogWarning("Avatar already has MMD blendshapes! Aborting.");
+                        return;
+                    }
+                }
 
                 var deltaVertices = new Vector3[mesh.vertexCount];
                 var deltaNormals = new Vector3[mesh.vertexCount];

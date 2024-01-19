@@ -25,6 +25,21 @@ namespace enitimeago.NonDestructiveMMD
                 EditorGUILayout.HelpBox("This component needs to be placed on or inside an avatar to work!", MessageType.Warning);
             }
 
+            var visemeSkinnedMesh = avatar.VisemeSkinnedMesh;
+            if (visemeSkinnedMesh == null)
+            {
+                EditorGUILayout.HelpBox("Avatar has no face skin mesh!", MessageType.Warning);
+            }
+            for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
+            {
+                string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
+                if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
+                {
+                    EditorGUILayout.HelpBox("Avatars with pre-existing MMD blend shapes are unsupported!", MessageType.Warning);
+                    break;
+                }
+            }
+
             EditorGUILayout.BeginHorizontal();
 
             if (GUILayout.Button("Open Editor"))

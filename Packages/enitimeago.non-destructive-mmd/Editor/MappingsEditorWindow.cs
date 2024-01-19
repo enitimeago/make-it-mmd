@@ -63,6 +63,8 @@ namespace enitimeago.NonDestructiveMMD
                 return;
             }
 
+            // TODO: should this be moved into ShowWindow?
+            // TODO: need to refresh if the scene changes
             if (_dataSource.gameObject != null)
             {
                 var avatar = _dataSource.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
@@ -71,15 +73,22 @@ namespace enitimeago.NonDestructiveMMD
                     GUILayout.Label("Couldn't find avatar!");
                     return;
                 }
-                if (avatar.VisemeSkinnedMesh == null)
+                var visemeSkinnedMesh = avatar.VisemeSkinnedMesh;
+                if (visemeSkinnedMesh == null)
                 {
                     GUILayout.Label("Avatar has no face skin mesh!");
                     return;
                 }
                 _faceBlendShapes.Clear();
-                for (int i = 0; i < avatar.VisemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
+                for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
                 {
-                    _faceBlendShapes.Add(avatar.VisemeSkinnedMesh.sharedMesh.GetBlendShapeName(i));
+                    string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
+                    if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
+                    {
+                        GUILayout.Label("Avatar already has MMD blendshapes!");
+                        return;
+                    }
+                    _faceBlendShapes.Add(blendShapeName);
                 }
                 if (!_faceBlendShapes.Any())
                 {
