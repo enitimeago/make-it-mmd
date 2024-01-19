@@ -1,18 +1,28 @@
 # Make It MMD
 
-Make It MMD is a **non-destructive** tool (using NDMF) for adding MMD world compatibility to your VRChat avatars.
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/enitimeago/make-it-mmd?label=release)
 
-It's currently experimental, so please be aware it may not function as expected, and may undergo breaking changes.
+Make It MMD makes it easy to **add** and **share** MMD world compatibility settings for VRChat avatars.
 
-Make It MMDは、NDMFを利用して、**非破壊な**VRChatアバターをMMDワールド対応するツールです。
+- 🌟 It's **non-destructive**, running only when you build your avatar.
+- ✏️ Settings are **editable any time**, no need to revert to the original mesh and try again.
+- 💌 Plus **easy .unitypackage export** of your settings, no need to worry about sharing your avatar's mesh data.
 
-本ツールは実験的なものであり、期待どおりに動かない可能性があり、動作が変更される可能性もあります。予めご了承下さい。
+Make It MMDは、VRChatアバターをMMDワールドに**対応すること**および**表情設定共有すること**を容易にします。
+
+- 🌟 本ツールは**非破壊的**で、アバターをビルドする際にのみ実行されます。
+- ✏️ 設定はいつでも**編集可能**で、元のメッシュに戻って再試行する必要はありません。
+- 💌 さらに、設定を**簡単に.unitypackageとしてエクスポート**できるので、アバターのメッシュデータを共有する恐れがありません。
 
 ## Current Status
 
 This tool has only been minimally tested with Unity 2019 and Sue v1.3.6 by mio3io at time of writing.
 
+It's currently experimental, so please be aware it may not function as expected, and may undergo breaking changes.
+
 現時点は、Unity 2019で、mio3ioさんの「透羽」v1.3.6のみで動作することをわずかに確認されておりました。
+
+このツールは実験的なものであり、期待どおりに動かない可能性があり、動作が変更される可能性もあります。予めご了承下さい。
 
 ## Installation
 
@@ -20,9 +30,8 @@ This tool has only been minimally tested with Unity 2019 and Sue v1.3.6 by mio3i
 
 🚨上記を理解したうえで、バックアップがない場合は**ご利用をお控えください**！🚨
 
-📦 Install using VPM: [enitimeago/vpm-repos](https://enitimeago.github.io/vpm-repos/)
-
-📦 Install using .unitypackage: [See Releases](https://github.com/enitimeago/make-it-mmd/releases)
+- 📦 Install using VRChat Creator Companion: [Add VPM repository](https://enitimeago.github.io/vpm-repos/)
+- 📦 Install using .unitypackage: [See Releases](https://github.com/enitimeago/make-it-mmd/releases)
 
 ## Usage
 
