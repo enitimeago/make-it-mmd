@@ -30,6 +30,10 @@ namespace enitimeago.NonDestructiveMMD
             {
                 EditorGUILayout.HelpBox("Avatar has no face skin mesh!", MessageType.Warning);
             }
+            if (visemeSkinnedMesh.name != "Body")
+            {
+                EditorGUILayout.HelpBox("This component needs your avatar's face mesh to be called \"Body\" to work!", MessageType.Warning);
+            }
             for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
             {
                 string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);

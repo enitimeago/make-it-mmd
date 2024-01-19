@@ -51,6 +51,11 @@ namespace enitimeago.NonDestructiveMMD
                 var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
                 var mesh = faceSkinnedMeshRenderer.sharedMesh;
+                if (faceSkinnedMeshRenderer.name != "Body")
+                {
+                    Debug.LogWarning("Face mesh must be called \"Body\"! Aborting.");
+                    return;
+                }
                 for (int i = 0; i < mesh.blendShapeCount; i++)
                 {
                     string blendShapeName = mesh.GetBlendShapeName(i);
