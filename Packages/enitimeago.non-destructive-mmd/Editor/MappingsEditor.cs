@@ -17,6 +17,13 @@ namespace enitimeago.NonDestructiveMMD
             base.OnInspectorGUI();
 
             var data = (BlendShapeMappings)target;
+            var avatar = data.GetComponentInParent<VRCAvatarDescriptor>();
+
+            // TODO: unify checks with plugin and editorwindow?
+            if (avatar == null)
+            {
+                EditorGUILayout.HelpBox("This component needs to be placed on or inside an avatar to work!", MessageType.Warning);
+            }
 
             EditorGUILayout.BeginHorizontal();
 

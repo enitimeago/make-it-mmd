@@ -21,7 +21,7 @@ namespace enitimeago.NonDestructiveMMD
         private int _currentMmdKeyIndex = -1;
         private Vector2 _leftPaneScroll;
         private Vector2 _rightPaneScroll;
-        private string[] _faceBlendShapes;
+        private List<string> _faceBlendShapes = new List<string>();
 
         private GUIStyle _defaultStyle;
         private GUIStyle _selectedStyle;
@@ -65,18 +65,26 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_dataSource.gameObject != null)
             {
-                var smr = _dataSource.gameObject.GetComponentInParent<VRCAvatarDescriptor>().VisemeSkinnedMesh;
-                if (smr)
+                var avatar = _dataSource.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
+                if (avatar == null)
                 {
-                    _faceBlendShapes = new string[smr.sharedMesh.blendShapeCount];
-                    for (int i = 0; i < smr.sharedMesh.blendShapeCount; i++)
-                    {
-                        _faceBlendShapes[i] = smr.sharedMesh.GetBlendShapeName(i);
-                    }
+                    GUILayout.Label("Couldn't find avatar!");
+                    return;
                 }
-                else
+                if (avatar.VisemeSkinnedMesh == null)
                 {
-                    _faceBlendShapes = null;
+                    GUILayout.Label("Avatar has no face skin mesh!");
+                    return;
+                }
+                _faceBlendShapes.Clear();
+                for (int i = 0; i < avatar.VisemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
+                {
+                    _faceBlendShapes.Add(avatar.VisemeSkinnedMesh.sharedMesh.GetBlendShapeName(i));
+                }
+                if (!_faceBlendShapes.Any())
+                {
+                    GUILayout.Label("Face has no blend shapes!");
+                    return;
                 }
             }
 
@@ -119,7 +127,7 @@ namespace enitimeago.NonDestructiveMMD
 
             _rightPaneScroll = GUILayout.BeginScrollView(_rightPaneScroll);
 
-            if (_currentMmdKeyIndex >= 0 && _faceBlendShapes != null)
+            if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
                 GUILayout.Label("Select blendshape for " + MMDBlendShapes.Names[_currentMmdKeyIndex]);
 
