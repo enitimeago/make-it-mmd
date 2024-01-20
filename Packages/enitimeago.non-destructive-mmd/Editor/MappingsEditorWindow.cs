@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using enitimeago.NonDestructiveMMD.vendor;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.fluent;
@@ -6,10 +8,11 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
+using Newtonsoft.Json.Linq;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    public class MappingsEditorWindow : EditorWindow
+    public class MappingsEditorWindow : BlendshapeViewerEditorWindowBase
     {
         private BlendShapeMappings _dataSource = null;
         // Local copy of mappings using int => string to avoid recalculating mappings List<MMDToAvatarBlendShape>.
@@ -79,6 +82,7 @@ namespace enitimeago.NonDestructiveMMD
                     GUILayout.Label("Avatar has no face skin mesh!");
                     return;
                 }
+                UsingSkinnedMesh(visemeSkinnedMesh);
                 _faceBlendShapes.Clear();
                 for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
                 {
@@ -103,6 +107,14 @@ namespace enitimeago.NonDestructiveMMD
             DrawRightPane();
 
             GUILayout.EndHorizontal();
+        }
+
+        private void OnFocus()
+        {
+            if (!autoUpdateOnFocus) return;
+            if (skinnedMesh == null) return;
+            if (!HasGenerationParamsChanged()) return;
+            TryExecuteUpdate();
         }
 
         private void DrawLeftPane()
@@ -134,38 +146,96 @@ namespace enitimeago.NonDestructiveMMD
         {
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
-            _rightPaneScroll = GUILayout.BeginScrollView(_rightPaneScroll);
-
             if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
                 GUILayout.Label("Select blendshape for " + MMDBlendShapes.Names[_currentMmdKeyIndex]);
 
+                var italicLabelStyle = new GUIStyle(GUI.skin.label);
+                italicLabelStyle.fontStyle = FontStyle.Italic;
+
+                // https://forum.unity.com/threads/how-get-packageinfo-by-name-and-version.761936/#post-9171308
+                var blendshapeViewerPackage = AssetDatabase
+                    .FindAssets("package")
+                    .Select(AssetDatabase.GUIDToAssetPath)
+                    .Where(x => x.EndsWith("package.json"))
+                    .Where(x => AssetDatabase.LoadAssetAtPath<TextAsset>(x) != null)
+                    .Select(s => AssetDatabase.LoadAssetAtPath<TextAsset>(s).text)
+                    .Select(JObject.Parse)
+                    .FirstOrDefault(j => (string)j["name"] == "dev.hai-vr.blendshape-viewer");
+                GUILayout.Label($"Avatar previews powered by Blendshape Viewer {(string)blendshapeViewerPackage["version"]}", italicLabelStyle);
+
+                var serializedObject = new SerializedObject(this);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(showDifferences)));
+                if (SystemInfo.supportsComputeShaders)
+                {
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(useComputeShader)));
+                }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.IntSlider(serializedObject.FindProperty(nameof(thumbnailSize)), 100, 300);
+
+                EditorGUI.BeginDisabledGroup(skinnedMesh == null || AnimationMode.InAnimationMode());
+                if (GUILayout.Button("Update"))
+                {
+                    TryExecuteUpdate();
+                }
+                EditorGUI.EndDisabledGroup();
+
+                serializedObject.ApplyModifiedProperties();
+
+                _rightPaneScroll = GUILayout.BeginScrollView(_rightPaneScroll);
+
                 string selectedBlendShape;
                 _knownBlendShapeMappings.TryGetValue(_currentMmdKeyIndex, out selectedBlendShape);
 
-                if (GUILayout.Button("None", string.IsNullOrEmpty(selectedBlendShape) ? _selectedStyle : _defaultStyle))
+                var width = Mathf.Max(thumbnailSize, MinWidth);
+                var mod = Mathf.Max(1, (int)position.width / (width + 15));
+                var shown = 1;
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button("None", string.IsNullOrEmpty(selectedBlendShape) ? _hasValueStyle : _defaultStyle))
                 {
                     Debug.Log("Unselected blendshape");
                     _knownBlendShapeMappings.Remove(_currentMmdKeyIndex);
                     _dataSource.RemoveBlendShapeMapping(MMDBlendShapes.Names[_currentMmdKeyIndex]);
                 }
-
-                foreach (var blendShapeName in _faceBlendShapes)
+                for (int i = 0; i < _faceBlendShapes.Count; i++)
                 {
-                    if (GUILayout.Button(blendShapeName, blendShapeName == selectedBlendShape ? _hasValueStyle : _defaultStyle))
+                    string blendShapeName = _faceBlendShapes[i];
+                    var texture2D = i < tex2ds.Length ? tex2ds[i] : null;
+                    if (shown % mod == 0)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        GUILayout.FlexibleSpace();
+                    }
+
+                    var buttonStyle = new GUIStyle(blendShapeName == selectedBlendShape ? _hasValueStyle : _defaultStyle);
+                    buttonStyle.imagePosition = ImagePosition.ImageAbove;
+	                var buttonContent = new GUIContent();
+                    buttonContent.image = texture2D;
+                    buttonContent.text = blendShapeName;
+                    if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width - 25)))
                     {
                         Debug.Log("Selected blendshape: " + blendShapeName);
                         _knownBlendShapeMappings[_currentMmdKeyIndex] = blendShapeName;
                         _dataSource.SetBlendShapeMapping(MMDBlendShapes.Names[_currentMmdKeyIndex], blendShapeName);
                     }
+
+                    if ((shown + 1) % mod == 0 || i == _faceBlendShapes.Count - 1)
+                    {
+                        GUILayout.FlexibleSpace();
+                        EditorGUILayout.EndHorizontal();
+                    }
+
+                    shown++;
                 }
+
+                GUILayout.EndScrollView();
             }
             else
             {
                 GUILayout.Label("Select a MMD shapekey");
             }
-
-            GUILayout.EndScrollView();
 
             GUILayout.EndVertical();
         }
