@@ -13,12 +13,14 @@ namespace enitimeago.NonDestructiveMMD
     [CustomEditor(typeof(BlendShapeMappings))]
     public class MappingsEditor : Editor
     {
+        private bool _showStoredData = false;
+
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
-
             var data = (BlendShapeMappings)target;
             var avatar = data.GetComponentInParent<VRCAvatarDescriptor>();
+
+            CL4EE.DrawLanguagePicker();
 
             // TODO: unify checks with plugin and editorwindow?
             if (avatar == null)
@@ -45,8 +47,6 @@ namespace enitimeago.NonDestructiveMMD
                 }
             }
 
-            CL4EE.DrawLanguagePicker();
-
             EditorGUILayout.BeginHorizontal();
 
             if (GUILayout.Button(CL4EE.Tr("MappingsEditor:OpenEditor")))
@@ -59,10 +59,18 @@ namespace enitimeago.NonDestructiveMMD
             {
                 var menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Share as .unitypackage..."), false, () => ExportPackage(data));
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Show stored data"), _showStoredData, () => _showStoredData = !_showStoredData);
                 menu.ShowAsContext();
             }
 
             EditorGUILayout.EndHorizontal();
+
+            if (_showStoredData)
+            {
+                var mappings = serializedObject.FindProperty(nameof(BlendShapeMappings.blendShapeMappings));
+                EditorGUILayout.PropertyField(mappings);
+            }
         }
 
         private void ExportPackage(BlendShapeMappings mappingsComponent)
