@@ -149,7 +149,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
-                GUILayout.Label("Select blendshape for " + MMDBlendShapes.Names[_currentMmdKeyIndex]);
+                GUILayout.Label(string.Format(CL4EE.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MMDBlendShapes.Names[_currentMmdKeyIndex]));
 
                 var italicLabelStyle = new GUIStyle(GUI.skin.label);
                 italicLabelStyle.fontStyle = FontStyle.Italic;

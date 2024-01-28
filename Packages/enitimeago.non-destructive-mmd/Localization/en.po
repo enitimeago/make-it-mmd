@@ -14,5 +14,8 @@ msgstr "Show stored data"
 msgid "MappingsEditorWindow:SelectMMDMorph"
 msgstr "Select a MMD morph"
 
+msgid "MappingsEditorWindow:SelectBlendShapeFor"
+msgstr "Select blendshape for \"{0}\""
+
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr "Save .unitypackage"
