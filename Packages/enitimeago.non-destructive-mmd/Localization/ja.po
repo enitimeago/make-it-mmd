@@ -5,6 +5,24 @@ msgstr ""
 msgid "locale:ja"
 msgstr "日本語"
 
+msgid "CommonAsserts:AvatarNotFound"
+msgstr "アバターが見つかりません！"
+
+msgid "CommonAsserts:AvatarNoFaceMeshSet"
+msgstr "アバターのFace Meshが設定されていません！"
+
+msgid "CommonAsserts:AvatarFaceSMRNotCalledBody"
+msgstr "アバターのFace Meshは「Body」と名前を付ける必要があります！"
+
+msgid "CommonAsserts:AvatarFaceSMRNoMesh"
+msgstr "アバターのFace Meshに、メッシュが設定されていません！"
+
+msgid "CommonAsserts:AvatarFaceSMRNoBlendShapes"
+msgstr "アバターのFace Meshに、メッシュがブレンドシェープがありません！"
+
+msgid "CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"
+msgstr "現在、すでにMMDブレンドシェープあるアバターはサポートされていません！"
+
 msgid "MappingsEditor:OpenEditor"
 msgstr "エディターを開く"
 

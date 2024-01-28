@@ -1,12 +1,8 @@
 #if NDMMD_VRCSDK3_AVATARS
 
-using enitimeago.NonDestructiveMMD.vendor;
-using System.Collections.Generic;
+using CustomLocalization4EditorExtension;
 using System.Linq;
-using nadena.dev.ndmf;
-using nadena.dev.ndmf.fluent;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
@@ -42,32 +38,32 @@ namespace enitimeago.NonDestructiveMMD
         {
             if (avatarDescriptor == null)
             {
-                Log("Couldn't find avatar!", Severity.Warning);
+                Log(CL4EE.Tr("CommonAsserts:AvatarNotFound"), Severity.Warning);
                 return false;
             }
 
             var visemeSkinnedMesh = avatarDescriptor.VisemeSkinnedMesh;
             if (visemeSkinnedMesh == null)
             {
-                Log("Avatar has no face skin mesh set!", Severity.Warning);
+                Log(CL4EE.Tr("CommonAsserts:AvatarNoFaceMeshSet"), Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.name != "Body")
             {
-                Log("Avatar face mesh must be called \"Body\"!", Severity.Warning);
+                Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRNotCalledBody"), Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh == null)
             {
-                Log("Avatar face mesh is not set!", Severity.Warning);
+                Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRNoMesh"), Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh.blendShapeCount == 0)
             {
-                Log("Avatar face mesh has no blend shapes!", Severity.Warning);
+                Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRNoBlendShapes"), Severity.Warning);
                 return false;
             }
 
@@ -76,7 +72,7 @@ namespace enitimeago.NonDestructiveMMD
                 string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
                 if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
                 {
-                    Log("Avatars with pre-existing MMD blend shapes are unsupported!", Severity.Warning);
+                    Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"), Severity.Warning);
                     return false;
                 }
             }

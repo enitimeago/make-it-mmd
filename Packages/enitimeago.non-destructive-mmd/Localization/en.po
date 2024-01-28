@@ -2,6 +2,24 @@ msgid ""
 msgstr ""
 "Language: en\n"
 
+msgid "CommonAsserts:AvatarNotFound"
+msgstr "Avatar not found!"
+
+msgid "CommonAsserts:AvatarNoFaceMeshSet"
+msgstr "Avatar has not set a face mesh!"
+
+msgid "CommonAsserts:AvatarFaceSMRNotCalledBody"
+msgstr "Avatar face mesh must be called \"Body\"!"
+
+msgid "CommonAsserts:AvatarFaceSMRNoMesh"
+msgstr "Avatar face mesh is missing!"
+
+msgid "CommonAsserts:AvatarFaceSMRNoBlendShapes"
+msgstr "Avatar face mesh has no blend shapes!"
+
+msgid "CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"
+msgstr "Avatars with pre-existing MMD blend shapes are currently unsupported!"
+
 msgid "MappingsEditor:OpenEditor"
 msgstr "Open Editor"
 
