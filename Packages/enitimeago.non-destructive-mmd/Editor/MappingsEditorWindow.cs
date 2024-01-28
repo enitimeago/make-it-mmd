@@ -89,11 +89,6 @@ namespace enitimeago.NonDestructiveMMD
                 {
                     _faceBlendShapes.Add(visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i));
                 }
-                if (!_faceBlendShapes.Any())
-                {
-                    GUILayout.Label("Face has no blend shapes!");
-                    return;
-                }
             }
 
             GUILayout.BeginHorizontal();

@@ -24,6 +24,17 @@ namespace enitimeago.NonDestructiveMMD
         public bool RunAsserts(GameObject avatarRootObject)
         {
             var avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
+            var mappingsComponents = avatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
+            if (mappingsComponents.Length == 0)
+            {
+                Log("No Make It MMD component found in avatar. Nothing to do", Severity.Debug);
+                return false;
+            }
+            if (mappingsComponents.Length > 1)
+            {
+                Log("More than one Make It MMD component found in avatar!", Severity.Error);
+                return false;
+            }
             return RunAsserts(avatarDescriptor);
         }
 
@@ -45,6 +56,18 @@ namespace enitimeago.NonDestructiveMMD
             if (visemeSkinnedMesh.name != "Body")
             {
                 Log("Avatar face mesh must be called \"Body\"!", Severity.Warning);
+                return false;
+            }
+
+            if (visemeSkinnedMesh.sharedMesh == null)
+            {
+                Log("Avatar face mesh is not set!", Severity.Warning);
+                return false;
+            }
+
+            if (visemeSkinnedMesh.sharedMesh.blendShapeCount == 0)
+            {
+                Log("Avatar face mesh has no blend shapes!", Severity.Warning);
                 return false;
             }
 

@@ -31,29 +31,15 @@ namespace enitimeago.NonDestructiveMMD
             seq = InPhase(BuildPhase.Transforming);
             seq.Run("Create MMD mesh", ctx =>
             {
-                // Find the mappings component in the avatar.
-                // Intentionally search for all instances to allow it to be placed anywhere,
-                // as well as enforcing a restriction of one instance per avatar.
-                // TODO: should this not be in the transforming phase?
-                var mappingsComponents = ctx.AvatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
-                if (mappingsComponents.Length > 1)
-                {
-                    Debug.LogWarning("More than one Make It MMD component found in avatar. Aborting.");
-                    return;
-                }
-                if (mappingsComponents.Length == 0)
-                {
-                    Debug.Log("No Make It MMD component found in avatar. Nothing to do");
-                    return;
-                }
-                var mappingsComponent = mappingsComponents.First();
-
-                var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
-
+                // TODO: should asserts not be in the transforming phase?
                 if (!commonAsserts.RunAsserts(ctx.AvatarRootObject))
                 {
                     return;
                 }
+
+                // If we're here, the avatar is found and valid.
+                var mappingsComponent = ctx.AvatarRootObject.GetComponentInChildren<BlendShapeMappings>();
+                var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
 
                 // Find the avatar's face mesh.
                 var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
