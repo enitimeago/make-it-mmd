@@ -5,5 +5,14 @@ msgstr ""
 msgid "MappingsEditor:OpenEditor"
 msgstr "Open Editor"
 
+msgid "MappingsEditor:ShareAsUnitypackage"
+msgstr "Share as .unitypackage..."
+
+msgid "MappingsEditor:ShowStoredData"
+msgstr "Show stored data"
+
 msgid "MappingsEditorWindow:SelectMMDMorph"
 msgstr "Select a MMD morph"
+
+msgid "SaveFilePanel:SaveUnitypackage"
+msgstr "Save .unitypackage"

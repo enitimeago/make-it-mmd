@@ -20,7 +20,9 @@ namespace enitimeago.NonDestructiveMMD
             var data = (BlendShapeMappings)target;
             var avatar = data.GetComponentInParent<VRCAvatarDescriptor>();
 
+            EditorGUILayout.BeginHorizontal();
             CL4EE.DrawLanguagePicker();
+            EditorGUILayout.EndHorizontal();
 
             // TODO: unify checks with plugin and editorwindow?
             if (avatar == null)
@@ -58,9 +60,9 @@ namespace enitimeago.NonDestructiveMMD
             if (GUILayout.Button("▼", EditorStyles.miniButton, GUILayout.Width(20)))
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent("Share as .unitypackage..."), false, () => ExportPackage(data));
+                menu.AddItem(new GUIContent(CL4EE.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
                 menu.AddSeparator("");
-                menu.AddItem(new GUIContent("Show stored data"), _showStoredData, () => _showStoredData = !_showStoredData);
+                menu.AddItem(new GUIContent(CL4EE.Tr("MappingsEditor:ShowStoredData")), _showStoredData, () => _showStoredData = !_showStoredData);
                 menu.ShowAsContext();
             }
 
@@ -76,7 +78,7 @@ namespace enitimeago.NonDestructiveMMD
         private void ExportPackage(BlendShapeMappings mappingsComponent)
         {
             string packagePath = EditorUtility.SaveFilePanel(
-                "Save .unitypackage",
+                CL4EE.Tr("SaveFilePanel:SaveUnitypackage"),
                 "",
                 "",
                 "unitypackage");

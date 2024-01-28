@@ -8,5 +8,14 @@ msgstr "日本語"
 msgid "MappingsEditor:OpenEditor"
 msgstr "エディターを開く"
 
+msgid "MappingsEditor:ShareAsUnitypackage"
+msgstr ".unitypackageで共有する..."
+
+msgid "MappingsEditor:ShowStoredData"
+msgstr "保存データを表示"
+
 msgid "MappingsEditorWindow:SelectMMDMorph"
 msgstr "MMDモーフを選んでください"
+
+msgid "SaveFilePanel:SaveUnitypackage"
+msgstr ".unitypackageで保存"
