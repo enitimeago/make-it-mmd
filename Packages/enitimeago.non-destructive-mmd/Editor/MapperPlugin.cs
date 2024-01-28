@@ -21,6 +21,7 @@ namespace enitimeago.NonDestructiveMMD
 
         protected override void Configure()
         {
+            var commonAsserts = new CommonAsserts(isEditor: false);
             Sequence seq = InPhase(BuildPhase.Resolving);
             // Clone animator controllers first to allow safe mutation.
             // Modular Avatar does this, but unless this is moved into somewhere common
@@ -47,24 +48,16 @@ namespace enitimeago.NonDestructiveMMD
                 }
                 var mappingsComponent = mappingsComponents.First();
 
-                // Find the avatar's face mesh.
                 var descriptor = ctx.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
-                var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
-                var mesh = faceSkinnedMeshRenderer.sharedMesh;
-                if (faceSkinnedMeshRenderer.name != "Body")
+
+                if (!commonAsserts.RunAsserts(ctx.AvatarRootObject))
                 {
-                    Debug.LogWarning("Face mesh must be called \"Body\"! Aborting.");
                     return;
                 }
-                for (int i = 0; i < mesh.blendShapeCount; i++)
-                {
-                    string blendShapeName = mesh.GetBlendShapeName(i);
-                    if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
-                    {
-                        Debug.LogWarning("Avatar already has MMD blendshapes! Aborting.");
-                        return;
-                    }
-                }
+
+                // Find the avatar's face mesh.
+                var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
+                var mesh = faceSkinnedMeshRenderer.sharedMesh;
 
                 var deltaVertices = new Vector3[mesh.vertexCount];
                 var deltaNormals = new Vector3[mesh.vertexCount];

@@ -15,6 +15,7 @@ namespace enitimeago.NonDestructiveMMD
 {
     public class MappingsEditorWindow : BlendshapeViewerEditorWindowBase
     {
+        private CommonAsserts _commonAsserts;
         private BlendShapeMappings _dataSource = null;
         // Local copy of mappings using int => string to avoid recalculating mappings List<MMDToAvatarBlendShape>.
         // This should only be initialized when the window is created.
@@ -31,6 +32,11 @@ namespace enitimeago.NonDestructiveMMD
         private GUIStyle _selectedStyle;
         private GUIStyle _hasValueStyle;
         private GUIStyle _selectedHasValueStyle;
+        
+        public void OnEnable()
+        {
+            _commonAsserts = new CommonAsserts(isEditor: true);
+        }
 
         public static void ShowWindow(BlendShapeMappings data)
         {
@@ -72,28 +78,16 @@ namespace enitimeago.NonDestructiveMMD
             if (_dataSource.gameObject != null)
             {
                 var avatar = _dataSource.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
-                if (avatar == null)
+                if (!_commonAsserts.RunAsserts(avatar))
                 {
-                    GUILayout.Label("Couldn't find avatar!");
                     return;
                 }
                 var visemeSkinnedMesh = avatar.VisemeSkinnedMesh;
-                if (visemeSkinnedMesh == null)
-                {
-                    GUILayout.Label("Avatar has no face skin mesh!");
-                    return;
-                }
                 UsingSkinnedMesh(visemeSkinnedMesh);
                 _faceBlendShapes.Clear();
                 for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
                 {
-                    string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
-                    if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
-                    {
-                        GUILayout.Label("Avatar already has MMD blendshapes!");
-                        return;
-                    }
-                    _faceBlendShapes.Add(blendShapeName);
+                    _faceBlendShapes.Add(visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i));
                 }
                 if (!_faceBlendShapes.Any())
                 {

@@ -13,7 +13,13 @@ namespace enitimeago.NonDestructiveMMD
     [CustomEditor(typeof(BlendShapeMappings))]
     public class MappingsEditor : Editor
     {
+        private CommonAsserts _commonAsserts;
         private bool _showStoredData = false;
+        
+        public void OnEnable()
+        {
+            _commonAsserts = new CommonAsserts(isEditor: true);
+        }
 
         public override void OnInspectorGUI()
         {
@@ -24,30 +30,8 @@ namespace enitimeago.NonDestructiveMMD
             CL4EE.DrawLanguagePicker();
             EditorGUILayout.EndHorizontal();
 
-            // TODO: unify checks with plugin and editorwindow?
-            if (avatar == null)
-            {
-                EditorGUILayout.HelpBox("This component needs to be placed on or inside an avatar to work!", MessageType.Warning);
-            }
-
-            var visemeSkinnedMesh = avatar.VisemeSkinnedMesh;
-            if (visemeSkinnedMesh == null)
-            {
-                EditorGUILayout.HelpBox("Avatar has no face skin mesh!", MessageType.Warning);
-            }
-            if (visemeSkinnedMesh.name != "Body")
-            {
-                EditorGUILayout.HelpBox("This component needs your avatar's face mesh to be called \"Body\" to work!", MessageType.Warning);
-            }
-            for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
-            {
-                string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
-                if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
-                {
-                    EditorGUILayout.HelpBox("Avatars with pre-existing MMD blend shapes are unsupported!", MessageType.Warning);
-                    break;
-                }
-            }
+            // Run asserts, however continue rendering GUI if errors are encountered.
+            bool avatarOkay = _commonAsserts.RunAsserts(avatar);
 
             EditorGUILayout.BeginHorizontal();
 
@@ -60,8 +44,11 @@ namespace enitimeago.NonDestructiveMMD
             if (GUILayout.Button("▼", EditorStyles.miniButton, GUILayout.Width(20)))
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent(CL4EE.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
-                menu.AddSeparator("");
+                if (avatarOkay)
+                {
+                    menu.AddItem(new GUIContent(CL4EE.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
+                    menu.AddSeparator("");
+                }
                 menu.AddItem(new GUIContent(CL4EE.Tr("MappingsEditor:ShowStoredData")), _showStoredData, () => _showStoredData = !_showStoredData);
                 menu.ShowAsContext();
             }
