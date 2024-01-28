@@ -1,4 +1,5 @@
-﻿using enitimeago.NonDestructiveMMD.vendor;
+﻿using CustomLocalization4EditorExtension;
+using enitimeago.NonDestructiveMMD.vendor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -234,7 +235,7 @@ namespace enitimeago.NonDestructiveMMD
             }
             else
             {
-                GUILayout.Label("Select a MMD shapekey");
+                GUILayout.Label(CL4EE.Tr("MappingsEditorWindow:SelectMMDMorph"));
             }
 
             GUILayout.EndVertical();

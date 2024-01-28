@@ -1,0 +1,9 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+
+msgid "MappingsEditor:OpenEditor"
+msgstr "Open Editor"
+
+msgid "MappingsEditorWindow:SelectMMDMorph"
+msgstr "Select a MMD morph"

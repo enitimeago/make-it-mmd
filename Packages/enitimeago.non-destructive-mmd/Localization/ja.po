@@ -1,0 +1,12 @@
+msgid ""
+msgstr ""
+"Language: ja\n"
+
+msgid "locale:ja"
+msgstr "日本語"
+
+msgid "MappingsEditor:OpenEditor"
+msgstr "エディターを開く"
+
+msgid "MappingsEditorWindow:SelectMMDMorph"
+msgstr "MMDモーフを選んでください"

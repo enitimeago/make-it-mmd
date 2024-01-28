@@ -1,0 +1,1 @@
+../../../../External/CustomLocalization4EditorExtension/Editor/CustomLocalization4EditorExtension.Editor.cs

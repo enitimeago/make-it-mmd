@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CustomLocalization4EditorExtension;
+using System.Collections.Generic;
 using System.Linq;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.fluent;
@@ -44,9 +45,11 @@ namespace enitimeago.NonDestructiveMMD
                 }
             }
 
+            CL4EE.DrawLanguagePicker();
+
             EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("Open Editor"))
+            if (GUILayout.Button(CL4EE.Tr("MappingsEditor:OpenEditor")))
             {
                 MappingsEditorWindow.ShowWindow(data);
             }
