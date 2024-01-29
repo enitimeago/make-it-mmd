@@ -1,0 +1,36 @@
+{
+    "name": "enitimeago.non-destructive-mmd.tests",
+    "references": [
+        "enitimeago.non-destructive-mmd.editor",
+        "enitimeago.non-destructive-mmd.runtime",
+        "nadena.dev.ndmf",
+        "VRC.SDK3A",
+        "VRC.SDKBase",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll",
+        "nunit.framework.dll",
+        "VRCSDK3A.dll",
+        "VRCSDKBase.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.vrchat.avatars",
+            "expression": "",
+            "define": "NDMMD_VRCSDK3_AVATARS"
+        }
+    ],
+    "noEngineReferences": false
+}

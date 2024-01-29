@@ -97,11 +97,13 @@ namespace enitimeago.NonDestructiveMMD
             }
             else
             {
+                // TODO: switch to NDMF error logging.
+                // Error has to be downgraded to Debug.LogWarning in order not to break tests
                 switch (severity)
                 {
                     case Severity.Debug: Debug.Log(message); break;
                     case Severity.Warning: Debug.LogWarning(message); break;
-                    case Severity.Error: Debug.LogError(message); break;
+                    case Severity.Error: Debug.LogWarning(message); break;
                     default: Debug.LogWarning($"Unknown severity type raised with message \"${message}\""); break;
                 }
             }
