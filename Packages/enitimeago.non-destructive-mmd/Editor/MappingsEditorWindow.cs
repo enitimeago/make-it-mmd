@@ -1,15 +1,12 @@
-﻿using CustomLocalization4EditorExtension;
-using enitimeago.NonDestructiveMMD.vendor;
+﻿using enitimeago.NonDestructiveMMD.vendor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using nadena.dev.ndmf;
-using nadena.dev.ndmf.fluent;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using Newtonsoft.Json.Linq;
+using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -138,7 +135,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
-                GUILayout.Label(string.Format(CL4EE.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MMDBlendShapes.Names[_currentMmdKeyIndex]));
+                GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MMDBlendShapes.Names[_currentMmdKeyIndex]));
 
                 var italicLabelStyle = new GUIStyle(GUI.skin.label);
                 italicLabelStyle.fontStyle = FontStyle.Italic;
@@ -224,7 +221,7 @@ namespace enitimeago.NonDestructiveMMD
             }
             else
             {
-                GUILayout.Label(CL4EE.Tr("MappingsEditorWindow:SelectMMDMorph"));
+                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectMMDMorph"));
             }
 
             GUILayout.EndVertical();

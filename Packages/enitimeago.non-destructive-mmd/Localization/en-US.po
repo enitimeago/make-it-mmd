@@ -1,6 +1,9 @@
 msgid ""
 msgstr ""
-"Language: en\n"
+"Language: en-US\n"
+
+msgid "locale:en-US"
+msgstr "English"
 
 msgid "CommonAsserts:AvatarNotFound"
 msgstr "Avatar not found!"

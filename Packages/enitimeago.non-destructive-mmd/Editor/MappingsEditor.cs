@@ -1,12 +1,11 @@
-﻿using CustomLocalization4EditorExtension;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.fluent;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
+using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -27,7 +26,7 @@ namespace enitimeago.NonDestructiveMMD
             var avatar = data.GetComponentInParent<VRCAvatarDescriptor>();
 
             EditorGUILayout.BeginHorizontal();
-            CL4EE.DrawLanguagePicker();
+            L.DrawLanguagePicker();
             EditorGUILayout.EndHorizontal();
 
             // Run asserts, however continue rendering GUI if errors are encountered.
@@ -35,7 +34,7 @@ namespace enitimeago.NonDestructiveMMD
 
             EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Button(CL4EE.Tr("MappingsEditor:OpenEditor")))
+            if (GUILayout.Button(L.Tr("MappingsEditor:OpenEditor")))
             {
                 MappingsEditorWindow.ShowWindow(data);
             }
@@ -46,10 +45,10 @@ namespace enitimeago.NonDestructiveMMD
                 var menu = new GenericMenu();
                 if (avatarOkay)
                 {
-                    menu.AddItem(new GUIContent(CL4EE.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
+                    menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
                     menu.AddSeparator("");
                 }
-                menu.AddItem(new GUIContent(CL4EE.Tr("MappingsEditor:ShowStoredData")), _showStoredData, () => _showStoredData = !_showStoredData);
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShowStoredData")), _showStoredData, () => _showStoredData = !_showStoredData);
                 menu.ShowAsContext();
             }
 
@@ -65,7 +64,7 @@ namespace enitimeago.NonDestructiveMMD
         private void ExportPackage(BlendShapeMappings mappingsComponent)
         {
             string packagePath = EditorUtility.SaveFilePanel(
-                CL4EE.Tr("SaveFilePanel:SaveUnitypackage"),
+                L.Tr("SaveFilePanel:SaveUnitypackage"),
                 "",
                 "",
                 "unitypackage");

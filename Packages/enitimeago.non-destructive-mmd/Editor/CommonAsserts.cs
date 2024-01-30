@@ -1,10 +1,10 @@
 #if NDMMD_VRCSDK3_AVATARS
 
-using CustomLocalization4EditorExtension;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
+using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -38,32 +38,32 @@ namespace enitimeago.NonDestructiveMMD
         {
             if (avatarDescriptor == null)
             {
-                Log(CL4EE.Tr("CommonAsserts:AvatarNotFound"), Severity.Warning);
+                Log(L.Tr("CommonAsserts:AvatarNotFound"), Severity.Warning);
                 return false;
             }
 
             var visemeSkinnedMesh = avatarDescriptor.VisemeSkinnedMesh;
             if (visemeSkinnedMesh == null)
             {
-                Log(CL4EE.Tr("CommonAsserts:AvatarNoFaceMeshSet"), Severity.Warning);
+                Log(L.Tr("CommonAsserts:AvatarNoFaceMeshSet"), Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.name != "Body")
             {
-                Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRNotCalledBody"), Severity.Warning);
+                Log(L.Tr("CommonAsserts:AvatarFaceSMRNotCalledBody"), Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh == null)
             {
-                Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRNoMesh"), Severity.Warning);
+                Log(L.Tr("CommonAsserts:AvatarFaceSMRNoMesh"), Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh.blendShapeCount == 0)
             {
-                Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRNoBlendShapes"), Severity.Warning);
+                Log(L.Tr("CommonAsserts:AvatarFaceSMRNoBlendShapes"), Severity.Warning);
                 return false;
             }
 
@@ -72,7 +72,7 @@ namespace enitimeago.NonDestructiveMMD
                 string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
                 if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
                 {
-                    Log(CL4EE.Tr("CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"), Severity.Warning);
+                    Log(L.Tr("CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"), Severity.Warning);
                     return false;
                 }
             }

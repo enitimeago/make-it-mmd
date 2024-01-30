@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Language: ja\n"
+"Language: ja-JP\n"
 
-msgid "locale:ja"
+msgid "locale:ja-JP"
 msgstr "日本語"
 
 msgid "CommonAsserts:AvatarNotFound"

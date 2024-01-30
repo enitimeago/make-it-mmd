@@ -1,6 +1,3 @@
 [submodule "External/blendshape-viewer"]
 	path = External/blendshape-viewer
 	url = https://github.com/hai-vr/blendshape-viewer-vcc.git
-[submodule "External/CustomLocalization4EditorExtension"]
-	path = External/CustomLocalization4EditorExtension
-	url = https://github.com/anatawa12/CustomLocalization4EditorExtension.git
