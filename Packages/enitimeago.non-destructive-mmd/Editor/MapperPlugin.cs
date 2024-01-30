@@ -17,7 +17,7 @@ namespace enitimeago.NonDestructiveMMD
     public class MapperPlugin : Plugin<MapperPlugin>
     {
         public override string QualifiedName => "enitimeago.non-destructive-mmd";
-        public override string DisplayName => "Non-Destructive MMD";
+        public override string DisplayName => "Make It MMD";
 
         protected override void Configure()
         {

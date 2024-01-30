@@ -1,5 +1,6 @@
 #if NDMMD_VRCSDK3_AVATARS
 
+using nadena.dev.ndmf;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -23,12 +24,12 @@ namespace enitimeago.NonDestructiveMMD
             var mappingsComponents = avatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
             if (mappingsComponents.Length == 0)
             {
-                Log(L.Tr("CommonAsserts:NoMMDComponents"), Severity.Debug);
+                LogLocalized("CommonAsserts:NoMMDComponents", Severity.Debug);
                 return false;
             }
             if (mappingsComponents.Length > 1)
             {
-                Log(L.Tr("CommonAsserts:MultipleMMDComponents"), Severity.Error);
+                LogLocalized("CommonAsserts:MultipleMMDComponents", Severity.Error);
                 return false;
             }
             return RunAsserts(avatarDescriptor);
@@ -38,32 +39,32 @@ namespace enitimeago.NonDestructiveMMD
         {
             if (avatarDescriptor == null)
             {
-                Log(L.Tr("CommonAsserts:AvatarNotFound"), Severity.Warning);
+                LogLocalized("CommonAsserts:AvatarNotFound", Severity.Warning);
                 return false;
             }
 
             var visemeSkinnedMesh = avatarDescriptor.VisemeSkinnedMesh;
             if (visemeSkinnedMesh == null)
             {
-                Log(L.Tr("CommonAsserts:AvatarNoFaceMeshSet"), Severity.Warning);
+                LogLocalized("CommonAsserts:AvatarNoFaceMeshSet", Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.name != "Body")
             {
-                Log(L.Tr("CommonAsserts:AvatarFaceSMRNotCalledBody"), Severity.Warning);
+                LogLocalized("CommonAsserts:AvatarFaceSMRNotCalledBody", Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh == null)
             {
-                Log(L.Tr("CommonAsserts:AvatarFaceSMRNoMesh"), Severity.Warning);
+                LogLocalized("CommonAsserts:AvatarFaceSMRNoMesh", Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh.blendShapeCount == 0)
             {
-                Log(L.Tr("CommonAsserts:AvatarFaceSMRNoBlendShapes"), Severity.Warning);
+                LogLocalized("CommonAsserts:AvatarFaceSMRNoBlendShapes", Severity.Warning);
                 return false;
             }
 
@@ -72,7 +73,7 @@ namespace enitimeago.NonDestructiveMMD
                 string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
                 if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
                 {
-                    Log(L.Tr("CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"), Severity.Warning);
+                    LogLocalized("CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported", Severity.Warning);
                     return false;
                 }
             }
@@ -83,10 +84,11 @@ namespace enitimeago.NonDestructiveMMD
 #if UNITY_2021_3_OR_NEWER
         [HideInCallstackAttribute]
 #endif
-        private void Log(string message, Severity severity)
+        private void LogLocalized(string key, Severity severity)
         {
             if (_isEditor)
             {
+                string message = L.Tr(key);
                 switch (severity)
                 {
                     case Severity.Debug: break;
@@ -97,18 +99,17 @@ namespace enitimeago.NonDestructiveMMD
             }
             else
             {
-                // TODO: switch to NDMF error logging.
-                // Error has to be downgraded to Debug.LogWarning in order not to break tests
                 switch (severity)
                 {
-                    case Severity.Debug: Debug.Log(message); break;
-                    case Severity.Warning: Debug.LogWarning(message); break;
-                    case Severity.Error: Debug.LogWarning(message); break;
-                    default: Debug.LogWarning($"Unknown severity type raised with message \"${message}\""); break;
+                    case Severity.Debug: Debug.Log(L.Tr(key)); break;
+                    case Severity.Warning: ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, key); break;
+                    case Severity.Error: ErrorReport.ReportError(L.Localizer, ErrorSeverity.Error, key); break;
+                    default: ErrorReport.ReportError(L.Localizer, ErrorSeverity.InternalError, $"Unknown severity type raised with message \"${key}\""); break;
                 }
             }
         }
 
+        // TODO: align with NDMF severity
         public enum Severity
         {
             Debug,

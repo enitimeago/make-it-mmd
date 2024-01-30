@@ -15,7 +15,7 @@ namespace enitimeago.NonDestructiveMMD
         private static string[] _localeCodes;
         private static string[] _localeNames;
         private static int _currentLocaleIndex;
-        private static Localizer _localizer;
+        public static Localizer Localizer { get; private set; }
 
         static Localization()
         {
@@ -30,7 +30,7 @@ namespace enitimeago.NonDestructiveMMD
             _localeNames = _localizationAssets
                 .Select(asset => asset.GetLocalizedString($"locale:{asset.localeIsoCode}"))
                 .ToArray();
-            _localizer = new Localizer("en-US", () => _localizationAssets);
+            Localizer = new Localizer("en-US", () => _localizationAssets);
             _currentLocaleIndex = Array.IndexOf(_localeCodes, LanguagePrefs.Language);
         }
 
@@ -51,7 +51,7 @@ namespace enitimeago.NonDestructiveMMD
 
         public static string Tr(string key, string fallback)
         {
-            if (_localizer.TryGetLocalizedString(key, out var value))
+            if (Localizer.TryGetLocalizedString(key, out var value))
             {
                 return value;
             }
