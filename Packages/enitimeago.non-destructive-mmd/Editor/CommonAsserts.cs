@@ -23,12 +23,12 @@ namespace enitimeago.NonDestructiveMMD
             var mappingsComponents = avatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
             if (mappingsComponents.Length == 0)
             {
-                Log("No Make It MMD component found in avatar. Nothing to do", Severity.Debug);
+                Log(L.Tr("CommonAsserts:NoMMDComponents"), Severity.Debug);
                 return false;
             }
             if (mappingsComponents.Length > 1)
             {
-                Log("More than one Make It MMD component found in avatar!", Severity.Error);
+                Log(L.Tr("CommonAsserts:MultipleMMDComponents"), Severity.Error);
                 return false;
             }
             return RunAsserts(avatarDescriptor);

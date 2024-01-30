@@ -5,6 +5,12 @@ msgstr ""
 msgid "locale:en-US"
 msgstr "English"
 
+msgid "CommonAsserts:NoMMDComponents"
+msgstr "No Make It MMD component found in avatar. Nothing to do"
+
+msgid "CommonAsserts:MultipleMMDComponents"
+msgstr "More than one Make It MMD component found in avatar!"
+
 msgid "CommonAsserts:AvatarNotFound"
 msgstr "Avatar not found!"
 

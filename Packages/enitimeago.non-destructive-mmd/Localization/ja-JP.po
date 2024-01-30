@@ -5,6 +5,12 @@ msgstr ""
 msgid "locale:ja-JP"
 msgstr "日本語"
 
+msgid "CommonAsserts:NoMMDComponents"
+msgstr "アバターにMake It MMDコンポーネントが見つかりません。処理するものがありません"
+
+msgid "CommonAsserts:MultipleMMDComponents"
+msgstr "アバターに複数のMake It MMDコンポーネントが見つけました！"
+
 msgid "CommonAsserts:AvatarNotFound"
 msgstr "アバターが見つかりません！"
 
