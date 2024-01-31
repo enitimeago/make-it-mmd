@@ -12,7 +12,7 @@ namespace enitimeago.NonDestructiveMMD
 {
     public class MappingsEditorWindow : BlendshapeViewerEditorWindowBase
     {
-        private CommonAsserts _commonAsserts;
+        private CommonChecks _commonChecks;
         private BlendShapeMappings _dataSource = null;
         // Local copy of mappings using int => string to avoid recalculating mappings List<MMDToAvatarBlendShape>.
         // This should only be initialized when the window is created.
@@ -32,7 +32,7 @@ namespace enitimeago.NonDestructiveMMD
         
         public void OnEnable()
         {
-            _commonAsserts = new CommonAsserts(isEditor: true);
+            _commonChecks = new CommonChecks(isEditor: true);
         }
 
         public static void ShowWindow(BlendShapeMappings data)
@@ -75,7 +75,7 @@ namespace enitimeago.NonDestructiveMMD
             if (_dataSource.gameObject != null)
             {
                 var avatar = _dataSource.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
-                if (!_commonAsserts.RunAsserts(avatar))
+                if (!_commonChecks.RunChecks(avatar))
                 {
                     return;
                 }

@@ -9,72 +9,72 @@ using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    public class CommonAsserts
+    public class CommonChecks
     {
         private bool _isEditor;
 
-        public CommonAsserts(bool isEditor)
+        public CommonChecks(bool isEditor)
         {
             _isEditor = isEditor;
         }
 
-        public bool RunAsserts(GameObject avatarRootObject)
+        public bool RunChecks(GameObject avatarRootObject)
         {
             var avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
             var mappingsComponents = avatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
             if (mappingsComponents.Length == 0)
             {
-                LogLocalized("CommonAsserts:NoMMDComponents", Severity.Debug);
+                LogLocalized("CommonChecks:NoMMDComponents", Severity.Debug);
                 return false;
             }
             if (mappingsComponents.Length > 1)
             {
-                LogLocalized("CommonAsserts:MultipleMMDComponents", Severity.Error);
+                LogLocalized("CommonChecks:MultipleMMDComponents", Severity.Error);
                 return false;
             }
-            return RunAsserts(mappingsComponents.First()) && RunAsserts(avatarDescriptor);
+            return RunChecks(mappingsComponents.First()) && RunChecks(avatarDescriptor);
         }
 
-        public bool RunAsserts(BlendShapeMappings blendShapeMappings)
+        public bool RunChecks(BlendShapeMappings blendShapeMappings)
         {
             if (blendShapeMappings.dataVersion > BlendShapeMappings.CURRENT_DATA_VERSION)
             {
-                LogLocalized("CommonAsserts:NewerDataVersion", Severity.Error);
+                LogLocalized("CommonChecks:NewerDataVersion", Severity.Error);
                 return false;
             }
             return true;
         }
 
-        public bool RunAsserts(VRCAvatarDescriptor avatarDescriptor)
+        public bool RunChecks(VRCAvatarDescriptor avatarDescriptor)
         {
             if (avatarDescriptor == null)
             {
-                LogLocalized("CommonAsserts:AvatarNotFound", Severity.Warning);
+                LogLocalized("CommonChecks:AvatarNotFound", Severity.Warning);
                 return false;
             }
 
             var visemeSkinnedMesh = avatarDescriptor.VisemeSkinnedMesh;
             if (visemeSkinnedMesh == null)
             {
-                LogLocalized("CommonAsserts:AvatarNoFaceMeshSet", Severity.Warning);
+                LogLocalized("CommonChecks:AvatarNoFaceMeshSet", Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.name != "Body")
             {
-                LogLocalized("CommonAsserts:AvatarFaceSMRNotCalledBody", Severity.Warning);
+                LogLocalized("CommonChecks:AvatarFaceSMRNotCalledBody", Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh == null)
             {
-                LogLocalized("CommonAsserts:AvatarFaceSMRNoMesh", Severity.Warning);
+                LogLocalized("CommonChecks:AvatarFaceSMRNoMesh", Severity.Warning);
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh.blendShapeCount == 0)
             {
-                LogLocalized("CommonAsserts:AvatarFaceSMRNoBlendShapes", Severity.Warning);
+                LogLocalized("CommonChecks:AvatarFaceSMRNoBlendShapes", Severity.Warning);
                 return false;
             }
 
@@ -83,7 +83,7 @@ namespace enitimeago.NonDestructiveMMD
                 string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
                 if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
                 {
-                    LogLocalized("CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported", Severity.Warning);
+                    LogLocalized("CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported", Severity.Warning);
                     return false;
                 }
             }

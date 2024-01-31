@@ -21,7 +21,7 @@ namespace enitimeago.NonDestructiveMMD
 
         protected override void Configure()
         {
-            var commonAsserts = new CommonAsserts(isEditor: false);
+            var commonChecks = new CommonChecks(isEditor: false);
             Sequence seq = InPhase(BuildPhase.Resolving);
             // Clone animator controllers first to allow safe mutation.
             // Modular Avatar does this, but unless this is moved into somewhere common
@@ -32,7 +32,7 @@ namespace enitimeago.NonDestructiveMMD
             seq.Run("Create MMD mesh", ctx =>
             {
                 // TODO: should asserts not be in the transforming phase?
-                if (!commonAsserts.RunAsserts(ctx.AvatarRootObject))
+                if (!commonChecks.RunChecks(ctx.AvatarRootObject))
                 {
                     return;
                 }

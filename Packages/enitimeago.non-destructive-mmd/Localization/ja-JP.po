@@ -5,31 +5,31 @@ msgstr ""
 msgid "locale:ja-JP"
 msgstr "日本語"
 
-msgid "CommonAsserts:NoMMDComponents"
+msgid "CommonChecks:NoMMDComponents"
 msgstr "アバターにMake It MMDコンポーネントが見つかりません。処理するものがありません"
 
-msgid "CommonAsserts:MultipleMMDComponents"
+msgid "CommonChecks:MultipleMMDComponents"
 msgstr "アバターに複数のMake It MMDコンポーネントが見つけました！"
 
-msgid "CommonAsserts:NewerDataVersion"
+msgid "CommonChecks:NewerDataVersion"
 msgstr "保存されたデータは新しいMake It MMDのバージョンで作ったようです。Make It MMDをアップデートし、または本コンポーネントを削除してください。"
 
-msgid "CommonAsserts:AvatarNotFound"
+msgid "CommonChecks:AvatarNotFound"
 msgstr "アバターが見つかりません！"
 
-msgid "CommonAsserts:AvatarNoFaceMeshSet"
+msgid "CommonChecks:AvatarNoFaceMeshSet"
 msgstr "アバターのFace Meshが設定されていません！"
 
-msgid "CommonAsserts:AvatarFaceSMRNotCalledBody"
+msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
 msgstr "アバターのFace Meshは「Body」と名前を付ける必要があります！"
 
-msgid "CommonAsserts:AvatarFaceSMRNoMesh"
+msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "アバターのFace Meshに、メッシュが設定されていません！"
 
-msgid "CommonAsserts:AvatarFaceSMRNoBlendShapes"
+msgid "CommonChecks:AvatarFaceSMRNoBlendShapes"
 msgstr "アバターのFace Meshに、メッシュがブレンドシェープがありません！"
 
-msgid "CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"
+msgid "CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported"
 msgstr "現在、すでにMMDブレンドシェープあるアバターはサポートされていません！"
 
 msgid "MappingsEditor:OpenEditor"

@@ -5,31 +5,31 @@ msgstr ""
 msgid "locale:en-US"
 msgstr "English"
 
-msgid "CommonAsserts:NoMMDComponents"
+msgid "CommonChecks:NoMMDComponents"
 msgstr "No Make It MMD component found in avatar. Nothing to do"
 
-msgid "CommonAsserts:MultipleMMDComponents"
+msgid "CommonChecks:MultipleMMDComponents"
 msgstr "More than one Make It MMD component found in avatar!"
 
-msgid "CommonAsserts:NewerDataVersion"
+msgid "CommonChecks:NewerDataVersion"
 msgstr "Data seems to be from a newer version of Make It MMD, please update Make It MMD or delete this component."
 
-msgid "CommonAsserts:AvatarNotFound"
+msgid "CommonChecks:AvatarNotFound"
 msgstr "Avatar not found!"
 
-msgid "CommonAsserts:AvatarNoFaceMeshSet"
+msgid "CommonChecks:AvatarNoFaceMeshSet"
 msgstr "Avatar has not set a face mesh!"
 
-msgid "CommonAsserts:AvatarFaceSMRNotCalledBody"
+msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
 msgstr "Avatar face mesh must be called \"Body\"!"
 
-msgid "CommonAsserts:AvatarFaceSMRNoMesh"
+msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "Avatar face mesh is missing!"
 
-msgid "CommonAsserts:AvatarFaceSMRNoBlendShapes"
+msgid "CommonChecks:AvatarFaceSMRNoBlendShapes"
 msgstr "Avatar face mesh has no blend shapes!"
 
-msgid "CommonAsserts:AvatarFaceSMRExistingBlendShapesUnsupported"
+msgid "CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported"
 msgstr "Avatars with pre-existing MMD blend shapes are currently unsupported!"
 
 msgid "MappingsEditor:OpenEditor"

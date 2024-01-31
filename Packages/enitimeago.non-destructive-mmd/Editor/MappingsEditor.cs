@@ -12,12 +12,12 @@ namespace enitimeago.NonDestructiveMMD
     [CustomEditor(typeof(BlendShapeMappings))]
     public class MappingsEditor : Editor
     {
-        private CommonAsserts _commonAsserts;
+        private CommonChecks _commonChecks;
         private bool _showStoredData = false;
         
         public void OnEnable()
         {
-            _commonAsserts = new CommonAsserts(isEditor: true);
+            _commonChecks = new CommonChecks(isEditor: true);
         }
 
         public override void OnInspectorGUI()
@@ -30,7 +30,7 @@ namespace enitimeago.NonDestructiveMMD
             EditorGUILayout.EndHorizontal();
 
             // Run asserts, however continue rendering GUI if errors are encountered.
-            bool avatarOkay = _commonAsserts.RunAsserts(data) && _commonAsserts.RunAsserts(avatar);
+            bool avatarOkay = _commonChecks.RunChecks(data) && _commonChecks.RunChecks(avatar);
 
             EditorGUILayout.BeginHorizontal();
 
