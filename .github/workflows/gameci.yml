@@ -14,6 +14,8 @@ jobs:
       with:
         submodules: recursive
 
+    - uses: anatawa12/sh-actions/resolve-vpm-packages@master
+
     - uses: actions/cache@v2
       with:
         path: Library
