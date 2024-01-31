@@ -1,7 +1,8 @@
 {
     "name": "enitimeago.non-destructive-mmd.runtime",
     "references": [
-        "nadena.dev.ndmf.runtime"
+        "nadena.dev.ndmf.runtime",
+        "VRC.SDKBase"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
