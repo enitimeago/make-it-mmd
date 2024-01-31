@@ -36,3 +36,9 @@ jobs:
         unityVersion: 2019.4.31f1
         packageMode: true
         projectPath: Packages/enitimeago.non-destructive-mmd
+
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: Test results
+        path: artifacts
