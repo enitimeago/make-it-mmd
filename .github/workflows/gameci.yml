@@ -34,8 +34,8 @@ jobs:
       with:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         unityVersion: 2019.4.31f1
-        packageMode: true
-        projectPath: Packages/enitimeago.non-destructive-mmd
+        #packageMode: true
+        #projectPath: Packages/enitimeago.non-destructive-mmd
 
     - uses: actions/upload-artifact@v3
       if: always()
