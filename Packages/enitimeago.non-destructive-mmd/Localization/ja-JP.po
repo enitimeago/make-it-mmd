@@ -11,6 +11,9 @@ msgstr "アバターにMake It MMDコンポーネントが見つかりません�
 msgid "CommonAsserts:MultipleMMDComponents"
 msgstr "アバターに複数のMake It MMDコンポーネントが見つけました！"
 
+msgid "CommonAsserts:NewerDataVersion"
+msgstr "保存されたデータは新しいMake It MMDのバージョンで作ったようです。Make It MMDをアップデートし、または本コンポーネントを削除してください。"
+
 msgid "CommonAsserts:AvatarNotFound"
 msgstr "アバターが見つかりません！"
 

@@ -30,7 +30,7 @@ namespace enitimeago.NonDestructiveMMD
             EditorGUILayout.EndHorizontal();
 
             // Run asserts, however continue rendering GUI if errors are encountered.
-            bool avatarOkay = _commonAsserts.RunAsserts(avatar);
+            bool avatarOkay = _commonAsserts.RunAsserts(data) && _commonAsserts.RunAsserts(avatar);
 
             EditorGUILayout.BeginHorizontal();
 

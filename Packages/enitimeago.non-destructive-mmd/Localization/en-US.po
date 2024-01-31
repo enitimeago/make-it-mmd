@@ -11,6 +11,9 @@ msgstr "No Make It MMD component found in avatar. Nothing to do"
 msgid "CommonAsserts:MultipleMMDComponents"
 msgstr "More than one Make It MMD component found in avatar!"
 
+msgid "CommonAsserts:NewerDataVersion"
+msgstr "Data seems to be from a newer version of Make It MMD, please update Make It MMD or delete this component."
+
 msgid "CommonAsserts:AvatarNotFound"
 msgstr "Avatar not found!"
 

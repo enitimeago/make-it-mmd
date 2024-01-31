@@ -23,7 +23,9 @@ namespace enitimeago.NonDestructiveMMD
     [DisallowMultipleComponent]
     public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {
-        public int dataVersion; // TODO: implement this
+        public const int CURRENT_DATA_VERSION = 0;
+    
+        public int dataVersion;
         public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
 
         public void RemoveBlendShapeMapping(string mmdKey)

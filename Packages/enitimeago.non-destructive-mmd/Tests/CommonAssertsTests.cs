@@ -39,6 +39,34 @@ public class CommonAssertsTests
     }
 
     [Test]
+    public void RunAsserts_BlendShapeMappingsWithCurrentDataVersion_WillPass()
+    {
+        var commonAsserts = new CommonAsserts(isEditor: false);
+        var blendShapeMappings = new BlendShapeMappings
+        {
+            dataVersion = BlendShapeMappings.CURRENT_DATA_VERSION
+        };
+
+        bool result = commonAsserts.RunAsserts(blendShapeMappings);
+
+        Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void RunAsserts_BlendShapeMappingsWithNewerDataVersion_WillFail()
+    {
+        var commonAsserts = new CommonAsserts(isEditor: false);
+        var blendShapeMappings = new BlendShapeMappings
+        {
+            dataVersion = BlendShapeMappings.CURRENT_DATA_VERSION + 1
+        };
+
+        bool result = commonAsserts.RunAsserts(blendShapeMappings);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
     public void RunAsserts_NullVRCAvatarDescriptor_WillFail()
     {
         var commonAsserts = new CommonAsserts(isEditor: false);

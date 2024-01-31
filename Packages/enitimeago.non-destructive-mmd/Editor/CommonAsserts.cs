@@ -32,7 +32,17 @@ namespace enitimeago.NonDestructiveMMD
                 LogLocalized("CommonAsserts:MultipleMMDComponents", Severity.Error);
                 return false;
             }
-            return RunAsserts(avatarDescriptor);
+            return RunAsserts(mappingsComponents.First()) && RunAsserts(avatarDescriptor);
+        }
+
+        public bool RunAsserts(BlendShapeMappings blendShapeMappings)
+        {
+            if (blendShapeMappings.dataVersion > BlendShapeMappings.CURRENT_DATA_VERSION)
+            {
+                LogLocalized("CommonAsserts:NewerDataVersion", Severity.Error);
+                return false;
+            }
+            return true;
         }
 
         public bool RunAsserts(VRCAvatarDescriptor avatarDescriptor)
