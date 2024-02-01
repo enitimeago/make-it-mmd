@@ -42,7 +42,7 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         unityVersion: 2019.4.31f1
         #packageMode: true
-        projectPath: copiedProject
+        projectPath: ./copiedProject/make-it-mmd
 
     - uses: actions/upload-artifact@v3
       if: always()
