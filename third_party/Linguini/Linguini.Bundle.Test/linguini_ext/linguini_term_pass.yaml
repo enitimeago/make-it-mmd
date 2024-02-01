@@ -1,0 +1,28 @@
+﻿suites:
+  - name: Linguini dynamic reference
+    resources:
+      - source: |-
+          -ship = Ship
+            .gender =  { $style ->
+              *[traditional] neuter
+              [chicago] feminine
+            } 
+          ship-gender = { -ship.gender(style: $style) ->
+            *[masculine] He
+            [feminine] She
+            [neuter] It
+          }
+    bundles:
+      - useExperimental: true
+    tests:
+      - name: regular reference
+        asserts:
+          - id: ship-gender
+            args:
+              style: "chicago"
+            value: "She"
+          - id: ship-gender
+            args:
+              style: ""
+            value: "It"
+            

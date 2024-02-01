@@ -1,0 +1,43 @@
+﻿suites:
+    - name: Linguini tests
+      suites:
+        - name: Term and Scoping
+          resources:
+            - source: |-
+                  x0 = {"hh\\:mm"}
+                  x1 = {"hh\u005C:mm"}
+                  x2 = {IDENTITY("hh\u005C:mm")}
+                  x3 = {IDENTITY("hh\\:mm")}
+                  -term = term
+                  term-and-scope = {-term} and {$scope}
+          bundles:
+            - functions:
+              - IDENTITY
+          tests:
+            - name: escape the value
+              asserts:
+              - id: x0
+                value: hh\:mm
+              - id: x1
+                value: hh\:mm
+              - id: x2
+                value: hh\:mm
+              - id: x3
+                value: hh\:mm
+            - name: term and scope references
+              assert:
+              - id: term-and-scope
+                args:
+                  scope: scope
+                value:
+                  term and scope
+        - name: Newlines
+          resources:
+            - source: "msg = \r\n  Line1\r\n\r\n\r\n  Line2"
+          tests:
+            - name: msg
+              value: |-
+                Line1
+                
+                
+                Line2

@@ -1,0 +1,44 @@
+﻿<Project>
+    <ItemGroup>
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="0.1.66">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <PropertyGroup>
+        <!-- .Net Language options -->
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        
+        <!-- Author and licence info -->
+        <Authors>Daniel Fath</Authors>
+        <Copyright>Copyright (c) Daniel Fath 2022</Copyright>
+        <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+        <PackageVersion>0.1.3</PackageVersion>
+
+        <!-- Repo info -->
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RepositoryUrl>https://github.com/Ygg01/Linguini</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/Ygg01/Linguini</PackageProjectUrl>
+        <RepositoryType>git</RepositoryType>
+        
+        <!-- Reproducible build setting -->
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Required if your repository is on GitHub -->
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All"/>
+
+        <!-- Required if your repository is on VSTS -->
+        <!--<PackageReference Include="Microsoft.SourceLink.Vsts.Git" Version="1.0.0-*" PrivateAssets="All"/>-->
+
+        <!-- Required if your repository is on GitLab -->
+        <!--<PackageReference Include="Microsoft.SourceLink.GitLab" Version="1.0.0-*" PrivateAssets="All"/>-->
+    </ItemGroup>
+</Project>

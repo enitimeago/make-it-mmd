@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Linguini Syntax - Zero Copy parser used to parse Fluent syntax</Title>
+        <Description>Linguini Syntax provides a module for parsing input using zero-copy Fluent parser.</Description>
+        <Copyright>Copyright (c) Daniel Fath 2021</Copyright>
+        <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/Ygg01/Linguini</RepositoryUrl>
+        <PackageTags>fluent, i18n, internationalization, l10n, l20n, globalization, translation</PackageTags>
+        <PackageProjectUrl>https://github.com/Ygg01/Linguini</PackageProjectUrl>
+        <RepositoryType>git</RepositoryType>
+        <TargetFrameworks>net6.0;netstandard2.1;net8.0</TargetFrameworks>
+        <PackageVersion>0.8.0</PackageVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>linguini.jpg</PackageIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Linguini.Shared\Linguini.Shared.csproj" />
+        <None Include="..\linguini.jpg" PackagePath="">
+          <Pack>True</Pack>
+            <Link>linguini.jpg</Link>
+        </None>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+</Project>

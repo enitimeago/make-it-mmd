@@ -1,0 +1,112 @@
+﻿{
+  "type": "Resource",
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "type": "Identifier",
+        "name": "attack-log1"
+      },
+      "value": {
+        "type": "Pattern",
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "DynamicReference",
+              "id": {
+                "type": "Identifier",
+                "name": "attacker"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " attacked "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "DynamicReference",
+              "id": {
+                "type": "Identifier",
+                "name": "defender"
+              }
+            }
+          }
+        ]
+      },
+      "attributes": []
+    },
+    {
+      "type": "Message",
+      "id": {
+        "type": "Identifier",
+        "name": "attack-log2"
+      },
+      "value": {
+        "type": "Pattern",
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "DynamicReference",
+              "id": {
+                "type": "Identifier",
+                "name": "attacker"
+              },
+              "arguments": {
+                "type": "CallArguments",
+                "positional": [],
+                "named": [
+                  {
+                    "type": "NamedArgument",
+                    "name": {
+                      "type": "Identifier",
+                      "name": "number"
+                    },
+                    "value": {
+                      "type": "VariableReference",
+                      "id": {
+                        "type": "Identifier",
+                        "name": "atk_num"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " attacked "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "DynamicReference",
+              "id": {
+                "type": "Identifier",
+                "name": "defender"
+              },
+              "arguments": {
+                "type": "CallArguments",
+                "positional": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "def_num"
+                    }
+                  }
+                ],
+                "named": []
+              }
+            }
+          }
+        ]
+      },
+      "attributes": []
+    }
+  ]
+}

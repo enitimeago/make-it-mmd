@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <Title>Linguini.Shared - Shared utils for parsing Fluent localization</Title>
+        <Authors>Daniel Fath</Authors>
+        <Description>Shared package used for Linguini, a C# Fluent localization implementation</Description>
+        <Copyright>Copyright (c) Daniel Fath 2021</Copyright>
+        <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+        <PackageTags>fluent, i18n, internationalization, l10n, l20n, globalization, translation</PackageTags>
+        <IncludeSymbols>false</IncludeSymbols>
+        <PackageVersion>0.8.0</PackageVersion>
+        <TargetFrameworks>net6.0;netstandard2.1;net8.0</TargetFrameworks>
+        <PackageIcon>linguini.jpg</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+    
+    
+    <ItemGroup>
+      <None Include="..\linguini.jpg" PackagePath="">
+        <Pack>True</Pack>
+          <Link>linguini.jpg</Link>
+      </None>
+      <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    
+
+</Project>

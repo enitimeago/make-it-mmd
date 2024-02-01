@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <Nullable>enable</Nullable>
+        <OutputType>Library</OutputType>
+        <PackageIcon>linguini.jpg</PackageIcon>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <PackageVersion>0.8.0</PackageVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions.Json" Version="6.1.0" />
+        <PackageReference Include="NUnit" Version="4.0.1" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Linguini.Serialization\Linguini.Serialization.csproj" />
+        <ProjectReference Include="..\Linguini.Syntax\Linguini.Syntax.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\linguini.jpg" PackagePath="">
+            <Pack>True</Pack>
+            <Link>linguini.jpg</Link>
+        </None>
+    </ItemGroup>
+</Project>

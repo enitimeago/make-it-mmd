@@ -1,0 +1,1 @@
+﻿reagent-effect = -cause-3rd-person($chance) an explosion
