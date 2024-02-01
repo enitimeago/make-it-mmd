@@ -26,12 +26,12 @@ jobs:
     #     key: Library-${{ runner.os }}-unity-2019.4.31f1
     #     restore-keys: Library-
 
-    - name: copy dir to new dir
-      run: |
-        pwd
-        folderName=$(echo "${PWD##*/}")
-        rsync -r "$GITHUB_WORKSPACE" "copiedProject" 
-        ls -F "copiedProject/$folderName"
+    # - name: copy dir to new dir
+    #   run: |
+    #     pwd
+    #     folderName=$(echo "${PWD##*/}")
+    #     rsync -r "$GITHUB_WORKSPACE" "copiedProject" 
+    #     ls -F "copiedProject/$folderName"
 
     - uses: game-ci/unity-test-runner@v4
       env:
@@ -42,7 +42,8 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         unityVersion: 2019.4.31f1
         #packageMode: true
-        projectPath: ./copiedProject/make-it-mmd
+        projectPath: .
+        coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+enitimeago.non-destructive-mmd.*'
 
     - uses: actions/upload-artifact@v3
       if: always()
