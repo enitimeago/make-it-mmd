@@ -3,7 +3,7 @@ name: Unity CI
 on:
   push:
     branches:
-      - gameci-develop
+      - main
 
 jobs:
   build:
