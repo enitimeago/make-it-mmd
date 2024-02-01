@@ -43,6 +43,7 @@ jobs:
         unityVersion: 2019.4.31f1
         #packageMode: true
         projectPath: .
+        # playmode hangs. need to investigate why
         testMode: EditMode
         coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+enitimeago.non-destructive-mmd.*'
 
