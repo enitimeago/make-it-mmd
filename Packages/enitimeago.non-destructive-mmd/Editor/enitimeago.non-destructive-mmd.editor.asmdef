@@ -1,7 +1,6 @@
 {
     "name": "enitimeago.non-destructive-mmd.editor",
     "references": [
-        "BlendshapeViewer.Editor",
         "enitimeago.non-destructive-mmd.runtime",
         "nadena.dev.ndmf",
         "VRC.SDKBase"
