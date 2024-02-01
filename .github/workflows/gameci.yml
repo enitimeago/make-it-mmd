@@ -43,6 +43,7 @@ jobs:
         unityVersion: 2019.4.31f1
         #packageMode: true
         projectPath: .
+        testMode: EditMode
         coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+enitimeago.non-destructive-mmd.*'
 
     - uses: actions/upload-artifact@v3
