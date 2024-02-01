@@ -20,18 +20,11 @@ jobs:
           https://vpm.nadena.dev/vpm.json
           https://hai-vr.github.io/vpm-listing/index.json
 
-    # - uses: actions/cache@v2
-    #   with:
-    #     path: Library
-    #     key: Library-${{ runner.os }}-unity-2019.4.31f1
-    #     restore-keys: Library-
-
-    # - name: copy dir to new dir
-    #   run: |
-    #     pwd
-    #     folderName=$(echo "${PWD##*/}")
-    #     rsync -r "$GITHUB_WORKSPACE" "copiedProject" 
-    #     ls -F "copiedProject/$folderName"
+    - uses: actions/cache@v2
+      with:
+        path: Library
+        key: Library-${{ runner.os }}-unity-2019.4.31f1
+        restore-keys: Library-
 
     - uses: game-ci/unity-test-runner@v4
       env:
@@ -41,9 +34,8 @@ jobs:
       with:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         unityVersion: 2019.4.31f1
-        #packageMode: true
         projectPath: .
-        # playmode hangs. need to investigate why
+        # TODO: PlayMode (incl. All) causes GameCI to hang. figure out if it's needed?
         testMode: EditMode
         coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+enitimeago.non-destructive-mmd.*'
 
