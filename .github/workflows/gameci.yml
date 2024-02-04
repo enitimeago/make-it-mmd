@@ -62,7 +62,7 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: Library
-        key: Library-${{ runner.os }}-unity-2019.4.31f1
+        key: Library-${{ runner.os }}-unity-2022.3.6f1
         restore-keys: Library-
 
     - name: Ensure .sln
@@ -72,7 +72,7 @@ jobs:
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       with:
-        unityVersion: 2019.4.31f1
+        unityVersion: 2022.3.6f1
         # vpm-manifest.json is modified.
         # TODO: does this have lockfile semantics? would committing it help?
         allowDirtyBuild: true
