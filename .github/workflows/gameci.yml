@@ -91,4 +91,4 @@ jobs:
       run: dotnet restore workspace.sln
 
     - name: dotnet format
-      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
+      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj --exclude ./Packages/enitimeago.non-destructive-mmd/Editor/vendor
