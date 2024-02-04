@@ -84,5 +84,11 @@ jobs:
       with:
         dotnet-version: "5.0.x"
 
-    - name: dotnet format
+    - name: dotnet format Editor
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj --exclude ./Packages/enitimeago.non-destructive-mmd/Editor/vendor
+
+    - name: dotnet format Runtime
+      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.runtime.csproj
+
+    - name: dotnet format Tests
+      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.tests.csproj
