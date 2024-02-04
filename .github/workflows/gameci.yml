@@ -47,7 +47,7 @@ jobs:
 
   format:
     runs-on: ubuntu-latest
-    container: unityci/editor:ubuntu-2019.4.31f1-windows-mono-3
+    #container: unityci/editor:ubuntu-2019.4.31f1-windows-mono-3
 
     steps:
     - uses: actions/checkout@v4
