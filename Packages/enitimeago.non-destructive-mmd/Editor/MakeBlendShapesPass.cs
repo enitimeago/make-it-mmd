@@ -1,4 +1,4 @@
-#if NDMMD_VRCSDK3_AVATARS
+﻿#if NDMMD_VRCSDK3_AVATARS
 
 using nadena.dev.ndmf;
 using UnityEditor.Animations;

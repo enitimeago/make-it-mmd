@@ -1,7 +1,7 @@
-#if NDMMD_VRCSDK3_AVATARS
+﻿#if NDMMD_VRCSDK3_AVATARS
 
-using nadena.dev.ndmf;
 using System.Linq;
+using nadena.dev.ndmf;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;

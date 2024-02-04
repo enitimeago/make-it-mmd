@@ -1,4 +1,4 @@
-#if NDMMD_VRCSDK3_AVATARS
+﻿#if NDMMD_VRCSDK3_AVATARS
 
 using enitimeago.NonDestructiveMMD.vendor;
 using nadena.dev.ndmf;

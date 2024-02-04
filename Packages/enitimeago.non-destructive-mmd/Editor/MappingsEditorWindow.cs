@@ -1,11 +1,11 @@
-﻿using enitimeago.NonDestructiveMMD.vendor;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using enitimeago.NonDestructiveMMD.vendor;
+using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
-using Newtonsoft.Json.Linq;
 using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
@@ -29,7 +29,7 @@ namespace enitimeago.NonDestructiveMMD
         private GUIStyle _selectedStyle;
         private GUIStyle _hasValueStyle;
         private GUIStyle _selectedHasValueStyle;
-        
+
         public void OnEnable()
         {
             _commonChecks = new CommonChecks(isEditor: true);
@@ -198,7 +198,7 @@ namespace enitimeago.NonDestructiveMMD
 
                     var buttonStyle = new GUIStyle(blendShapeName == selectedBlendShape ? _hasValueStyle : _defaultStyle);
                     buttonStyle.imagePosition = ImagePosition.ImageAbove;
-	                var buttonContent = new GUIContent();
+                    var buttonContent = new GUIContent();
                     buttonContent.image = texture2D;
                     buttonContent.text = blendShapeName;
                     if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width - 25)))

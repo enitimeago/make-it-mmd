@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using enitimeago.NonDestructiveMMD;
 using enitimeago.NonDestructiveMMD.vendor;
 using nadena.dev.ndmf;
