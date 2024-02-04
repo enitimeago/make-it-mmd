@@ -85,9 +85,3 @@ jobs:
 
     - name: dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
-
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: Test results
-        path: .
