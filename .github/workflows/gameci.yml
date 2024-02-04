@@ -47,6 +47,7 @@ jobs:
 
   format:
     runs-on: ubuntu-latest
+    container: unityci/editor:ubuntu-2019.4.31f1-windows-mono-3
 
     steps:
     - uses: actions/checkout@v4
@@ -59,26 +60,22 @@ jobs:
           https://vpm.nadena.dev/vpm.json
           https://hai-vr.github.io/vpm-listing/index.json
 
-    - uses: actions/cache@v2
-      with:
-        path: Library
-        key: Library-${{ runner.os }}-unity-2019.4.31f1
-        restore-keys: Library-
+    # - uses: actions/cache@v2
+    #   with:
+    #     path: Library
+    #     key: Library-${{ runner.os }}-unity-2019.4.31f1
+    #     restore-keys: Library-
 
-    - name: Ensure .sln
-      uses: game-ci/unity-builder@v4
-      env:
+    - uses: game-ci/unity-activate@v2
+      with:
+        unityVersion: 2019.4.31f1
+      env: 
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      with:
-        unityVersion: 2019.4.31f1
-        # vpm-manifest.json is modified.
-        # TODO: does this have lockfile semantics? would committing it help?
-        allowDirtyBuild: true
-        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
-      continue-on-error: true
 
+    - name: Ensure .sln
+      run: unity-editor -nographics -logFile /dev/stdout -projectPath . -executeMethod Packages.Rider.Editor.RiderScriptEditor.SyncSolution -quit
     - name: ls
       run: ls Library/PackageCache/com.unity.ide.rider@1.2.1/Rider/Editor/ProjectGeneration
 
@@ -89,3 +86,6 @@ jobs:
 
     - name: dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
+
+    - uses: game-ci/unity-return-license@v2
+      if: always()
