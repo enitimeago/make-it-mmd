@@ -84,8 +84,11 @@ jobs:
       with:
         dotnet-version: "5.0.x"
 
+    - name: ls
+      run: ls
+
     - name: dotnet restore
-      run: dotnet restore make-it-mmd.sln
+      run: dotnet restore enitimeago.non-destructive-mmd.editor.csproj
 
     - name: dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
