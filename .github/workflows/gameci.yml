@@ -80,7 +80,7 @@ jobs:
       continue-on-error: true
 
     - name: ls
-      run: ls
+      run: ls Library/PackageCache/com.unity.ide.rider@1.2.1/Rider/Editor/ProjectGeneration
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v4
