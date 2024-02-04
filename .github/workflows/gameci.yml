@@ -76,6 +76,8 @@ jobs:
         # vpm-manifest.json is modified.
         # TODO: does this have lockfile semantics? would committing it help?
         allowDirtyBuild: true
+        # Use this for >2021
+        # https://davidmfinol.com/gameci-2_testing.html
         #buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
         buildMethod: UnityEditor.SyncVS.SyncSolution
 
@@ -83,6 +85,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: "5.0.x"
+
+    - name: dotnet restore
+      run: dotnet restore
 
     - name: dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
