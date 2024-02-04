@@ -1,5 +1,6 @@
 #if NDMMD_VRCSDK3_AVATARS
 
+using enitimeago.NonDestructiveMMD.vendor;
 using nadena.dev.ndmf;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -13,9 +14,16 @@ namespace enitimeago.NonDestructiveMMD
 
         protected override void Execute(BuildContext context)
         {
+            // TODO: switch to NDMF solution once https://github.com/bdunderscore/ndmf/issues/111 lands
+            AnimationUtil.CloneAllControllers(context);
             Execute(context.AvatarRootObject);
         }
 
+        /// <summary>
+        /// Pass implementation. Assumes animator controllers are safe to mutate.
+        /// ThiS MUST be run after a deep clone, otherwise the avatar's underlying files WILL BE MUTATED.
+        /// </summary>
+        /// <param name="avatarRootObject"></param>
         internal void Execute(GameObject avatarRootObject)
         {
             // TODO: need some checks but if we run checks we'll see mmd shape keys exist
