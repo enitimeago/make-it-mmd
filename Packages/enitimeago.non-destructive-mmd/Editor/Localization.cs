@@ -1,8 +1,8 @@
-using nadena.dev.ndmf.localization;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.IO;
 using System.Linq;
+using nadena.dev.ndmf.localization;
 using UnityEditor;
 using UnityEngine;
 

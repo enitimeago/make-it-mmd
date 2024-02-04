@@ -14,7 +14,7 @@ namespace enitimeago.NonDestructiveMMD
     {
         private CommonChecks _commonChecks;
         private bool _showStoredData = false;
-        
+
         public void OnEnable()
         {
             _commonChecks = new CommonChecks(isEditor: true);
@@ -73,7 +73,7 @@ namespace enitimeago.NonDestructiveMMD
             {
                 return;
             }
-            
+
             // Create a new GameObject with a clone of current mappings.
             // The name doesn't matter because it will match the prefab's name.
             // TODO: implement a copyinto method, or see if it's possible to clone the BlendShapeMappings object and add it into the new GameObject.
