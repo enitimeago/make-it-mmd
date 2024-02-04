@@ -53,9 +53,8 @@ jobs:
 
     - name: Report dotnet format Conclusion
       if: always()
-      uses: dflydev/check-runs-action@2ca9762b84cb405cff07f16e925e1f9434532c37
+      uses: LouisBrunner/checks-action@v2.0.0
       with:
-        name: dotnet format
         token: ${{ secrets.GITHUB_TOKEN }}
-        id: dotnet-format
+        name: dotnet format
         conclusion: ${{ steps.dotnet-format.outcome }}
