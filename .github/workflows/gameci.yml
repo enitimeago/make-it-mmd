@@ -37,6 +37,7 @@ jobs:
         projectPath: .
         # TODO: PlayMode (incl. All) causes GameCI to hang. figure out if it's needed?
         testMode: EditMode
+        customParameters: '-executeMethod Packages.Rider.Editor.RiderScriptEditor.SyncSolution'
         coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+enitimeago.non-destructive-mmd.*'
 
     - uses: actions/upload-artifact@v3
