@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,3 +44,51 @@ jobs:
       with:
         name: Test results
         path: artifacts
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - uses: anatawa12/sh-actions/resolve-vpm-packages@master
+      with:
+        repos: |
+          https://vpm.nadena.dev/vpm.json
+          https://hai-vr.github.io/vpm-listing/index.json
+
+    - uses: actions/cache@v2
+      with:
+        path: Library
+        key: Library-${{ runner.os }}-unity-2019.4.31f1
+        restore-keys: Library-
+
+    - uses: game-ci/unity-builder@v4
+      env:
+        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      with:
+        unityVersion: 2019.4.31f1
+        # vpm-manifest.json is modified.
+        # TODO: does this have lockfile semantics? would committing it help?
+        allowDirtyBuild: true
+        # Use this for >2021
+        # https://davidmfinol.com/gameci-2_testing.html
+        #buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
+        buildMethod: UnityEditor.SyncVS.SyncSolution
+
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "5.0.x"
+
+    - name: dotnet format Editor
+      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj --exclude ./Packages/enitimeago.non-destructive-mmd/Editor/vendor
+
+    - name: dotnet format Runtime
+      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.runtime.csproj
+
+    - name: dotnet format Tests
+      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.tests.csproj
