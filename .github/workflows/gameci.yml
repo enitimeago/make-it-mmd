@@ -73,6 +73,9 @@ jobs:
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       with:
         unityVersion: 2019.4.31f1
+        # vpm-manifest.json is modified.
+        # TODO: does this have lockfile semantics? would committing it help?
+        allowDirtyBuild: true
         buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
     - name: Set up .NET
