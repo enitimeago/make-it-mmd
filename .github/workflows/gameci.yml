@@ -49,7 +49,7 @@ jobs:
     - name: dotnet format
       id: dotnet-format
       continue-on-error: true
-      run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
+      run: ls && dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
 
     - name: Report dotnet format Conclusion
       if: always()
