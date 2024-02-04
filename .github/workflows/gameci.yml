@@ -66,13 +66,17 @@ jobs:
     #     key: Library-${{ runner.os }}-unity-2019.4.31f1
     #     restore-keys: Library-
 
-    - uses: game-ci/unity-activate@v2
+    - uses: game-ci/unity-activate@v2.0.0
       with:
         unityVersion: 2019.4.31f1
       env: 
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+    - uses: game-ci/unity-builder@v2
+      with:
+        unityVersion: 2019.4.31f1
 
     - name: Ensure .sln
       run: unity-editor -nographics -logFile /dev/stdout -projectPath . -executeMethod Packages.Rider.Editor.RiderScriptEditor.SyncSolution -quit
@@ -86,6 +90,3 @@ jobs:
 
     - name: dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
-
-    - uses: game-ci/unity-return-license@v2
-      if: always()
