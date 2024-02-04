@@ -47,7 +47,6 @@ jobs:
 
   format:
     runs-on: ubuntu-latest
-    container: unityci/editor:ubuntu-2019.4.31f1-linux-il2cpp-3
 
     steps:
     - uses: actions/checkout@v4
@@ -60,26 +59,24 @@ jobs:
           https://vpm.nadena.dev/vpm.json
           https://hai-vr.github.io/vpm-listing/index.json
 
-    # - uses: actions/cache@v2
-    #   with:
-    #     path: Library
-    #     key: Library-${{ runner.os }}-unity-2019.4.31f1
-    #     restore-keys: Library-
-
-    # https://github.com/JohnMurwin/NQueensSimulation/blob/5a6ac1c7ce256078787584b06fc421610b432028/.github/workflows/CI.yml#L28
-    - name: Activate Unity
-      # exit code is 1 for manual activation
-      continue-on-error: true
-      env:
-        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      run: |          
-        echo "$UNITY_LICENSE" | tr -d '\r' > UnityLicenseFile.ulf
-        unity-editor -nographics -logFile /dev/stdout -manualLicenseFile UnityLicenseFile.ulf -quit
+    - uses: actions/cache@v2
+      with:
+        path: Library
+        key: Library-${{ runner.os }}-unity-2019.4.31f1
+        restore-keys: Library-
 
     - name: Ensure .sln
-      run: unity-editor -nographics -logFile /dev/stdout -projectPath . -executeMethod Packages.Rider.Editor.RiderScriptEditor.SyncSolution -quit
-    - name: ls
-      run: ls Library/PackageCache/com.unity.ide.rider@1.2.1/Rider/Editor/ProjectGeneration
+      uses: game-ci/unity-builder@v4
+      env:
+        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      with:
+        unityVersion: 2019.4.31f1
+        # vpm-manifest.json is modified.
+        # TODO: does this have lockfile semantics? would committing it help?
+        allowDirtyBuild: true
+        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v4
