@@ -24,8 +24,13 @@ namespace enitimeago.NonDestructiveMMD
                 return;
             }
 
-            // If we're here, the avatar is found and valid.
             var mappingsComponent = avatarRootObject.GetComponentInChildren<BlendShapeMappings>();
+            if (mappingsComponent.blendShapeMappings.Count == 0)
+            {
+                return;
+            }
+
+            // If we're here, the avatar is found and valid.
             var descriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
 
             // Find the avatar's face mesh.
