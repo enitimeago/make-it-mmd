@@ -1,7 +1,7 @@
-﻿using enitimeago.NonDestructiveMMD;
-using NUnit.Framework;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using enitimeago.NonDestructiveMMD;
+using NUnit.Framework;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
