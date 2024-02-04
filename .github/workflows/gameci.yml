@@ -77,7 +77,10 @@ jobs:
         # TODO: does this have lockfile semantics? would committing it help?
         allowDirtyBuild: true
         buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
-        continue-on-error: true
+      continue-on-error: true
+
+    - name: ls
+      run: ls
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v4
