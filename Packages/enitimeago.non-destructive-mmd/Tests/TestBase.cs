@@ -34,11 +34,6 @@ public class TestBase
 
         var vrcAvatarDescriptor = avatarRootObject.AddComponent<VRCAvatarDescriptor>();
         vrcAvatarDescriptor.VisemeSkinnedMesh = faceMeshRenderer;
-
-        var mmdObject = new GameObject();
-        mmdObject.transform.parent = avatarRootObject.transform;
-        mmdObject.AddComponent<BlendShapeMappings>();
-
         return avatarRootObject;
     }
 
