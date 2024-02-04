@@ -88,7 +88,7 @@ jobs:
       run: ls
 
     - name: dotnet restore
-      run: dotnet restore enitimeago.non-destructive-mmd.editor.csproj
+      run: dotnet restore workspace.sln
 
     - name: dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
