@@ -76,7 +76,8 @@ jobs:
         # vpm-manifest.json is modified.
         # TODO: does this have lockfile semantics? would committing it help?
         allowDirtyBuild: true
-        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
+        #buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
+        buildMethod: UnityEditor.SyncVS.SyncSolution
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v4
