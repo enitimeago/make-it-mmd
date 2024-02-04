@@ -3,7 +3,7 @@ name: Unity CI
 on:
   push:
     branches:
-      - format-ci
+      - main
 
 jobs:
   test:
