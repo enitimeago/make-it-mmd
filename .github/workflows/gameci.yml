@@ -45,7 +45,7 @@ jobs:
         name: Test results
         path: artifacts
 
-  format:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -65,8 +65,7 @@ jobs:
         key: Library-${{ runner.os }}-unity-2019.4.31f1
         restore-keys: Library-
 
-    - name: Ensure .sln
-      uses: game-ci/unity-builder@v4
+    - uses: game-ci/unity-builder@v4
       env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -81,13 +80,12 @@ jobs:
         #buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
         buildMethod: UnityEditor.SyncVS.SyncSolution
 
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: "5.0.x"
 
     - name: dotnet restore
-      run: dotnet restore
+      run: dotnet restore make-it-mmd.sln
 
     - name: dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj
