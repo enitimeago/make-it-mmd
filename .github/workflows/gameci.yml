@@ -47,7 +47,7 @@ jobs:
 
   format:
     runs-on: ubuntu-latest
-    #container: unityci/editor:ubuntu-2019.4.31f1-windows-mono-3
+    container: unityci/editor:ubuntu-2019.4.31f1-windows-mono-3
 
     steps:
     - uses: actions/checkout@v4
@@ -66,17 +66,15 @@ jobs:
     #     key: Library-${{ runner.os }}-unity-2019.4.31f1
     #     restore-keys: Library-
 
-    - uses: game-ci/unity-activate@v2.0.0
-      with:
-        unityVersion: 2019.4.31f1
-      env: 
+    # https://github.com/JohnMurwin/NQueensSimulation/blob/5a6ac1c7ce256078787584b06fc421610b432028/.github/workflows/CI.yml#L28
+    - name: Activate Unity
+      # exit code is 1 for manual activation
+      continue-on-error: true
+      env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-
-    - uses: game-ci/unity-builder@v2
-      with:
-        unityVersion: 2019.4.31f1
+      run: |          
+        echo "$UNITY_LICENSE" | tr -d '\r' > UnityLicenseFile.ulf
+        unity-editor -nographics -logFile /dev/stdout -manualLicenseFile UnityLicenseFile.ulf -quit
 
     - name: Ensure .sln
       run: unity-editor -nographics -logFile /dev/stdout -projectPath . -executeMethod Packages.Rider.Editor.RiderScriptEditor.SyncSolution -quit
