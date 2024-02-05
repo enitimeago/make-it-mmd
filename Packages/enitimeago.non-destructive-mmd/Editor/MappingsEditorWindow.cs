@@ -110,17 +110,22 @@ namespace enitimeago.NonDestructiveMMD
 
             _leftPaneScroll = GUILayout.BeginScrollView(_leftPaneScroll);
 
-            foreach (var (blendShape, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
+            int i = 0;
+            foreach (var grouping in MmdBlendShapeNames.All.GroupBy(x => x.Category))
             {
-                var buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _hasValueStyle : _defaultStyle;
-                if (i == _currentMmdKeyIndex)
+                GUILayout.Label(grouping.Key.ToString());
+                foreach (var blendShape in grouping)
                 {
-                    buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _selectedHasValueStyle : _selectedStyle;
-                }
-
-                if (GUILayout.Button(blendShape.Name, buttonStyle))
-                {
-                    _currentMmdKeyIndex = i;
+                    var buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _hasValueStyle : _defaultStyle;
+                    if (i == _currentMmdKeyIndex)
+                    {
+                        buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _selectedHasValueStyle : _selectedStyle;
+                    }
+                    if (GUILayout.Button(blendShape.Name, buttonStyle))
+                    {
+                        _currentMmdKeyIndex = i;
+                    }
+                    i++;
                 }
             }
 
