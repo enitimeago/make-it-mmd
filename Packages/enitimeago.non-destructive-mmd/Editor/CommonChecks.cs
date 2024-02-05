@@ -81,7 +81,7 @@ namespace enitimeago.NonDestructiveMMD
             for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
             {
                 string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
-                if (MMDBlendShapes.JapaneseNames().Any(blendShape => blendShape.name == blendShapeName))
+                if (MmdBlendShapeNames.All.Any(blendShape => blendShape.Name == blendShapeName))
                 {
                     LogLocalized("CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported", Severity.Warning);
                     return false;

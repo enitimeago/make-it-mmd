@@ -43,9 +43,9 @@ namespace enitimeago.NonDestructiveMMD
             // Retrieve blend shape settings that match known MMD keys.
             foreach (var mapping in data.blendShapeMappings)
             {
-                foreach ((string knownMmdKey, int i) in MMDBlendShapes.JapaneseNames())
+                foreach (var (knownBlendShape, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
                 {
-                    if (mapping.mmdKey == knownMmdKey)
+                    if (mapping.mmdKey == knownBlendShape.Name)
                     {
                         window._knownBlendShapeMappings.Add(i, mapping.avatarKey);
                         break;
@@ -110,7 +110,7 @@ namespace enitimeago.NonDestructiveMMD
 
             _leftPaneScroll = GUILayout.BeginScrollView(_leftPaneScroll);
 
-            foreach ((string name, int i) in MMDBlendShapes.JapaneseNames())
+            foreach (var (blendShape, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
             {
                 var buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _hasValueStyle : _defaultStyle;
                 if (i == _currentMmdKeyIndex)
@@ -118,7 +118,7 @@ namespace enitimeago.NonDestructiveMMD
                     buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _selectedHasValueStyle : _selectedStyle;
                 }
 
-                if (GUILayout.Button(name, buttonStyle))
+                if (GUILayout.Button(blendShape.Name, buttonStyle))
                 {
                     _currentMmdKeyIndex = i;
                 }
@@ -135,7 +135,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
-                GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MMDBlendShapes.Names[_currentMmdKeyIndex]));
+                GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
 
                 var italicLabelStyle = new GUIStyle(GUI.skin.label);
                 italicLabelStyle.fontStyle = FontStyle.Italic;
@@ -184,7 +184,7 @@ namespace enitimeago.NonDestructiveMMD
                 {
                     Debug.Log("Unselected blendshape");
                     _knownBlendShapeMappings.Remove(_currentMmdKeyIndex);
-                    _dataSource.RemoveBlendShapeMapping(MMDBlendShapes.Names[_currentMmdKeyIndex]);
+                    _dataSource.RemoveBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name);
                 }
                 for (int i = 0; i < _faceBlendShapes.Count; i++)
                 {
@@ -205,7 +205,7 @@ namespace enitimeago.NonDestructiveMMD
                     {
                         Debug.Log("Selected blendshape: " + blendShapeName);
                         _knownBlendShapeMappings[_currentMmdKeyIndex] = blendShapeName;
-                        _dataSource.SetBlendShapeMapping(MMDBlendShapes.Names[_currentMmdKeyIndex], blendShapeName);
+                        _dataSource.SetBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, blendShapeName);
                     }
 
                     if ((shown + 1) % mod == 0 || i == _faceBlendShapes.Count - 1)
