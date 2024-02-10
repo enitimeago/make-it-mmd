@@ -10,9 +10,9 @@
     "email": "129673786+enitimeago@users.noreply.github.com",
     "url": "https://github.com/enitimeago"
   },
-	"dependencies" : {
-		"com.unity.nuget.newtonsoft-json" : "2.0.2"
-	},
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "2.0.2"
+  },
   "vpmDependencies": {
     "com.vrchat.avatars": ">=3.3.0 <3.5.0",
     "dev.hai-vr.blendshape-viewer": "^2.0.0",
