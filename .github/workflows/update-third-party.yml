@@ -40,4 +40,4 @@ jobs:
       run: bazel build //java/com/google/copybara
 
     - run: |
-        bazel run //java/com/google/copybara -- ${{ github.workspace }}/make-it-mmd/copy.bara.sky
+        bazel run //java/com/google/copybara -- ${{ github.workspace }}/make-it-mmd/copy.bara.sky --force blendshape-viewer
