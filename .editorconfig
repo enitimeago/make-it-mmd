@@ -5,11 +5,13 @@ root = true
 # All files
 [*]
 indent_style = space
+insert_final_newline = true
 
 # NPM files
 [{package.json,package-lock.json}]
 indent_style = space
 indent_size = 2
+insert_final_newline = false
 
 # XML project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
@@ -22,7 +24,6 @@ indent_size = 2
 # Code files
 [*.{cs,csx,vb,vbx}]
 indent_size = 4
-insert_final_newline = true
 charset = utf-8-bom
 ###############################
 # .NET Coding Conventions     #
