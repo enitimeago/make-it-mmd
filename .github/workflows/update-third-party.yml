@@ -52,4 +52,4 @@ jobs:
         git config --global user.name 'github-actions[bot]'
         git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
         echo "https://x-access-token:${GITHUB_TOKEN}@api.github.com" > ~/.git-credentials
-        bazel run //java/com/google/copybara -- ${{ github.workspace }}/make-it-mmd/copy.bara.sky --force blendshape-viewer 37778f2cee1d9a24e2adc52b3468599a581b7b5a
+        bazel run //java/com/google/copybara -- ${{ github.workspace }}/make-it-mmd/copy.bara.sky --force blendshape-viewer 37778f2cee1d9a24e2adc52b3468599a581b7b5a --github-destination-pr-branch="copybara_test"
