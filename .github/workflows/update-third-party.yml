@@ -11,17 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v4
-      with:
-        path: make-it-mmd
-
     - name: Checkout Copybara
       uses: actions/checkout@v4
       with:
         repository: google/copybara
         ref: c4cf60695a656d16c1e70e79eea0654e05e5a945
-        path: copybara
 
     - name: Cache Copybara
       uses: actions/cache@v3
@@ -33,6 +27,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-bazel-
 
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+      with:
+        path: make-it-mmd
+
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -41,6 +40,5 @@ jobs:
     - run: |
         ls
         ls make-it-mmd
-        cd copybara
         bazel build //java/com/google/copybara
       #bazel run //java/com/google/copybara -- ../make-it-mmd/copy.bara.sky
