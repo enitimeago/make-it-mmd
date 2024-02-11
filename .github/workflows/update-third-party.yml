@@ -28,5 +28,7 @@ jobs:
         java-version: '11'
 
     - run: |
+        ls
+        ls make-it-mmd
         cd copybara
         bazel run //java/com/google/copybara -- ../make-it-mmd/copy.bara.sky
