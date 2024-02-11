@@ -20,14 +20,13 @@ jobs:
     - name: Cache Copybara
       uses: actions/cache@v3
       with:
-        working-directory: copybara
         path: |
           ~/.cache/bazel
         key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE', 'WORKSPACE.bazel', 'MODULE.bazel') }}
         restore-keys: |
           ${{ runner.os }}-bazel-
 
-    - name: Checkout Repo
+    - name: Checkout repo
       uses: actions/checkout@v4
       with:
         path: make-it-mmd
@@ -37,8 +36,8 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
+    - name: Build Copybara
+      run: bazel build //java/com/google/copybara
+
     - run: |
-        ls
-        ls make-it-mmd
-        bazel build //java/com/google/copybara
-      #bazel run //java/com/google/copybara -- ../make-it-mmd/copy.bara.sky
+        bazel run //java/com/google/copybara -- ./make-it-mmd/copy.bara.sky
