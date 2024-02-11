@@ -1,0 +1,29 @@
+name: Update Third Party
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: make-it-mmd
+
+    - name: Checkout tools repo
+      uses: actions/checkout@v4
+      with:
+        repository: google/copybara
+        ref: c4cf60695a656d16c1e70e79eea0654e05e5a945
+        path: copybara
+
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - run: |
+        cd copybara
+        bazel run //java/com/google/copybara -- ../make-it-mmd/copy.bara.sky

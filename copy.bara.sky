@@ -1,0 +1,17 @@
+core.workflow(
+    name = "blendshape-viewer",
+    origin = git.github_origin(
+        url = "https://github.com/hai-vr/blendshape-viewer-vcc.git",
+        ref = "37778f2cee1d9a24e2adc52b3468599a581b7b5a",
+    ),
+    destination = git.github_pr_destination(
+        url = "https://github.com/enitimeago/make-it-mmd",
+        destination_ref = "main",
+        update_description = True,
+    ),
+    destination_files = glob(["third_party/blendshape-viewer/**"]),
+    authoring = authoring.pass_thru("github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"),
+    transformations = [
+        core.move("", "third_party/blendshape-viewer")
+    ],
+)
