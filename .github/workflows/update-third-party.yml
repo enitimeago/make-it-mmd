@@ -50,7 +50,7 @@ jobs:
 
     # Derived from https://github.com/oilpan-gc/cppgc/blob/90fdd99259a5fc0f85a9fba6641b7ab9902960d2/.github/workflows/update.yml
     # Found via https://github.com/google/copybara/issues/123#issuecomment-1187650248
-    - name: Run Copybara
+    - name: Set bot credentials
       env:
         GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
       run: |
@@ -58,4 +58,9 @@ jobs:
         git config --global user.name '${{ secrets.BOT_COMMITTER_NAME }}'
         git config --global user.email '${{ secrets.BOT_COMMITTER_EMAIL }}'
         echo "https://x-access-token:${GITHUB_TOKEN}@api.github.com" > ~/.git-credentials
-        bazel run //java/com/google/copybara -- ${{ github.workspace }}/make-it-mmd/copy.bara.sky --force blendshape-viewer 37778f2cee1d9a24e2adc52b3468599a581b7b5a --github-destination-pr-branch update-blendshape-viewer
+
+    - name: Set bot author
+      run: sed 's/github-actions\[bot\] <41898282+github-actions\[bot\]@users.noreply.github.com>/${{ secrets.BOT_COMMITTER_NAME }} <${{ secrets.BOT_COMMITTER_EMAIL }}>/g' ${{ github.workspace }}/make-it-mmd/copy.bara.sky > ${{ runner.temp }}/copy.bara.sky
+
+    - name: Run Copybara
+      run: bazel run //java/com/google/copybara -- ${{ runner.temp }}/copy.bara.sky --force blendshape-viewer 37778f2cee1d9a24e2adc52b3468599a581b7b5a --github-destination-pr-branch update-blendshape-viewer
