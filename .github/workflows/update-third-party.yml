@@ -1,6 +1,9 @@
 name: Update Third Party
 
-on: 
+on:
+  push:
+    branches:
+      - copybara
   workflow_dispatch:
 
 jobs:
