@@ -6,6 +6,10 @@ on:
       - copybara
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -44,6 +48,8 @@ jobs:
       with:
         path: make-it-mmd
 
+    # Derived from https://github.com/oilpan-gc/cppgc/blob/90fdd99259a5fc0f85a9fba6641b7ab9902960d2/.github/workflows/update.yml
+    # Found via https://github.com/google/copybara/issues/123#issuecomment-1187650248
     - name: Run Copybara
       env:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
