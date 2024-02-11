@@ -1,8 +1,8 @@
 core.workflow(
     name = "blendshape-viewer",
-    origin = git.github_origin(
+    origin = git.origin(
         url = "https://github.com/hai-vr/blendshape-viewer-vcc.git",
-        ref = "37778f2cee1d9a24e2adc52b3468599a581b7b5a",
+        ref = "main",
     ),
     destination = git.github_pr_destination(
         url = "https://github.com/enitimeago/make-it-mmd.git",
