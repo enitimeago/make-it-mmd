@@ -8,6 +8,7 @@ core.workflow(
         url = "https://github.com/enitimeago/make-it-mmd.git",
         destination_ref = "main",
         update_description = True,
+        pr_branch = "update-blendshape-viewer",
     ),
     destination_files = glob(["third_party/blendshape-viewer/**"]),
     authoring = authoring.pass_thru("github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"),
