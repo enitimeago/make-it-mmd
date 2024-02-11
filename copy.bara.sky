@@ -5,7 +5,7 @@ core.workflow(
         ref = "37778f2cee1d9a24e2adc52b3468599a581b7b5a",
     ),
     destination = git.github_pr_destination(
-        url = "https://github.com/enitimeago/make-it-mmd",
+        url = "https://github.com/enitimeago/make-it-mmd.git",
         destination_ref = "main",
         update_description = True,
     ),
