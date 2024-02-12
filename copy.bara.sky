@@ -24,6 +24,8 @@ blendshape_viewer_license = """\\\r
 // SOFTWARE.\r
 """
 
+vendor_path_editor = "Packages/enitimeago.non-destructive-mmd/Editor/vendor"
+
 core.workflow(
     name = "blendshape-viewer",
     origin = git.origin(
@@ -60,6 +62,18 @@ core.workflow(
             after = "enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer",
             paths = glob(["**/*.cs"]),
         ),
+        # Rename shaders to avoid collision with upstream.
+        core.replace(
+            before = "\"Hai/BlendshapeViewer",
+            after = "\"enitimeago/MakeItMMD_Hai_BlendshapeViewer",
+            paths = glob(["**/*.cs", "**/*.shader"]),
+        ),
+        # Update expected path of DiffCompute.compute.
+        core.replace(
+            before = "Assets/Hai/BlendshapeViewer/Scripts/Editor/DiffCompute.compute",
+            after = vendor_path_editor + "/DiffCompute.compute",
+        ),
+        # Move to third_party location.
         core.move("", "third_party/blendshape-viewer"),
     ],
 )
