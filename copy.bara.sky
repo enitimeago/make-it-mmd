@@ -40,19 +40,21 @@ core.workflow(
     destination_files = glob(["third_party/blendshape-viewer/**"]),
     authoring = authoring.pass_thru("github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"),
     transformations = [
+        # Prepend license header to all source files.
+        # Need to handle UTF-8 BOM otherwise it incorrectly gets put after the header.
+        # Unfortunately it can't be matched directly via regex so use a workaround.
         core.replace(
-            before = "\\xc3\\xaf\\xc2\\xbb\\xc2\\xbf",
-            after = "",
-            paths = glob(["**/*.compute", "**/*.cs", "**/*.shader"]),
-            first_only = True,
-        ),
-        core.replace(
-            before = "",
-            after = blendshape_viewer_license,
+            before = "${utf8_bom}${first_character}",
+            after = "${utf8_bom}" + blendshape_viewer_license + "${first_character}",
+            regex_groups = {
+                "utf8_bom": r"^.*?",
+                "first_character": r"[a-zA-Z/#]",
+            },
             paths = glob(["**/*.compute", "**/*.cs", "**/*.shader"]),
             first_only = True,
             multiline = True,
         ),
+        # Rename namespace to avoid collision with upstream.
         core.replace(
             before = "Hai.BlendshapeViewer",
             after = "enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer",
