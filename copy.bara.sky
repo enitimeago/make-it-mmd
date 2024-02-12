@@ -43,7 +43,7 @@ core.workflow(
         core.replace(
             before = "",
             after = blendshape_viewer_license,
-            paths = glob(["**/*.cs"]),
+            paths = glob(["**/*.compute", "**/*.cs", "**/*.shader"]),
             first_only = True,
             multiline = True,
         ),
