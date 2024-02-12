@@ -61,4 +61,4 @@ jobs:
         git config --global user.name '${{ secrets.BOT_COMMITTER_NAME }}'
         git config --global user.email '${{ secrets.BOT_COMMITTER_EMAIL }}'
         echo "https://x-access-token:${GITHUB_TOKEN}@api.github.com" > ~/.git-credentials
-        bazel run //java/com/google/copybara -- ${{ runner.temp }}/copy.bara.sky --force blendshape-viewer 37778f2cee1d9a24e2adc52b3468599a581b7b5a --github-destination-pr-branch update-blendshape-viewer
+        bazel run //java/com/google/copybara -- ${{ runner.temp }}/copy.bara.sky blendshape-viewer 37778f2cee1d9a24e2adc52b3468599a581b7b5a --github-destination-pr-branch update-blendshape-viewer
