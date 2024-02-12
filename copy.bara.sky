@@ -41,7 +41,7 @@ core.workflow(
     authoring = authoring.pass_thru("github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"),
     transformations = [
         core.replace(
-            before = "\ufeff",
+            before = "\xef\xbb\xbf",
             after = "",
             paths = glob(["**/*.compute", "**/*.cs", "**/*.shader"]),
         ),
