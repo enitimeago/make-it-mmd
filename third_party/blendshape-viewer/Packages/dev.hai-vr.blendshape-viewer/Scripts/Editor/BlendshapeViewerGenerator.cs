@@ -41,7 +41,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
             _overlay = overlay;
             _useComputeShader = SystemInfo.supportsComputeShaders && useComputeShader;
 
-            _material = new Material(_useComputeShader ? Shader.Find("Hai/BlendshapeViewerRectOnly") : Shader.Find("Hai/BlendshapeViewer"));
+            _material = new Material(_useComputeShader ? Shader.Find("enitimeago/MakeItMMD_Hai_BlendshapeViewerRectOnly") : Shader.Find("enitimeago/MakeItMMD_Hai_BlendshapeViewer"));
             _material.SetFloat("_Hotspots", _overlay);
             _camera = new GameObject().AddComponent<Camera>();
 
