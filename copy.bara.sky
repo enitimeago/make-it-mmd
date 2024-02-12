@@ -54,7 +54,7 @@ def get_filename(file):
     return matcher.group(2)
 
 # Symlink transformation.
-# Ideally workflows only touch third_party, but it's a pain to make these on Windows.
+# Ideally workflows only touch third_party, but it's a pain to make symlinks on Windows.
 def _create_symlinks_impl(ctx):
     for file in ctx.params["targets"]:
         ctx.create_symlink(
