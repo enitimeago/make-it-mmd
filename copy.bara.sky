@@ -109,6 +109,12 @@ core.workflow(
             first_only = True,
             multiline = True,
         ),
+        # Change classes to internal.
+        core.replace(
+            before = "public class",
+            after = "internal class",
+            paths = glob(["**/*.cs"]),
+        ),
         # Rename namespace to avoid collision with upstream.
         core.replace(
             before = "Hai.BlendshapeViewer",
