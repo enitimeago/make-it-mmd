@@ -44,7 +44,7 @@ core.workflow(
             paths = glob(["**/*.cs"]),
             first_only = True,
             multiline = True,
-        )
+        ),
         core.replace(
             before = "Hai.BlendshapeViewer",
             after = "enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer",
