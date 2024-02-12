@@ -24,8 +24,9 @@
  * SOFTWARE.
  */
 
-using Hai.BlendshapeViewer.Scripts.Editor;
+using enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor;
 using System;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace enitimeago.NonDestructiveMMD.vendor
         public Texture2D[] tex2ds = new Texture2D[0];
 
         private string _search;
-        
+
         private Vector2 _scrollPos;
         private SkinnedMeshRenderer _generatedFor;
         private int _generatedSize;
@@ -57,7 +58,7 @@ namespace enitimeago.NonDestructiveMMD.vendor
         private float _generatedFarClipPlane;
         private float _generatedOrthographicSize;
         private Rect m_area;
-        
+
         private const string SearchLabel = "Search";
 
         protected void TryExecuteUpdate()
@@ -105,6 +106,22 @@ namespace enitimeago.NonDestructiveMMD.vendor
 
         private void Generate()
         {
+            // Workaround for BlendshapeViewerDiffComputer bug (unsure if repros in both 2019/2022) where
+            // `AssetDatabase.GUIDToAssetPath("569e5a4e6b0efc74b93a42db6d069724")` doesn't actually work.
+            // TODO: see if this is a problem upstream and if so contribute a patch? see FindComputeShader?
+            // also the below as try finally means that exceptions are swallowed if Begin fails, so added a catch
+            // i.e. if `_diffCompute = new BlendshapeViewerDiffCompute();` fails because of not finding the shader
+            string diffComputePath = AssetDatabase.GUIDToAssetPath("569e5a4e6b0efc74b93a42db6d069724");
+            if (string.IsNullOrEmpty(diffComputePath))
+            {
+                diffComputePath = "Packages/enitimeago.non-destructive-mmd/Editor/vendor/DiffCompute.compute";
+                AssetDatabase.LoadAssetAtPath<ComputeShader>(diffComputePath);
+                if (!File.Exists(diffComputePath))
+                {
+                    Debug.LogError("Required shader not found");
+                }
+            }
+
             var module = new BlendshapeViewerGenerator();
             try
             {
@@ -116,7 +133,7 @@ namespace enitimeago.NonDestructiveMMD.vendor
                     module.Render(EmptyClip(), neutralTexture);
                 }
 
-                var results = new [] {skinnedMesh}
+                var results = new[] { skinnedMesh }
                     .SelectMany(relevantSmr =>
                     {
                         var sharedMesh = relevantSmr.sharedMesh;
@@ -178,6 +195,10 @@ namespace enitimeago.NonDestructiveMMD.vendor
                     })
                     .ToArray();
             }
+            catch (Exception)
+            {
+                throw;
+            }
             finally
             {
                 module.Terminate();
@@ -221,7 +242,7 @@ namespace enitimeago.NonDestructiveMMD.vendor
             newTexture.wrapMode = TextureWrapMode.Clamp;
             return newTexture;
         }
-        
+
         private bool IsMatch(string thatName)
         {
             var propertyName = thatName.ToLowerInvariant();
