@@ -70,12 +70,14 @@ def create_symlinks(dest, targets):
 
 vendor_path_editor = "Packages/enitimeago.non-destructive-mmd/Editor/vendor"
 
+blendshape_viewer_window_base_file = "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerEditorWindowBase.cs"
 blendshape_viewer_files = [
     "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerDiffCompute.cs",
     "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerGenerator.cs",
     "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/DiffCompute.compute",
     "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Shaders/HaiBlendshapeViewer.shader",
     "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Shaders/HaiBlendshapeViewerRectOnly.shader",
+    blendshape_viewer_window_base_file,
 ]
 
 core.workflow(
@@ -86,7 +88,7 @@ core.workflow(
     ),
     destination = git.github_pr_destination(
         url = "https://github.com/enitimeago/make-it-mmd.git",
-        destination_ref = "main",
+        destination_ref = "blendshape-viewer-cleanup",
         title = "Update Blendshape Viewer",
         update_description = True,
         pr_branch = "update-blendshape-viewer",
@@ -134,6 +136,28 @@ core.workflow(
         ),
         # Move to third_party location.
         core.move("", "third_party/blendshape-viewer"),
+        # Make EditorWindow accessible as a base.
+        core.copy("third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerEditorWindow.cs", blendshape_viewer_window_base_file),
+        core.replace(
+            before = "internal class BlendshapeViewerEditorWindow",
+            after = "internal abstract class BlendshapeViewerEditorWindowBase",
+            paths = glob([blendshape_viewer_window_base_file]),
+        ),
+        core.replace(
+            before = "private ",
+            after = "protected ",
+            paths = glob([blendshape_viewer_window_base_file]),
+        ),
+        core.replace(
+            before = "${menuitem_method}",
+            after = "",
+            paths = glob([blendshape_viewer_window_base_file]),
+            regex_groups = {
+                # Remove methods annotated with [MenuItem]. Based on https://stackoverflow.com/a/31069671
+                "menuitem_method": r"\[MenuItem.*?\]([^{]*)((?:\{[^}]*\}|//.*\r?\n|\"[^\"]*\"|[\S\s])*?\{(?:\{[^}]*\}|//.*\r?\n|\"[^\"]*\"|[\S\s])*?)\}",
+            },
+            multiline = True,
+        ),
         # Create symlinks.
         create_symlinks(
             dest = vendor_path_editor,
