@@ -142,12 +142,6 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       }
     },
-    "dev.hai-vr.blendshape-viewer": {
-      "version": "file:dev.hai-vr.blendshape-viewer",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "enitimeago.non-destructive-mmd": {
       "version": "file:enitimeago.non-destructive-mmd",
       "depth": 0,

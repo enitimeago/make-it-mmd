@@ -1,0 +1,61 @@
+name: Update Third Party
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get bot token
+      id: get_workflow_token
+      uses: peter-murray/workflow-application-token-action@v3
+      with:
+        application_id: ${{ secrets.BOT_ID }}
+        application_private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+    - name: Checkout Copybara
+      uses: actions/checkout@v4
+      with:
+        repository: google/copybara
+        ref: c4cf60695a656d16c1e70e79eea0654e05e5a945
+
+    - name: Cache Copybara
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/bazel
+        key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE', 'WORKSPACE.bazel', 'MODULE.bazel') }}
+        restore-keys: |
+          ${{ runner.os }}-bazel-
+
+    - name: Ensure Copybara dependencies
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        path: make-it-mmd
+
+    - name: Set bot author
+      run: sed 's/github-actions\[bot\] <41898282+github-actions\[bot\]@users.noreply.github.com>/${{ secrets.BOT_COMMITTER_NAME }} <${{ secrets.BOT_COMMITTER_EMAIL }}>/g' ${{ github.workspace }}/make-it-mmd/copy.bara.sky > ${{ runner.temp }}/copy.bara.sky
+
+    # Derived from https://github.com/oilpan-gc/cppgc/blob/90fdd99259a5fc0f85a9fba6641b7ab9902960d2/.github/workflows/update.yml
+    # Found via https://github.com/google/copybara/issues/123#issuecomment-1187650248
+    - name: Run Copybara
+      env:
+        GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+      run: |
+        gh auth setup-git
+        git config --global user.name '${{ secrets.BOT_COMMITTER_NAME }}'
+        git config --global user.email '${{ secrets.BOT_COMMITTER_EMAIL }}'
+        echo "https://x-access-token:${GITHUB_TOKEN}@api.github.com" > ~/.git-credentials
+        bazel run //java/com/google/copybara -- ${{ runner.temp }}/copy.bara.sky blendshape-viewer --github-destination-pr-branch update-blendshape-viewer
