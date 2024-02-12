@@ -139,8 +139,13 @@ core.workflow(
         # Make EditorWindow accessible as a base.
         core.copy("third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerEditorWindow.cs", blendshape_viewer_window_base_file),
         core.replace(
-            before = "internal class BlendshapeViewerEditorWindow",
-            after = "internal abstract class BlendshapeViewerEditorWindowBase",
+            before = "internal class",
+            after = "internal abstract class",
+            paths = glob([blendshape_viewer_window_base_file]),
+        ),
+        core.replace(
+            before = "BlendshapeViewerEditorWindow",
+            after = "BlendshapeViewerEditorWindowBase",
             paths = glob([blendshape_viewer_window_base_file]),
         ),
         core.replace(
