@@ -142,20 +142,6 @@ namespace enitimeago.NonDestructiveMMD
             {
                 GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
 
-                var italicLabelStyle = new GUIStyle(GUI.skin.label);
-                italicLabelStyle.fontStyle = FontStyle.Italic;
-
-                // https://forum.unity.com/threads/how-get-packageinfo-by-name-and-version.761936/#post-9171308
-                var blendshapeViewerPackage = AssetDatabase
-                    .FindAssets("package")
-                    .Select(AssetDatabase.GUIDToAssetPath)
-                    .Where(x => x.EndsWith("package.json"))
-                    .Where(x => AssetDatabase.LoadAssetAtPath<TextAsset>(x) != null)
-                    .Select(s => AssetDatabase.LoadAssetAtPath<TextAsset>(s).text)
-                    .Select(JObject.Parse)
-                    .FirstOrDefault(j => (string)j["name"] == "dev.hai-vr.blendshape-viewer");
-                GUILayout.Label($"Avatar previews powered by Blendshape Viewer {(string)blendshapeViewerPackage["version"]}", italicLabelStyle);
-
                 var serializedObject = new SerializedObject(this);
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(showDifferences)));
