@@ -1,3 +1,25 @@
+# MIT License
+#
+# Copyright (c) 2024 enitimeago
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 blendshape_viewer_license = """// Blendshape Viewer
 //
 // MIT License
@@ -23,7 +45,38 @@ blendshape_viewer_license = """// Blendshape Viewer
 // SOFTWARE.
 """
 
+path_re = re2.compile(r"^(.+)\/([^\/]+)$")
+
+def get_filename(file):
+    matcher = path_re.matcher(file)
+    if not matcher.matches():
+        return False
+    return matcher.group(2)
+
+# Symlink transformation.
+# Ideally workflows only touch third_party, but it's a pain to make these on Windows.
+def _create_symlinks_impl(ctx):
+    for file in ctx.params["targets"]:
+        ctx.create_symlink(
+            ctx.new_path(ctx.params["dest"]).resolve(get_filename(file)),
+            ctx.new_path(file),
+        )
+
+def create_symlinks(dest, targets):
+    return core.dynamic_transform(
+        impl = _create_symlinks_impl,
+        params = {"dest": dest, "targets": targets},
+    )
+
 vendor_path_editor = "Packages/enitimeago.non-destructive-mmd/Editor/vendor"
+
+blendshape_viewer_files = [
+    "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerDiffCompute.cs",
+    "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerGenerator.cs",
+    "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/DiffCompute.compute",
+    "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Shaders/HaiBlendshapeViewer.shader",
+    "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Shaders/HaiBlendshapeViewerRectOnly.shader",
+]
 
 core.workflow(
     name = "blendshape-viewer",
@@ -38,7 +91,8 @@ core.workflow(
         update_description = True,
         pr_branch = "update-blendshape-viewer",
     ),
-    destination_files = glob(["third_party/blendshape-viewer/**"]),
+    destination_files = glob(["third_party/blendshape-viewer/**"] +
+                             ["{}/{}".format(vendor_path_editor, get_filename(file)) for file in blendshape_viewer_files]),
     authoring = authoring.pass_thru("github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"),
     transformations = [
         # Prepend license header to all source files.
@@ -74,5 +128,10 @@ core.workflow(
         ),
         # Move to third_party location.
         core.move("", "third_party/blendshape-viewer"),
+        # Create symlinks.
+        create_symlinks(
+            dest = vendor_path_editor,
+            targets = blendshape_viewer_files,
+        ),
     ],
 )

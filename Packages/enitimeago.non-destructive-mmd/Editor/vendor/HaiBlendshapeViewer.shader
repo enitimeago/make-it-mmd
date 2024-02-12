@@ -1,1 +1,0 @@
-../../../../third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Shaders/HaiBlendshapeViewer.shader
