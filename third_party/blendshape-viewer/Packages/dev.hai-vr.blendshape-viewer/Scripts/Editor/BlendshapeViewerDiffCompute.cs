@@ -37,7 +37,7 @@ using UnityEngine;
 
 namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
 {
-    public class BlendshapeViewerDiffCompute
+    internal class BlendshapeViewerDiffCompute
     {
         private readonly ComputeShader _computeShader;
         private readonly ComputeBuffer _buf;

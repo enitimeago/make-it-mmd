@@ -26,7 +26,7 @@ using UnityEngine;
 
 namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
 {
-    public class BlendshapeViewerGenerator
+    internal class BlendshapeViewerGenerator
     {
         private Material _material;
         private SkinnedMeshRenderer _skinnedMesh;

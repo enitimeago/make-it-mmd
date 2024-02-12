@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using enitimeago.NonDestructiveMMD.vendor;
+using enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +10,7 @@ using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    public class MappingsEditorWindow : BlendshapeViewerEditorWindowBase
+    internal class MappingsEditorWindow : BlendshapeViewerEditorWindowBase
     {
         private CommonChecks _commonChecks;
         private BlendShapeMappings _dataSource = null;
