@@ -88,7 +88,7 @@ core.workflow(
     ),
     destination = git.github_pr_destination(
         url = "https://github.com/enitimeago/make-it-mmd.git",
-        destination_ref = "blendshape-viewer-cleanup",
+        destination_ref = "main",
         title = "Update Blendshape Viewer",
         update_description = True,
         pr_branch = "update-blendshape-viewer",
