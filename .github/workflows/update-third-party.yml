@@ -1,6 +1,9 @@
 name: Update Third Party
 
 on:
+  push:
+    branches:
+      - copybara
   workflow_dispatch:
 
 permissions:

@@ -32,7 +32,7 @@ core.workflow(
     ),
     destination = git.github_pr_destination(
         url = "https://github.com/enitimeago/make-it-mmd.git",
-        destination_ref = "main",
+        destination_ref = "copybara",
         title = "Update Blendshape Viewer",
         update_description = True,
         pr_branch = "update-blendshape-viewer",
@@ -40,6 +40,11 @@ core.workflow(
     destination_files = glob(["third_party/blendshape-viewer/**"]),
     authoring = authoring.pass_thru("github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"),
     transformations = [
+        core.replace(
+            before = "\ufeff",
+            after = "",
+            paths = glob(["**/*.compute", "**/*.cs", "**/*.shader"]),
+        ),
         core.replace(
             before = "",
             after = blendshape_viewer_license,
