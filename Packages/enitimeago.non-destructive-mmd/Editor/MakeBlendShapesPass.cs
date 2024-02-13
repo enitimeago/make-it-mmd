@@ -51,8 +51,8 @@ namespace enitimeago.NonDestructiveMMD
             // Make shape key copies.
             foreach (var mapping in mappingsComponent.blendShapeMappings)
             {
-                int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKey);
-                Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKey + " (found " + mapping.avatarKey + " as index " + blendShapeIndex + ")");
+                int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKeys[0]);
+                Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKeys[0] + " (found " + mapping.avatarKeys[0] + " as index " + blendShapeIndex + ")");
                 int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
                 for (int f = 0; f < frameCount; f++)
                 {

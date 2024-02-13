@@ -47,7 +47,7 @@ namespace enitimeago.NonDestructiveMMD
                 {
                     if (mapping.mmdKey == knownBlendShape.Name)
                     {
-                        window._knownBlendShapeMappings.Add(i, mapping.avatarKey);
+                        window._knownBlendShapeMappings.Add(i, mapping.avatarKeys[0]);
                         break;
                     }
                 }
