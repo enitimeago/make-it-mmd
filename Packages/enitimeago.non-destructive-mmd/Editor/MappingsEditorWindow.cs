@@ -199,9 +199,7 @@ namespace enitimeago.NonDestructiveMMD
 
                 var width = Mathf.Max(thumbnailSize, MinWidth);
                 var mod = Mathf.Max(1, (int)position.width / (width + 15));
-                var shown = 1;
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
+                var shown = 0;
                 // TODO: implement removing blendshape
                 for (int i = 0; i < _faceBlendShapes.Count; i++)
                 {
