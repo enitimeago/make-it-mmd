@@ -122,7 +122,8 @@ namespace enitimeago.NonDestructiveMMD
 
             _leftPaneScroll = GUILayout.BeginScrollView(_leftPaneScroll);
 
-            if (_knownBlendShapeMappings.Count == 0)
+            if (_knownBlendShapeMappings != null // TODO: why isn't _dataSource != null good enough?
+                && _knownBlendShapeMappings.Count == 0)
             {
                 ReloadMappings();
             }
@@ -133,10 +134,10 @@ namespace enitimeago.NonDestructiveMMD
                 GUILayout.Label(grouping.Key.ToString());
                 foreach (var blendShape in grouping)
                 {
-                    var buttonStyle = _knownBlendShapeMappings[i].Count() > 0 ? _hasValueStyle : _defaultStyle;
+                    var buttonStyle = _knownBlendShapeMappings?[i].Count() > 0 ? _hasValueStyle : _defaultStyle;
                     if (i == _currentMmdKeyIndex)
                     {
-                        buttonStyle = _knownBlendShapeMappings[i].Count() > 0 ? _selectedHasValueStyle : _selectedStyle;
+                        buttonStyle = _knownBlendShapeMappings?[i].Count() > 0 ? _selectedHasValueStyle : _selectedStyle;
                     }
                     if (GUILayout.Button(blendShape.Name, buttonStyle))
                     {
