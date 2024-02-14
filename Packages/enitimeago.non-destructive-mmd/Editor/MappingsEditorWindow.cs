@@ -14,11 +14,8 @@ namespace enitimeago.NonDestructiveMMD
     {
         private CommonChecks _commonChecks;
         private BlendShapeMappings _dataSource = null;
-        // Local copy of mappings using int => string to avoid recalculating mappings List<MMDToAvatarBlendShape>.
-        // This should only be initialized when the window is created.
-        // TODO: Support refreshing mappings if they are changed in the inspector.
-        // TODO: Consider whether to only mutate the data source and have this be an immutable representation (i.e. a ViewModel-like representation) of the underlying data.
-        private Dictionary<int, string> _knownBlendShapeMappings = new Dictionary<int, string>();
+        // View-side representation of underlying mapping data for fast accesses.
+        private ILookup<int, string> _knownBlendShapeMappings;
 
         private int _currentMmdKeyIndex = -1;
         private Vector2 _leftPaneScroll;
@@ -39,19 +36,33 @@ namespace enitimeago.NonDestructiveMMD
         {
             var window = GetWindow<MappingsEditorWindow>("Make It MMD");
             window._dataSource = data;
+            window.ReloadMappings();
+        }
 
-            // Retrieve blend shape settings that match known MMD keys.
-            foreach (var mapping in data.blendShapeMappings)
+        // Update view-side mappings from underlying data.
+        // TODO: this is really inefficient O(n^2) and ugly code. have the underlying data's Validate() deal with dupes?
+        // if that's not possible and this is a bottleneck, will need to persist view-side data and sync with storage.
+        private void ReloadMappings()
+        {
+            var knownMappings = new Dictionary<int, HashSet<string>>();
+            var mappingsToSearch = new LinkedList<MMDToAvatarBlendShape>(_dataSource.blendShapeMappings);
+            foreach (var (knownMorph, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
             {
-                foreach (var (knownBlendShape, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
+                // Iterate all underlying mappings due to risk of duplicate keys.
+                // Use set to avoid potential duplicate values.
+                knownMappings.Add(i, new HashSet<string>());
+                for (var mapping = mappingsToSearch.First; mapping != null; mapping = mapping.Next)
                 {
-                    if (mapping.mmdKey == knownBlendShape.Name)
+                    if (mapping.Value.mmdKey == knownMorph.Name)
                     {
-                        window._knownBlendShapeMappings.Add(i, mapping.avatarKeys[0]);
-                        break;
+                        knownMappings[i].UnionWith(mapping.Value.avatarKeys);
+                        mappingsToSearch.Remove(mapping);
                     }
                 }
             }
+            _knownBlendShapeMappings = knownMappings
+                .SelectMany(p => p.Value.Select(x => new { p.Key, Value = x }))
+                .ToLookup(pair => pair.Key, pair => pair.Value);
         }
 
         private void OnGUI()
@@ -90,8 +101,9 @@ namespace enitimeago.NonDestructiveMMD
 
             GUILayout.BeginHorizontal();
 
-            DrawLeftPane();
-            DrawRightPane();
+            DrawMmdMorphsPane();
+            DrawSelectedBlendShapesPane();
+            DrawBlendShapeSelectorPane();
 
             GUILayout.EndHorizontal();
         }
@@ -104,11 +116,16 @@ namespace enitimeago.NonDestructiveMMD
             TryExecuteUpdate();
         }
 
-        private void DrawLeftPane()
+        private void DrawMmdMorphsPane()
         {
             GUILayout.BeginVertical("box", GUILayout.Width(150), GUILayout.ExpandHeight(true));
 
             _leftPaneScroll = GUILayout.BeginScrollView(_leftPaneScroll);
+
+            if (_knownBlendShapeMappings.Count == 0)
+            {
+                ReloadMappings();
+            }
 
             int i = 0;
             foreach (var grouping in MmdBlendShapeNames.All.GroupBy(x => x.Category))
@@ -116,10 +133,10 @@ namespace enitimeago.NonDestructiveMMD
                 GUILayout.Label(grouping.Key.ToString());
                 foreach (var blendShape in grouping)
                 {
-                    var buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _hasValueStyle : _defaultStyle;
+                    var buttonStyle = _knownBlendShapeMappings[i].Count() > 0 ? _hasValueStyle : _defaultStyle;
                     if (i == _currentMmdKeyIndex)
                     {
-                        buttonStyle = _knownBlendShapeMappings.ContainsKey(i) ? _selectedHasValueStyle : _selectedStyle;
+                        buttonStyle = _knownBlendShapeMappings[i].Count() > 0 ? _selectedHasValueStyle : _selectedStyle;
                     }
                     if (GUILayout.Button(blendShape.Name, buttonStyle))
                     {
@@ -134,7 +151,23 @@ namespace enitimeago.NonDestructiveMMD
             GUILayout.EndVertical();
         }
 
-        private void DrawRightPane()
+        private void DrawSelectedBlendShapesPane()
+        {
+            GUILayout.BeginVertical("box", GUILayout.Width(150), GUILayout.ExpandHeight(true));
+
+            if (_currentMmdKeyIndex >= 0)
+            {
+                GUILayout.Label("Selected blendshapes:");
+            }
+            else
+            {
+                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectMMDMorph"));
+            }
+
+            GUILayout.EndVertical();
+        }
+
+        private void DrawBlendShapeSelectorPane()
         {
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
@@ -163,20 +196,12 @@ namespace enitimeago.NonDestructiveMMD
 
                 _rightPaneScroll = GUILayout.BeginScrollView(_rightPaneScroll);
 
-                string selectedBlendShape;
-                _knownBlendShapeMappings.TryGetValue(_currentMmdKeyIndex, out selectedBlendShape);
-
                 var width = Mathf.Max(thumbnailSize, MinWidth);
                 var mod = Mathf.Max(1, (int)position.width / (width + 15));
                 var shown = 1;
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button("None", string.IsNullOrEmpty(selectedBlendShape) ? _hasValueStyle : _defaultStyle))
-                {
-                    Debug.Log("Unselected blendshape");
-                    _knownBlendShapeMappings.Remove(_currentMmdKeyIndex);
-                    _dataSource.RemoveBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name);
-                }
+                // TODO: implement removing blendshape
                 for (int i = 0; i < _faceBlendShapes.Count; i++)
                 {
                     string blendShapeName = _faceBlendShapes[i];
@@ -187,16 +212,16 @@ namespace enitimeago.NonDestructiveMMD
                         GUILayout.FlexibleSpace();
                     }
 
-                    var buttonStyle = new GUIStyle(blendShapeName == selectedBlendShape ? _hasValueStyle : _defaultStyle);
+                    var buttonStyle = new GUIStyle(_knownBlendShapeMappings[_currentMmdKeyIndex].Contains(blendShapeName) ? _hasValueStyle : _defaultStyle);
                     buttonStyle.imagePosition = ImagePosition.ImageAbove;
                     var buttonContent = new GUIContent();
                     buttonContent.image = texture2D;
                     buttonContent.text = blendShapeName;
                     if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width - 25)))
                     {
-                        Debug.Log("Selected blendshape: " + blendShapeName);
-                        _knownBlendShapeMappings[_currentMmdKeyIndex] = blendShapeName;
-                        _dataSource.SetBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, blendShapeName);
+                        Debug.Log("Add blendshape: " + blendShapeName);
+                        _dataSource.AddBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, blendShapeName);
+                        ReloadMappings();
                     }
 
                     if ((shown + 1) % mod == 0 || i == _faceBlendShapes.Count - 1)

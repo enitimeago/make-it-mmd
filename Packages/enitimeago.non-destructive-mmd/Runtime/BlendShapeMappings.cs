@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
+using System.Runtime.InteropServices;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Math.EC.Rfc7748;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -47,10 +50,18 @@ namespace enitimeago.NonDestructiveMMD
             blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
         }
 
-        public void SetBlendShapeMapping(string mmdKey, string avatarKey)
+        public void AddBlendShapeMapping(string mmdKey, string avatarKey)
         {
-            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
-            blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, new string[] { avatarKey }));
+            // This is inefficient, but because the underlying data structure is not a dictionary,
+            // always assume it may be possible to have duplicate keys.
+            var newMappings = new HashSet<string>();
+            if (blendShapeMappings.Any(x => x.mmdKey == mmdKey))
+            {
+                newMappings.UnionWith(blendShapeMappings.Where(x => x.mmdKey == mmdKey).SelectMany(x => x.avatarKeys));
+                blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
+            }
+            newMappings.Add(avatarKey);
+            blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, newMappings.ToArray()));
         }
     }
 
