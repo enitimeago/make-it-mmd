@@ -165,6 +165,11 @@ namespace enitimeago.NonDestructiveMMD
                 GUILayout.Label(L.Tr("MappingsEditorWindow:SelectMMDMorph"));
             }
 
+            foreach (string avatarKey in _knownBlendShapeMappings[_currentMmdKeyIndex])
+            {
+                GUILayout.Label(avatarKey);
+            }
+
             GUILayout.EndVertical();
         }
 
