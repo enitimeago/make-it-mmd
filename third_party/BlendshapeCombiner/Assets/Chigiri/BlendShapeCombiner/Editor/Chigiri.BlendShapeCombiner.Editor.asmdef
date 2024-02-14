@@ -1,0 +1,10 @@
+﻿{
+	"name": "Chigiri.BlendShapeCombiner.Editor",
+    "references": [
+        "Chigiri.BlendShapeCombiner"
+    ],
+	"includePlatforms": [
+		"Editor"
+	],
+    "autoReferenced": true
+}

@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setenv
+        run: |
+          echo "RELEASE_VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Prepare Build
+        run: |
+          mkdir build
+          find Assets -name \*.meta > metaList
+
+      - name: create-unitypackage
+        uses: pCYSl5EDgo/create-unitypackage@v1
+        with:
+          package-path: build/BlendShapeCombiner-${{ env.RELEASE_VERSION }}.unitypackage
+          include-files: metaList
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: unitypackage
+          path: build/BlendShapeCombiner-${{ env.RELEASE_VERSION }}.unitypackage
+
+      - name: Release
+        uses: fnkr/github-action-ghr@v1
+        if: |
+          !contains(github.ref, '-')
+        env:
+          GHR_PATH: build/BlendShapeCombiner-${{ env.RELEASE_VERSION }}.unitypackage
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
