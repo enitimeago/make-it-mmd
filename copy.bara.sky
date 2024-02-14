@@ -232,6 +232,12 @@ core.workflow(
             after = "internal class",
             paths = glob(["**/*.cs"]),
         ),
+        # Expose MergeBlendShapes.
+        core.replace(
+            before = "static Mesh MergeBlendShapes",
+            after = "internal static Mesh MergeBlendShapes",
+            paths = glob(["**/*.cs"]),
+        ),
         # Rename namespace to avoid collision with upstream.
         core.replace(
             before = "Chigiri.BlendShapeCombiner",
