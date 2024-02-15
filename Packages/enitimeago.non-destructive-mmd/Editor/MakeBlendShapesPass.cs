@@ -1,6 +1,10 @@
 ﻿#if NDMMD_VRCSDK3_AVATARS
 
+using System.Linq;
+using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner;
+using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner.Editor;
 using nadena.dev.ndmf;
+using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -48,11 +52,11 @@ namespace enitimeago.NonDestructiveMMD
             meshCopy.AddBlendShapeFrame("------Make It MMD------", 0, deltaVertices, deltaNormals, deltaTangents);
             faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
-            // Make shape key copies.
-            foreach (var mapping in mappingsComponent.blendShapeMappings)
+            // Run simple copies of single keys.
+            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() == 1))
             {
-                int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKey);
-                Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKey + " (found " + mapping.avatarKey + " as index " + blendShapeIndex + ")");
+                int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKeys[0]);
+                Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKeys[0] + " (found " + mapping.avatarKeys[0] + " as index " + blendShapeIndex + ")");
                 int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
                 for (int f = 0; f < frameCount; f++)
                 {
@@ -60,6 +64,26 @@ namespace enitimeago.NonDestructiveMMD
                     mesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
                     meshCopy.AddBlendShapeFrame(mapping.mmdKey, weight, deltaVertices, deltaNormals, deltaTangents);
                 }
+            }
+
+            // Run BlendShapeCombiner on multiple keys.
+            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() > 1);
+            if (multiMappings.Count() > 0)
+            {
+                faceSkinnedMeshRenderer.sharedMesh = CombinerImpl.MergeBlendShapes(new BlendShapeCombiner
+                {
+                    targetRenderer = faceSkinnedMeshRenderer,
+                    sourceMesh = meshCopy,
+                    newKeys = multiMappings
+                        .Select(mapping => new NewKey
+                        {
+                            name = mapping.mmdKey,
+                            sourceKeys = mapping.avatarKeys
+                                .Select(avatarKey => new SourceKey { name = avatarKey })
+                                .ToArray()
+                        })
+                        .ToArray()
+                });
             }
         }
     }

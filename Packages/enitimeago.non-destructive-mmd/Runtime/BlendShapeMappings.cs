@@ -1,5 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Linq;
+using System.Runtime.InteropServices;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Math.EC.Rfc7748;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -7,12 +12,13 @@ namespace enitimeago.NonDestructiveMMD
     public class MMDToAvatarBlendShape
     {
         public string mmdKey;
-        public string avatarKey;
+        public string[] avatarKeys;
+        [FormerlySerializedAs("avatarKey")] public string legacyAvatarKey;
 
-        public MMDToAvatarBlendShape(string mmdKey, string avatarKey)
+        public MMDToAvatarBlendShape(string mmdKey, IEnumerable<string> avatarKeys)
         {
             this.mmdKey = mmdKey;
-            this.avatarKey = avatarKey;
+            this.avatarKeys = avatarKeys.ToArray();
         }
     }
 
@@ -20,20 +26,79 @@ namespace enitimeago.NonDestructiveMMD
     [DisallowMultipleComponent]
     public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {
-        public const int CURRENT_DATA_VERSION = 0;
+        public const int CURRENT_DATA_VERSION = 1;
 
         public int dataVersion;
         public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
 
-        public void RemoveBlendShapeMapping(string mmdKey)
+        public void OnValidate()
         {
-            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
+            RunMigrations();
+            NormalizeData();
         }
 
-        public void SetBlendShapeMapping(string mmdKey, string avatarKey)
+        public void AddBlendShapeMapping(string mmdKey, string avatarKey)
         {
-            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
-            blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, avatarKey));
+            // This is inefficient, but because the underlying data structure is not a dictionary,
+            // always assume it may be possible to have duplicate keys.
+            // TODO: use NormalizeData to simplify this function.
+            var newMappings = new HashSet<string>();
+            if (blendShapeMappings.Any(x => x.mmdKey == mmdKey))
+            {
+                newMappings.UnionWith(blendShapeMappings.Where(x => x.mmdKey == mmdKey).SelectMany(x => x.avatarKeys));
+                blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
+            }
+            newMappings.Add(avatarKey);
+            blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, newMappings.ToArray()));
+        }
+
+        public void DeleteBlendShapeMapping(string mmdKey, string avatarKey)
+        {
+            NormalizeData();
+            var mapping = blendShapeMappings.FirstOrDefault(x => x.mmdKey == mmdKey);
+            if (mapping != null && mapping.avatarKeys.Contains(avatarKey))
+            {
+                mapping.avatarKeys = mapping.avatarKeys.Where(x => x != avatarKey).ToArray();
+            }
+        }
+
+        // TODO: add unit test to verify migration
+        private void RunMigrations()
+        {
+            if (dataVersion == 0)
+            {
+                var newMappings = blendShapeMappings
+                    .Select(x => new MMDToAvatarBlendShape(x.mmdKey, new string[] { x.legacyAvatarKey }))
+                    .ToList();
+                blendShapeMappings.Clear();
+                blendShapeMappings.AddRange(newMappings);
+                dataVersion = 1;
+            }
+        }
+
+        // TODO: unit test?
+        private void NormalizeData()
+        {
+            var seenMmdKeys = new Dictionary<string, MMDToAvatarBlendShape>();
+            // Run off a duplicate of the original list, so it's safe to delete as we go along.
+            foreach (var blendShapeMapping in blendShapeMappings.ToList())
+            {
+                if (!seenMmdKeys.ContainsKey(blendShapeMapping.mmdKey))
+                {
+                    // Mark this as seen.
+                    // TODO: dedup avatar keys.
+                    seenMmdKeys[blendShapeMapping.mmdKey] = blendShapeMapping;
+                }
+                else
+                {
+                    // First unify both sets.
+                    var newMappings = new HashSet<string>(seenMmdKeys[blendShapeMapping.mmdKey].avatarKeys);
+                    newMappings.UnionWith(blendShapeMapping.avatarKeys);
+                    seenMmdKeys[blendShapeMapping.mmdKey].avatarKeys = newMappings.ToArray();
+                    // Then delete this mapping.
+                    blendShapeMappings.Remove(blendShapeMapping);
+                }
+            }
         }
     }
 

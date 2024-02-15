@@ -9,6 +9,7 @@ on:
         type: choice
         options:
         - blendshape-viewer
+        - blendshape-combiner
       force:
         description: 'Force'
         required: false

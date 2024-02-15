@@ -20,31 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-blendshape_viewer_license = """// Blendshape Viewer
-//
-// MIT License
-//
-// Copyright (c) 2023 Haï~ (@vr_hai github.com/hai-vr)
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-"""
-
 path_re = re2.compile(r"^(.+)\/([^\/]+)$")
 
 def get_filename(file):
@@ -69,6 +44,31 @@ def create_symlinks(dest, targets):
     )
 
 vendor_path_editor = "Packages/enitimeago.non-destructive-mmd/Editor/vendor"
+
+blendshape_viewer_license = """// Blendshape Viewer
+//
+// MIT License
+//
+// Copyright (c) 2023 Haï~ (@vr_hai github.com/hai-vr)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+"""
 
 blendshape_viewer_window_base_file = "third_party/blendshape-viewer/Packages/dev.hai-vr.blendshape-viewer/Scripts/Editor/BlendshapeViewerEditorWindowBase.cs"
 blendshape_viewer_files = [
@@ -168,5 +168,83 @@ core.workflow(
             dest = vendor_path_editor,
             targets = blendshape_viewer_files,
         ),
+    ],
+)
+
+blendshape_combiner_license = """// BlendShape Combiner
+//
+// MIT License
+//
+// Copyright (c) 2020 TSUTSUMI Chigiri
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+// OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+core.workflow(
+    name = "blendshape-combiner",
+    origin = git.origin(
+        url = "https://github.com/chigirits/BlendShapeCombiner.git",
+        ref = "master",
+    ),
+    destination = git.github_pr_destination(
+        url = "https://github.com/enitimeago/make-it-mmd.git",
+        destination_ref = "blendshape-combiner",
+        title = "Update BlendShape Combiner",
+        update_description = True,
+        pr_branch = "update-blendshape-combiner",
+    ),
+    destination_files = glob(["third_party/BlendshapeCombiner/**"]),
+    authoring = authoring.pass_thru("github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"),
+    transformations = [
+        # Prepend license header to all source files.
+        # Need to handle UTF-8 BOM otherwise it incorrectly gets put after the header.
+        # Seems like it can't be matched directly via regex so use a workaround.
+        core.replace(
+            before = "${utf8_bom}${first_character}",
+            after = "${utf8_bom}" + blendshape_combiner_license + "${first_character}",
+            regex_groups = {
+                "utf8_bom": r"^.*?",
+                "first_character": r"[a-zA-Z/#]",
+            },
+            paths = glob(["**/*.cs"]),
+            first_only = True,
+            multiline = True,
+        ),
+        # Change classes to internal.
+        core.replace(
+            before = "public class",
+            after = "internal class",
+            paths = glob(["**/*.cs"]),
+        ),
+        # Expose MergeBlendShapes.
+        core.replace(
+            before = "static Mesh MergeBlendShapes",
+            after = "internal static Mesh MergeBlendShapes",
+            paths = glob(["**/*.cs"]),
+        ),
+        # Rename namespace to avoid collision with upstream.
+        core.replace(
+            before = "Chigiri.BlendShapeCombiner",
+            after = "enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner",
+            paths = glob(["**/*.cs"]),
+        ),
+        # Move to third_party location.
+        core.move("", "third_party/BlendshapeCombiner"),
     ],
 )
