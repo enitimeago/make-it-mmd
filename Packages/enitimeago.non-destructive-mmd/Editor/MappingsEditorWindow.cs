@@ -102,8 +102,7 @@ namespace enitimeago.NonDestructiveMMD
             GUILayout.BeginHorizontal();
 
             DrawMmdMorphsPane();
-            DrawSelectedBlendShapesPane();
-            DrawBlendShapeSelectorPane();
+            DrawBlendShapesPane();
 
             GUILayout.EndHorizontal();
         }
@@ -152,6 +151,20 @@ namespace enitimeago.NonDestructiveMMD
             GUILayout.EndVertical();
         }
 
+        private void DrawBlendShapesPane()
+        {
+            GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
+            GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
+
+            GUILayout.BeginHorizontal();
+            DrawSelectedBlendShapesPane();
+            DrawBlendShapeSelectorPane();
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+        }
+
         private void DrawSelectedBlendShapesPane()
         {
             GUILayout.BeginVertical("box", GUILayout.Width(150), GUILayout.ExpandHeight(true));
@@ -179,8 +192,6 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
-                GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
-
                 var serializedObject = new SerializedObject(this);
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(showDifferences)));
