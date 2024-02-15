@@ -188,7 +188,16 @@ namespace enitimeago.NonDestructiveMMD
 
                 foreach (string avatarKey in _knownBlendShapeMappings[_currentMmdKeyIndex])
                 {
+                    EditorGUILayout.BeginHorizontal();
                     GUILayout.Label(avatarKey);
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("x"))
+                    {
+                        Debug.Log("Delete blendshape: " + avatarKey);
+                        _dataSource.DeleteBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, avatarKey);
+                        ReloadMappings();
+                    }
+                    EditorGUILayout.EndHorizontal();
                 }
             }
 
