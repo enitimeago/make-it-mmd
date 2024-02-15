@@ -134,6 +134,10 @@ core.workflow(
             before = "Assets/Hai/BlendshapeViewer/Scripts/Editor/DiffCompute.compute",
             after = vendor_path_editor + "/DiffCompute.compute",
         ),
+        core.replace(
+            before = "569e5a4e6b0efc74b93a42db6d069724",
+            after = "b2ab599d4c7f17b4cbf7ceecfd59b4b8",
+        ),
         # Move to third_party location.
         core.move("", "third_party/blendshape-viewer"),
         # Make EditorWindow accessible as a base.

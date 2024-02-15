@@ -73,7 +73,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor
 
         private static ComputeShader FindComputeShader()
         {
-            var assetPathOrEmpty = AssetDatabase.GUIDToAssetPath("569e5a4e6b0efc74b93a42db6d069724");
+            var assetPathOrEmpty = AssetDatabase.GUIDToAssetPath("b2ab599d4c7f17b4cbf7ceecfd59b4b8");
             var defaultPath = "Packages/enitimeago.non-destructive-mmd/Editor/vendor/DiffCompute.compute";
             var computeShader = AssetDatabase.LoadAssetAtPath<ComputeShader>(assetPathOrEmpty == "" ? defaultPath : assetPathOrEmpty)
                                 ?? FindAmongAllComputeShaders();
