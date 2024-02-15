@@ -44,8 +44,14 @@ msgstr "保存データを表示"
 msgid "MappingsEditorWindow:SelectMMDMorph"
 msgstr "MMDモーフを選んでください"
 
-msgid "MappingsEditorWindow:SelectBlendShapeFor"
-msgstr "「{0}」のブレンドシェイプを選択"
+msgid "MappingsEditorWindow:EditingBlendShapesFor"
+msgstr "「{0}」のブレンドシェイプを編集中…"
+
+msgid "MappingsEditorWindow:SelectedBlendShapes"
+msgstr "選択されているブレンドシェイプ"
+
+msgid "MappingsEditorWindow:AvatarBlendShapes"
+msgstr "アバターのブレンドシェープ"
 
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr ".unitypackageで保存"

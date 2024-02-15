@@ -22,10 +22,12 @@ namespace enitimeago.NonDestructiveMMD
         private Vector2 _rightPaneScroll;
         private List<string> _faceBlendShapes = new List<string>();
 
+        // TODO: move into common class?
         private GUIStyle _defaultStyle;
         private GUIStyle _selectedStyle;
         private GUIStyle _hasValueStyle;
         private GUIStyle _selectedHasValueStyle;
+        private GUIStyle _boldLabelStyle;
 
         public void OnEnable()
         {
@@ -74,6 +76,10 @@ namespace enitimeago.NonDestructiveMMD
             _hasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.0f, 0.5f, 1f, 1f));
             _selectedHasValueStyle = new GUIStyle(GUI.skin.button);
             _selectedHasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.75f, 1f, 1f));
+            _boldLabelStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontStyle = FontStyle.Bold
+            };
 
             if (_dataSource == null)
             {
@@ -155,7 +161,14 @@ namespace enitimeago.NonDestructiveMMD
         {
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
-            GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:SelectBlendShapeFor"), MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
+            if (_currentMmdKeyIndex >= 0)
+            {
+                GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:EditingBlendShapesFor"), MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
+            }
+            else
+            {
+                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectMMDMorph"));
+            }
 
             GUILayout.BeginHorizontal();
             DrawSelectedBlendShapesPane();
@@ -171,16 +184,12 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0)
             {
-                GUILayout.Label("Selected blendshapes:");
-            }
-            else
-            {
-                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectMMDMorph"));
-            }
+                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectedBlendShapes"), _boldLabelStyle);
 
-            foreach (string avatarKey in _knownBlendShapeMappings[_currentMmdKeyIndex])
-            {
-                GUILayout.Label(avatarKey);
+                foreach (string avatarKey in _knownBlendShapeMappings[_currentMmdKeyIndex])
+                {
+                    GUILayout.Label(avatarKey);
+                }
             }
 
             GUILayout.EndVertical();
@@ -189,6 +198,8 @@ namespace enitimeago.NonDestructiveMMD
         private void DrawBlendShapeSelectorPane()
         {
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
+            GUILayout.Label(L.Tr("MappingsEditorWindow:AvatarBlendShapes"), _boldLabelStyle);
 
             if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
