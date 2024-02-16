@@ -12,6 +12,9 @@ namespace enitimeago.NonDestructiveMMD
 {
     internal class MappingsEditorWindow : BlendshapeViewerEditorWindowBase
     {
+        private const int MMD_MORPHS_PANE_WIDTH = 150;
+        private const int SELECTED_BLEND_SHAPES_PANE_WIDTH = 150;
+
         private CommonChecks _commonChecks;
         private BlendShapeMappings _dataSource = null;
         // View-side representation of underlying mapping data for fast accesses.
@@ -125,7 +128,7 @@ namespace enitimeago.NonDestructiveMMD
 
         private void DrawMmdMorphsPane()
         {
-            GUILayout.BeginVertical("box", GUILayout.Width(150), GUILayout.ExpandHeight(true));
+            GUILayout.BeginVertical("box", GUILayout.Width(MMD_MORPHS_PANE_WIDTH), GUILayout.ExpandHeight(true));
 
             _leftPaneScroll = GUILayout.BeginScrollView(_leftPaneScroll);
 
@@ -182,7 +185,7 @@ namespace enitimeago.NonDestructiveMMD
 
         private void DrawSelectedBlendShapesPane()
         {
-            GUILayout.BeginVertical("box", GUILayout.Width(150), GUILayout.ExpandHeight(true));
+            GUILayout.BeginVertical("box", GUILayout.Width(SELECTED_BLEND_SHAPES_PANE_WIDTH), GUILayout.ExpandHeight(true));
 
             if (_currentMmdKeyIndex >= 0)
             {
@@ -235,8 +238,8 @@ namespace enitimeago.NonDestructiveMMD
 
                 _rightPaneScroll = GUILayout.BeginScrollView(_rightPaneScroll);
 
-                var width = Mathf.Max(thumbnailSize, MinWidth);
-                var mod = Mathf.Max(1, (int)position.width / (width + 15));
+                var width = Mathf.Max(_generatedSize, MinWidth);
+                var mod = Mathf.Max(1, (int)(position.width - MMD_MORPHS_PANE_WIDTH - SELECTED_BLEND_SHAPES_PANE_WIDTH) / (width + 12));
                 var shown = 0;
                 // TODO: implement removing blendshape
                 for (int i = 0; i < _faceBlendShapes.Count; i++)
@@ -249,12 +252,14 @@ namespace enitimeago.NonDestructiveMMD
                         GUILayout.FlexibleSpace();
                     }
 
-                    var buttonStyle = new GUIStyle(_knownBlendShapeMappings[_currentMmdKeyIndex].Contains(blendShapeName) ? _hasValueStyle : _defaultStyle);
+                    bool isSelected = _knownBlendShapeMappings[_currentMmdKeyIndex].Contains(blendShapeName);
+
+                    var buttonStyle = new GUIStyle(isSelected ? _hasValueStyle : _defaultStyle);
                     buttonStyle.imagePosition = ImagePosition.ImageAbove;
                     var buttonContent = new GUIContent();
                     buttonContent.image = texture2D;
                     buttonContent.text = blendShapeName;
-                    if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width - 25)))
+                    if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width)))
                     {
                         Debug.Log("Add blendshape: " + blendShapeName);
                         _dataSource.AddBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, blendShapeName);
