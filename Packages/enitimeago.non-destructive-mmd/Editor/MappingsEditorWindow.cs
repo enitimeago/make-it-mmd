@@ -24,6 +24,7 @@ namespace enitimeago.NonDestructiveMMD
         private Vector2 _leftPaneScroll;
         private Vector2 _rightPaneScroll;
         private List<string> _faceBlendShapes = new List<string>();
+        private bool _showBlendShapeViewOptions = false;
 
         // TODO: move into common class?
         private GUIStyle _defaultStyle;
@@ -213,28 +214,51 @@ namespace enitimeago.NonDestructiveMMD
         {
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
+            EditorGUILayout.BeginHorizontal();
             GUILayout.Label(L.Tr("MappingsEditorWindow:AvatarBlendShapes"), _boldLabelStyle);
+            GUILayout.FlexibleSpace();
+            var settingsButtonContent = EditorGUIUtility.IconContent("_Popup");
+            if (GUILayout.Button(settingsButtonContent))
+            {
+                _showBlendShapeViewOptions = !_showBlendShapeViewOptions;
+            }
+            EditorGUILayout.EndHorizontal();
 
             if (_currentMmdKeyIndex >= 0 && _faceBlendShapes.Any())
             {
-                var serializedObject = new SerializedObject(this);
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(showDifferences)));
-                if (SystemInfo.supportsComputeShaders)
+                if (_showBlendShapeViewOptions)
                 {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(useComputeShader)));
+                    bool newShowDifferences;
+                    bool newUseComputeShader;
+                    int newThumbnailSize;
+                    EditorGUILayout.BeginHorizontal();
+                    newShowDifferences = EditorGUILayout.ToggleLeft("Highlight differences", showDifferences, GUILayout.ExpandWidth(false));
+                    if (newShowDifferences != showDifferences)
+                    {
+                        showDifferences = newShowDifferences;
+                        TryExecuteUpdate();
+                    }
+                    if (SystemInfo.supportsComputeShaders)
+                    {
+                        newUseComputeShader = EditorGUILayout.ToggleLeft("Enable compute shader", useComputeShader, GUILayout.ExpandWidth(false));
+                        if (newUseComputeShader != useComputeShader)
+                        {
+                            useComputeShader = newUseComputeShader;
+                            TryExecuteUpdate();
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                    newThumbnailSize = EditorGUILayout.IntSlider("Thumbnail size", thumbnailSize, 100, 300);
+                    if (newThumbnailSize != thumbnailSize)
+                    {
+                        thumbnailSize = newThumbnailSize;
+                        TryExecuteUpdate();
+                    }
+                    EditorGUI.BeginDisabledGroup(skinnedMesh == null || AnimationMode.InAnimationMode());
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.EndHorizontal();
                 }
-                EditorGUILayout.EndHorizontal();
-                EditorGUILayout.IntSlider(serializedObject.FindProperty(nameof(thumbnailSize)), 100, 300);
-
-                EditorGUI.BeginDisabledGroup(skinnedMesh == null || AnimationMode.InAnimationMode());
-                if (GUILayout.Button("Update"))
-                {
-                    TryExecuteUpdate();
-                }
-                EditorGUI.EndDisabledGroup();
-
-                serializedObject.ApplyModifiedProperties();
 
                 _rightPaneScroll = GUILayout.BeginScrollView(_rightPaneScroll);
 
