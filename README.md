@@ -2,17 +2,21 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/enitimeago/make-it-mmd?label=release)
 
-Make It MMD makes it easy to **add** and **share** MMD world compatibility settings for VRChat avatars.
+Make It MMD makes it easy to **create** and **share** MMD blend shapes for VRChat avatars, based on their existing facial expressions.
 
 - 🌟 It's **non-destructive**, running only when you build your avatar.
 - ✏️ Settings are **editable any time**, no need to revert to the original mesh and try again.
 - 💌 Plus **easy .unitypackage export** of your settings, no need to worry about sharing your avatar's mesh data.
 
-Make It MMDは、VRChatアバターをMMDワールドに**対応すること**および**表情設定共有すること**を容易にします。
+Make It MMDは、VRChatアバターの既存の表情を基づいて、MMDブレンドシェープを**作成すること**および**設定を共有すること**を容易にします。
 
 - 🌟 本ツールは**非破壊的**で、アバターをビルドする際にのみ実行されます。
 - ✏️ 設定はいつでも**編集可能**で、元のメッシュに戻って再試行する必要はありません。
 - 💌 さらに、設定を**簡単に.unitypackageとしてエクスポート**できるので、アバターのメッシュデータを共有する恐れがありません。
+
+## Who is this for?
+
+If your avatar does not have MMD blendshapes. (Maybe also in the future: If you want to modify your existing MMD blendshapes too.) If you avatar already has MMD blendshapes and it does not work in MMD worlds, you will need to debug your avatar's animators, which unforunately is not simple to automate!
 
 ## Current Status
 
@@ -25,10 +29,6 @@ It's currently experimental, so please be aware it may not function as expected,
 このツールは実験的なものであり、期待どおりに動かない可能性があり、動作が変更される可能性もあります。予めご了承下さい。
 
 ## Installation
-
-🚨**Please do not use this** unless you have a backup and understand the above!🚨
-
-🚨上記を理解したうえで、バックアップがない場合は**ご利用をお控えください**！🚨
 
 - 📦 Install using VRChat Creator Companion: [Add VPM repository](https://enitimeago.github.io/vpm-repos/)
 - 📦 Install using .unitypackage: [See Releases](https://github.com/enitimeago/make-it-mmd/releases)
