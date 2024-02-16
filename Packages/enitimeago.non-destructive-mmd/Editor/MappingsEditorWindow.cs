@@ -39,6 +39,8 @@ namespace enitimeago.NonDestructiveMMD
             var window = GetWindow<MappingsEditorWindow>("Make It MMD");
             window._dataSource = data;
             window.ReloadMappings();
+            window.OnGUI();
+            window.TryExecuteUpdate();
         }
 
         // Update view-side mappings from underlying data.
@@ -113,7 +115,7 @@ namespace enitimeago.NonDestructiveMMD
             GUILayout.EndHorizontal();
         }
 
-        private void OnFocus()
+        public new void OnFocus()
         {
             if (!autoUpdateOnFocus) return;
             if (skinnedMesh == null) return;
