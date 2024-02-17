@@ -53,6 +53,18 @@ msgstr "選択されているブレンドシェイプ"
 msgid "MappingsEditorWindow:AvatarBlendShapes"
 msgstr "アバターのブレンドシェープ"
 
+msgid "MappingsEditorWindow:HighlightDifferences"
+msgstr "差分を強調表示"
+
+msgid "MappingsEditorWindow:EnableComputeShader"
+msgstr "コンピュートシェーダーを有効にする"
+
+msgid "MappingsEditorWindow:ThumbnailSize"
+msgstr "サムネイルサイズ"
+
+msgid "MappingsEditorWindow:NoData"
+msgstr "データがない。プレイモードに入ったかもしれません。"
+
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr ".unitypackageで保存"
 

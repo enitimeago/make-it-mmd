@@ -53,6 +53,18 @@ msgstr "Selected blendshapes"
 msgid "MappingsEditorWindow:AvatarBlendShapes"
 msgstr "Avatar blendshapes"
 
+msgid "MappingsEditorWindow:HighlightDifferences"
+msgstr "Highlight differences"
+
+msgid "MappingsEditorWindow:EnableComputeShader"
+msgstr "Enable compute shader"
+
+msgid "MappingsEditorWindow:ThumbnailSize"
+msgstr "Thumbnail size"
+
+msgid "MappingsEditorWindow:NoData"
+msgstr "No data. Maybe you are in play mode?"
+
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr "Save .unitypackage"
 

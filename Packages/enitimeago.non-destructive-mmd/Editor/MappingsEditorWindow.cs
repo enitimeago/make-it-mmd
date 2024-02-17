@@ -89,7 +89,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_dataSource == null)
             {
-                GUILayout.Label("No data. Maybe you are in play mode?");
+                GUILayout.Label(L.Tr("MappingsEditorWindow:NoData"));
                 return;
             }
 
@@ -232,7 +232,7 @@ namespace enitimeago.NonDestructiveMMD
                     bool newUseComputeShader;
                     int newThumbnailSize;
                     EditorGUILayout.BeginHorizontal();
-                    newShowDifferences = EditorGUILayout.ToggleLeft("Highlight differences", showDifferences, GUILayout.ExpandWidth(false));
+                    newShowDifferences = EditorGUILayout.ToggleLeft(L.Tr("MappingsEditorWindow:HighlightDifferences"), showDifferences, GUILayout.ExpandWidth(false));
                     if (newShowDifferences != showDifferences)
                     {
                         showDifferences = newShowDifferences;
@@ -240,7 +240,7 @@ namespace enitimeago.NonDestructiveMMD
                     }
                     if (SystemInfo.supportsComputeShaders)
                     {
-                        newUseComputeShader = EditorGUILayout.ToggleLeft("Enable compute shader", useComputeShader, GUILayout.ExpandWidth(false));
+                        newUseComputeShader = EditorGUILayout.ToggleLeft(L.Tr("MappingsEditorWindow:EnableComputeShader"), useComputeShader, GUILayout.ExpandWidth(false));
                         if (newUseComputeShader != useComputeShader)
                         {
                             useComputeShader = newUseComputeShader;
@@ -249,7 +249,7 @@ namespace enitimeago.NonDestructiveMMD
                     }
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.BeginHorizontal();
-                    newThumbnailSize = EditorGUILayout.IntSlider("Thumbnail size", thumbnailSize, 100, 300);
+                    newThumbnailSize = EditorGUILayout.IntSlider(L.Tr("MappingsEditorWindow:ThumbnailSize"), thumbnailSize, 100, 300);
                     if (newThumbnailSize != thumbnailSize)
                     {
                         thumbnailSize = newThumbnailSize;
