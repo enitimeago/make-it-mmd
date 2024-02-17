@@ -22,12 +22,18 @@ namespace enitimeago.NonDestructiveMMD
         {
             var avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
             var mappingsComponents = avatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
+            var writeDefaultsComponents = avatarRootObject.GetComponentsInChildren<WriteDefaultsComponent>();
             if (mappingsComponents.Length == 0)
             {
                 LogLocalized("CommonChecks:NoMMDComponents", Severity.Debug);
                 return false;
             }
             if (mappingsComponents.Length > 1)
+            {
+                LogLocalized("CommonChecks:MultipleMMDComponents", Severity.Error);
+                return false;
+            }
+            if (writeDefaultsComponents.Length > 1)
             {
                 LogLocalized("CommonChecks:MultipleMMDComponents", Severity.Error);
                 return false;

@@ -27,6 +27,17 @@ namespace enitimeago.NonDestructiveMMD
         internal void Execute(GameObject avatarRootObject)
         {
             // TODO: need some checks but if we run checks we'll see mmd shape keys exist
+            // var commonChecks = new CommonChecks(isEditor: false);
+            // if (!commonChecks.RunChecks(avatarRootObject))
+            // {
+            //     return;
+            // }
+
+            var mappingsComponent = avatarRootObject.GetComponentInChildren<WriteDefaultsComponent>();
+            if (mappingsComponent == null || !mappingsComponent.forceAvatarWriteDefaults)
+            {
+                return;
+            }
 
             var descriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
 

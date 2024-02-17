@@ -24,9 +24,13 @@ This tool has only been minimally tested with Unity 2019 and Sue v1.3.6 by mio3i
 
 It's currently experimental, so please be aware it may not function as expected, and may undergo breaking changes.
 
+Please be aware this tool currently will not work if the face has any name other than "Body".
+
 現時点は、Unity 2019で、mio3ioさんの「透羽」v1.3.6のみで動作することをわずかに確認されておりました。
 
 このツールは実験的なものであり、期待どおりに動かない可能性があり、動作が変更される可能性もあります。予めご了承下さい。
+
+アバターの顔のメッシュが「Body」で呼ばれていない場合は、このツールは現在機能しません。
 
 ## Installation
 
@@ -35,23 +39,38 @@ It's currently experimental, so please be aware it may not function as expected,
 
 ## Usage
 
-以下は日本語の場合はGoogle TranslateまたはDeepLなどでお願いします。
+現在、以下の使用方法は英語のみです。日本語の場合はGoogle TranslateまたはDeepLなどでお願いします。
 
-Please be aware this tool will not work if the face has any name other than "Body". It will force all FX animators to Write Defaults ON. This may cause unexpected behavior. (Usage with FaceEmo is recommended.)
+In order to support facial animations in MMD worlds, your avatar must meet the following conditions:
 
-- Right-click your avatar in the hierarchy and select "Create Empty", and name your new object "MMD"
-  - **Advanced users:** This is just the recommended approach. You can use any object underneath your avatar, or even your avatar itself.
-- Click on "Add Component" in your new object's inspector
-- Search for "Make It MMD", or select "Scripts/Make It MMD"
+1. Your avatar's face mesh must have blend shapes named the same as MMD morphs.
+2. Your avatar's FX Animator States must *all* have Write Defaults enabled.
+
+Make It MMD provides a Unity component to assist with each of these.
+
+### Create blend shapes
+
+The "Make MMD BlendShapes" component generates blend shapes for MMD morphs, with a visual editor to preview which blend shapes you can select for each MMD morph. It's non-destructive, so it doesn't make a permanent copy of your avatar's face mesh. You can change your choices at any time.
+
+- In your avatar or any object inside your avatar, click on "Add Component" in the object inspector
+- Search for "Make MMD BlendShapes", or select "Make It MMD/Make MMD Blendshapes"
 - Click Open Editor
-- On the left, you will see a list of MMD blend shapes. Select a blend shape to continue
-- On the right, you will see the list of your avatar's blend shapes. Select a blend shape that corresponds to the MMD blend shape.
-- Repeat for all MMD blend shapes you wish to support. The most important are generally あ　い　う　え　お.
-- Click the Play button in the toolbar. Check that your avatar builds.
-- Click on "Body" on your hierarchy, and check the blend shapes in the inspector. You should see the MMD blend shapes listed at the bottom.
-- Adjust the MMD blend shapes to confirm that they function correctly.
-- Exit the Play mode
-- Build and publish your avatar!
+- On the left, you will see a list of MMD morphs. Select a blend shape to continue
+- On the right, you will see the list of your avatar's blend shapes. Select one or more blend shapes that correspond to the MMD blend shape.
+- Repeat for all MMD morphs you wish to support.
+- You should see the new MMD blend shapes applied to your avatar's face mesh when you enter Play mode.
+
+### Set Write Defaults
+
+The "Avatar Write Defaults" component can help modify all FX Animator States on your avatar to set Write Defaults ON. It's non-destructive, so it only modifies your avatar's FX when the component is enabled in your avatar.
+
+**WARNING:** Forcing all Animator States to Write Defaults ON may cause unexpected behavior with other gimmicks installed in your avatar!
+
+You don't need this component if your avatar already uses Write Defaults ON for all Animator States, or if you're using other tools that achieve this for you.
+
+- In your avatar or any object inside your avatar, click on "Add Component" in the object inspector
+- Search for "Avatar Write Defaults", or select "Make It MMD/Avatar Write Defaults"
+- Click the checkbox to force all Write Defaults ON when you enter Play mode or build your avatar.
 
 ## Development
 

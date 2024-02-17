@@ -55,3 +55,9 @@ msgstr "Avatar blendshapes"
 
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr "Save .unitypackage"
+
+msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"
+msgstr "Force all FX Write Defaults ON"
+
+msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOnDescription"
+msgstr "If enabled, all Animator States on this avatar will have Write Defaults enabled. If your avatar has gimmicks not designed for Write Defaults ON, your avatar and/or these gimmicks ***may break***!"

@@ -55,3 +55,9 @@ msgstr "アバターのブレンドシェープ"
 
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr ".unitypackageで保存"
+
+msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"
+msgstr "FX の WriteDefaults を全て強制的に有効化する"
+
+msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOnDescription"
+msgstr "チェックを有効化するとすべてのAnimator State の Write Defaults が有効化されます。Write Defaults ON が前提されていない別途で導入されたギミックがある場合、こちらのギミックまたはアバター自体が正常に機能しなくなる可能性があります。"

@@ -22,7 +22,7 @@ public class CommonChecksTests
     }
 
     [Test]
-    public void RunChecks_AvatarRootObjectWithMultipleMMDComponents_WillFail()
+    public void RunChecks_AvatarRootObjectWithMultipleBlendShapeMappingsComponents_WillFail()
     {
         var commonChecks = new CommonChecks(isEditor: false);
         var avatarRootObject = new GameObject();
@@ -31,6 +31,23 @@ public class CommonChecksTests
         childObject1.transform.parent = avatarRootObject.transform;
         var childObject2 = new GameObject();
         childObject2.AddComponent<BlendShapeMappings>();
+        childObject2.transform.parent = avatarRootObject.transform;
+
+        bool result = commonChecks.RunChecks(avatarRootObject);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void RunChecks_AvatarRootObjectWithMultipleWriteDefaultsComponents_WillFail()
+    {
+        var commonChecks = new CommonChecks(isEditor: false);
+        var avatarRootObject = new GameObject();
+        var childObject1 = new GameObject();
+        childObject1.AddComponent<WriteDefaultsComponent>();
+        childObject1.transform.parent = avatarRootObject.transform;
+        var childObject2 = new GameObject();
+        childObject2.AddComponent<WriteDefaultsComponent>();
         childObject2.transform.parent = avatarRootObject.transform;
 
         bool result = commonChecks.RunChecks(avatarRootObject);

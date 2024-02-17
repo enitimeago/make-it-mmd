@@ -4,7 +4,7 @@ using nadena.dev.ndmf;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    public class MapperPlugin : Plugin<MapperPlugin>
+    public class NonDestructiveMmdPlugin : Plugin<NonDestructiveMmdPlugin>
     {
         public override string QualifiedName => "enitimeago.non-destructive-mmd";
         public override string DisplayName => "Make It MMD";

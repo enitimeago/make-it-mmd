@@ -2,5 +2,5 @@
 using enitimeago.NonDestructiveMMD;
 using nadena.dev.ndmf;
 
-[assembly: ExportsPlugin(typeof(MapperPlugin))]
+[assembly: ExportsPlugin(typeof(NonDestructiveMmdPlugin))]
 [assembly: InternalsVisibleTo("enitimeago.non-destructive-mmd.tests")]

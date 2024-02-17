@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
-using System.Runtime.InteropServices;
-using BestHTTP.SecureProtocol.Org.BouncyCastle.Math.EC.Rfc7748;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -22,7 +19,7 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
-    [AddComponentMenu("Scripts/Make It MMD")]
+    [AddComponentMenu("Make It MMD/Make MMD BlendShapes")]
     [DisallowMultipleComponent]
     public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {
