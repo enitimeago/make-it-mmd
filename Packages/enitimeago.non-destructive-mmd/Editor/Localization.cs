@@ -31,7 +31,8 @@ namespace enitimeago.NonDestructiveMMD
                 .Select(asset => asset.GetLocalizedString($"locale:{asset.localeIsoCode}"))
                 .ToArray();
             Localizer = new Localizer("en-US", () => _localizationAssets);
-            _currentLocaleIndex = Array.IndexOf(_localeCodes, LanguagePrefs.Language);
+            OnLanguageChange();
+            LanguagePrefs.RegisterLanguageChangeCallback(typeof(Localization), _ => OnLanguageChange());
         }
 
         public static void DrawLanguagePicker()
@@ -56,6 +57,11 @@ namespace enitimeago.NonDestructiveMMD
                 return value;
             }
             return fallback;
+        }
+
+        private static void OnLanguageChange()
+        {
+            _currentLocaleIndex = Array.IndexOf(_localeCodes, LanguagePrefs.Language);
         }
     }
 }
