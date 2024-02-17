@@ -186,6 +186,11 @@ namespace enitimeago.NonDestructiveMMD
 
         private void DrawSelectedBlendShapesPane()
         {
+            if (_knownBlendShapeMappings == null)
+            {
+                return;
+            }
+
             GUILayout.BeginVertical("box", GUILayout.Width(SELECTED_BLEND_SHAPES_PANE_WIDTH), GUILayout.ExpandHeight(true));
 
             if (_currentMmdKeyIndex >= 0)
