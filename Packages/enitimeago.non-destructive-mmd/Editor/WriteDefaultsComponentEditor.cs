@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using nadena.dev.ndmf;
-using nadena.dev.ndmf.fluent;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
