@@ -84,13 +84,16 @@ namespace enitimeago.NonDestructiveMMD
                 return false;
             }
 
-            for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
+            if (!EditorApplication.isPlaying)
             {
-                string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
-                if (MmdBlendShapeNames.All.Any(blendShape => blendShape.Name == blendShapeName))
+                for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
                 {
-                    LogLocalized("CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported", Severity.Warning);
-                    return false;
+                    string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
+                    if (MmdBlendShapeNames.All.Any(blendShape => blendShape.Name == blendShapeName))
+                    {
+                        LogLocalized("CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported", Severity.Warning);
+                        return false;
+                    }
                 }
             }
 

@@ -47,6 +47,9 @@ msgstr "MMDモーフを選んでください"
 msgid "MappingsEditorWindow:EditingBlendShapesFor"
 msgstr "「{0}」のブレンドシェイプを編集中…"
 
+msgid "MappingsEditorWindow:ViewingBlendShapesForInPlayMode"
+msgstr "「{0}」のブレンドシェイプを表示中 (編集するには再生モードを終了してください)…"
+
 msgid "MappingsEditorWindow:SelectedBlendShapes"
 msgstr "選択されているブレンドシェイプ"
 
@@ -61,9 +64,6 @@ msgstr "コンピュートシェーダーを有効にする"
 
 msgid "MappingsEditorWindow:ThumbnailSize"
 msgstr "サムネイルサイズ"
-
-msgid "MappingsEditorWindow:NoData"
-msgstr "データがない。プレイモードに入ったかもしれません。"
 
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr ".unitypackageで保存"
