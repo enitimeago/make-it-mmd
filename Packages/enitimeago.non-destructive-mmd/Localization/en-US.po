@@ -47,6 +47,9 @@ msgstr "Select a MMD morph"
 msgid "MappingsEditorWindow:EditingBlendShapesFor"
 msgstr "Editing blendshapes for \"{0}\"..."
 
+msgid "MappingsEditorWindow:ViewingBlendShapesForInPlayMode"
+msgstr "Viewing blendshapes for \"{0}\" (exit play mode to edit)..."
+
 msgid "MappingsEditorWindow:SelectedBlendShapes"
 msgstr "Selected blendshapes"
 
@@ -61,9 +64,6 @@ msgstr "Enable compute shader"
 
 msgid "MappingsEditorWindow:ThumbnailSize"
 msgstr "Thumbnail size"
-
-msgid "MappingsEditorWindow:NoData"
-msgstr "No data. Maybe you are in play mode?"
 
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr "Save .unitypackage"

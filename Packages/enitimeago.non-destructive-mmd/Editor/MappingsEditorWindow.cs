@@ -16,7 +16,10 @@ namespace enitimeago.NonDestructiveMMD
         private const int SELECTED_BLEND_SHAPES_PANE_WIDTH = 150;
 
         private CommonChecks _commonChecks;
-        private BlendShapeMappings _dataSource = null;
+        // Store a reference to the component rather than the component itself.
+        // The component itself, even if annotated with [SerializeField] will not persist when entering play mode.
+        private int _dataSource;
+        private BlendShapeMappings MappingsComponent => (BlendShapeMappings)EditorUtility.InstanceIDToObject(_dataSource);
         // View-side representation of underlying mapping data for fast accesses.
         private ILookup<int, string> _knownBlendShapeMappings;
 
@@ -36,12 +39,32 @@ namespace enitimeago.NonDestructiveMMD
         public void OnEnable()
         {
             _commonChecks = new CommonChecks(isEditor: true);
+            if (_dataSource > 0)
+            {
+                ReloadMappings();
+            }
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        public void OnDisable()
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            // Reload thumbnails on state change. As with any other data, they will be lost on play mode state.
+            if (state == PlayModeStateChange.EnteredPlayMode || state == PlayModeStateChange.EnteredEditMode)
+            {
+                TryExecuteUpdate();
+            }
         }
 
         public static void ShowWindow(BlendShapeMappings data)
         {
             var window = GetWindow<MappingsEditorWindow>("Make It MMD");
-            window._dataSource = data;
+            window._dataSource = data.GetInstanceID();
             window.ReloadMappings();
             window.OnGUI();
             window.TryExecuteUpdate();
@@ -53,7 +76,7 @@ namespace enitimeago.NonDestructiveMMD
         private void ReloadMappings()
         {
             var knownMappings = new Dictionary<int, HashSet<string>>();
-            var mappingsToSearch = new LinkedList<MMDToAvatarBlendShape>(_dataSource.blendShapeMappings);
+            var mappingsToSearch = new LinkedList<MMDToAvatarBlendShape>(MappingsComponent.blendShapeMappings);
             foreach (var (knownMorph, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
             {
                 // Iterate all underlying mappings due to risk of duplicate keys.
@@ -87,17 +110,11 @@ namespace enitimeago.NonDestructiveMMD
                 fontStyle = FontStyle.Bold
             };
 
-            if (_dataSource == null)
-            {
-                GUILayout.Label(L.Tr("MappingsEditorWindow:NoData"));
-                return;
-            }
-
             // TODO: should this be moved into ShowWindow?
             // TODO: need to refresh if the scene changes
-            if (_dataSource.gameObject != null)
+            if (MappingsComponent.gameObject != null)
             {
-                var avatar = _dataSource.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
+                var avatar = MappingsComponent.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
                 if (!_commonChecks.RunChecks(avatar))
                 {
                     return;
@@ -133,7 +150,7 @@ namespace enitimeago.NonDestructiveMMD
 
             _leftPaneScroll = GUILayout.BeginScrollView(_leftPaneScroll);
 
-            if (_knownBlendShapeMappings != null // TODO: why isn't _dataSource != null good enough?
+            if (_knownBlendShapeMappings != null // TODO: why isn't MappingsComponent != null good enough?
                 && _knownBlendShapeMappings.Count == 0)
             {
                 ReloadMappings();
@@ -169,7 +186,10 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0)
             {
-                GUILayout.Label(string.Format(L.Tr("MappingsEditorWindow:EditingBlendShapesFor"), MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
+                GUILayout.Label(
+                    string.Format(
+                        EditorApplication.isPlaying ? L.Tr("MappingsEditorWindow:ViewingBlendShapesForInPlayMode") : L.Tr("MappingsEditorWindow:EditingBlendShapesFor"),
+                        MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
             }
             else
             {
@@ -202,12 +222,16 @@ namespace enitimeago.NonDestructiveMMD
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Label(avatarKey);
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("x"))
+                    EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
                     {
-                        Debug.Log("Delete blendshape: " + avatarKey);
-                        _dataSource.DeleteBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, avatarKey);
-                        ReloadMappings();
+                        if (GUILayout.Button("x"))
+                        {
+                            Debug.Log("Delete blendshape: " + avatarKey);
+                            MappingsComponent.DeleteBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, avatarKey);
+                            ReloadMappings();
+                        }
                     }
+                    EditorGUI.EndDisabledGroup();
                     EditorGUILayout.EndHorizontal();
                 }
             }
@@ -270,39 +294,43 @@ namespace enitimeago.NonDestructiveMMD
                 var width = Mathf.Max(_generatedSize, MinWidth);
                 var mod = Mathf.Max(1, (int)(position.width - MMD_MORPHS_PANE_WIDTH - SELECTED_BLEND_SHAPES_PANE_WIDTH) / (width + 12));
                 var shown = 0;
-                // TODO: implement removing blendshape
-                for (int i = 0; i < _faceBlendShapes.Count; i++)
+
+                EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
                 {
-                    string blendShapeName = _faceBlendShapes[i];
-                    var texture2D = i < tex2ds.Length ? tex2ds[i] : null;
-                    if (shown % mod == 0)
+                    for (int i = 0; i < _faceBlendShapes.Count; i++)
                     {
-                        EditorGUILayout.BeginHorizontal();
-                        GUILayout.FlexibleSpace();
+                        string blendShapeName = _faceBlendShapes[i];
+                        var texture2D = i < tex2ds.Length ? tex2ds[i] : null;
+                        if (shown % mod == 0)
+                        {
+                            EditorGUILayout.BeginHorizontal();
+                            GUILayout.FlexibleSpace();
+                        }
+
+                        bool isSelected = _knownBlendShapeMappings[_currentMmdKeyIndex].Contains(blendShapeName);
+
+                        var buttonStyle = new GUIStyle(isSelected ? _hasValueStyle : _defaultStyle);
+                        buttonStyle.imagePosition = ImagePosition.ImageAbove;
+                        var buttonContent = new GUIContent();
+                        buttonContent.image = texture2D;
+                        buttonContent.text = blendShapeName;
+                        if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width)))
+                        {
+                            Debug.Log("Add blendshape: " + blendShapeName);
+                            MappingsComponent.AddBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, blendShapeName);
+                            ReloadMappings();
+                        }
+
+                        if ((shown + 1) % mod == 0 || i == _faceBlendShapes.Count - 1)
+                        {
+                            GUILayout.FlexibleSpace();
+                            EditorGUILayout.EndHorizontal();
+                        }
+
+                        shown++;
                     }
-
-                    bool isSelected = _knownBlendShapeMappings[_currentMmdKeyIndex].Contains(blendShapeName);
-
-                    var buttonStyle = new GUIStyle(isSelected ? _hasValueStyle : _defaultStyle);
-                    buttonStyle.imagePosition = ImagePosition.ImageAbove;
-                    var buttonContent = new GUIContent();
-                    buttonContent.image = texture2D;
-                    buttonContent.text = blendShapeName;
-                    if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width)))
-                    {
-                        Debug.Log("Add blendshape: " + blendShapeName);
-                        _dataSource.AddBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, blendShapeName);
-                        ReloadMappings();
-                    }
-
-                    if ((shown + 1) % mod == 0 || i == _faceBlendShapes.Count - 1)
-                    {
-                        GUILayout.FlexibleSpace();
-                        EditorGUILayout.EndHorizontal();
-                    }
-
-                    shown++;
                 }
+                EditorGUI.EndDisabledGroup();
 
                 GUILayout.EndScrollView();
             }
