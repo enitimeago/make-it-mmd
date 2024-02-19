@@ -2,7 +2,7 @@
 
 namespace enitimeago.NonDestructiveMMD
 {
-    [AddComponentMenu("Make It MMD/Avatar Write Defaults")]
+    [AddComponentMenu("Make It MMD/MIM Avatar Write Defaults")]
     [DisallowMultipleComponent]
     public class WriteDefaultsComponent : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {

@@ -2,7 +2,7 @@
 
 namespace enitimeago.NonDestructiveMMD
 {
-    [AddComponentMenu("Make It MMD/Remove FX Animator Layers")]
+    [AddComponentMenu("Make It MMD/MIM Remove FX Animator Layers")]
     [DisallowMultipleComponent]
     public class RemoveAnimatorLayersComponent : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {

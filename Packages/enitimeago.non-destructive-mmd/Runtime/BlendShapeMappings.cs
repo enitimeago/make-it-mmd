@@ -19,7 +19,7 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
-    [AddComponentMenu("Make It MMD/Make MMD BlendShapes")]
+    [AddComponentMenu("Make It MMD/MIM Make MMD BlendShapes")]
     [DisallowMultipleComponent]
     public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {
