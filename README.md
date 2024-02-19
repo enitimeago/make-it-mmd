@@ -2,6 +2,15 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/enitimeago/make-it-mmd?label=release)
 
+Make It MMD is a suite of **non-destructive** Unity components to help VRChat avatars support MMD worlds.
+
+- 🌟 **"Make MMD BlendShapes"** helps you generate MMD blend shapes based on your avatar's existing facial expressions, without permanently modifying the orignal mesh. It comes with a visual editor that helps you select the right expression for each MMD morph at any time.
+- ✏️ **"Avatar Write Defaults"** helps you enable Write Defaults on all animator layers, without permanently modifying the original animator controller. (May not be compatible with your avatar or gimmicks in your avatar.)
+- 🧹 **"Remove FX Animator Layers"** helps you remove unnecessary animator layers, without permanently modifying the original animator controller.
+- Plus **easy .unitypackage export** helps you share blend shape settings, without the risk of sharing your avatar's 3D mesh.
+
+## Old intro, TODO remove
+
 Make It MMD makes it easy to **create** and **share** MMD blend shapes for VRChat avatars, based on their existing facial expressions.
 
 - 🌟 It's **non-destructive**, running only when you build your avatar.
@@ -14,23 +23,15 @@ Make It MMDは、VRChatアバターの既存の表情を基づいて、MMDブレ
 - ✏️ 設定はいつでも**編集可能**で、元のメッシュに戻って再試行する必要はありません。
 - 💌 さらに、設定を**簡単に.unitypackageとしてエクスポート**できるので、アバターのメッシュデータを共有する恐れがありません。
 
-## Who is this for?
-
-If your avatar does not have MMD blendshapes. (Maybe also in the future: If you want to modify your existing MMD blendshapes too.) If you avatar already has MMD blendshapes and it does not work in MMD worlds, you will need to debug your avatar's animators, which unforunately is not simple to automate!
-
-## Current Status
-
-This tool has only been minimally tested with Unity 2019 and Sue v1.3.6 by mio3io at time of writing.
-
-It's currently experimental, so please be aware it may not function as expected, and may undergo breaking changes.
+## Known Issues
 
 Please be aware this tool currently will not work if the face has any name other than "Body".
 
-現時点は、Unity 2019で、mio3ioさんの「透羽」v1.3.6のみで動作することをわずかに確認されておりました。
-
-このツールは実験的なものであり、期待どおりに動かない可能性があり、動作が変更される可能性もあります。予めご了承下さい。
+Avatars with existing MMD blend shapes are unsupported. Support is planned for a future release.
 
 アバターの顔のメッシュが「Body」で呼ばれていない場合は、このツールは現在機能しません。
+
+既存のMMDブレンドシェイプを持つアバターはサポートされていません。サポートするのは予定されています。
 
 ## Installation
 
@@ -41,14 +42,15 @@ Please be aware this tool currently will not work if the face has any name other
 
 現在、以下の使用方法は英語のみです。日本語の場合はGoogle TranslateまたはDeepLなどでお願いします。
 
-In order to support facial animations in MMD worlds, your avatar must meet the following conditions:
+In order to support facial animations in popular VRChat MMD worlds, your avatar must meet the following conditions:
 
 1. Your avatar's face mesh must have blend shapes named the same as MMD morphs.
 2. Your avatar's FX Animator States must *all* have Write Defaults enabled.
+3. Your avatar's first three FX Animator Layers should include the "Left Hand" and "Right Hand" layers.
 
 Make It MMD provides a Unity component to assist with each of these.
 
-### Create blend shapes
+### Make MMD BlendShapes
 
 The "Make MMD BlendShapes" component generates blend shapes for MMD morphs, with a visual editor to preview which blend shapes you can select for each MMD morph. It's non-destructive, so it doesn't make a permanent copy of your avatar's face mesh. You can change your choices at any time.
 
@@ -60,7 +62,7 @@ The "Make MMD BlendShapes" component generates blend shapes for MMD morphs, with
 - Repeat for all MMD morphs you wish to support.
 - You should see the new MMD blend shapes applied to your avatar's face mesh when you enter Play mode.
 
-### Set Write Defaults
+### Avatar Write Defaults
 
 The "Avatar Write Defaults" component can help modify all FX Animator States on your avatar to set Write Defaults ON. It's non-destructive, so it only modifies your avatar's FX when the component is enabled in your avatar.
 
@@ -71,6 +73,10 @@ You don't need this component if your avatar already uses Write Defaults ON for 
 - In your avatar or any object inside your avatar, click on "Add Component" in the object inspector
 - Search for "Avatar Write Defaults", or select "Make It MMD/Avatar Write Defaults"
 - Click the checkbox to force all Write Defaults ON when you enter Play mode or build your avatar.
+
+### Remove FX Animator Layers
+
+TODO document this
 
 ## Development
 
