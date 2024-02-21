@@ -13,6 +13,14 @@
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 
+# Exclude certain directories and meta data for local testing purposes
+Assets/Amatousagi*
+Assets/Examples and Samples Have Moved*
+Assets/lilToon*
+Assets/mio3io*
+Assets/onigashima*
+Assets/Scenes*
+
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
 
