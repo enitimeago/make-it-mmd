@@ -2,7 +2,7 @@
 
 # This .gitignore file should be placed at the root of your Unity project directory
 #
-# Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
+# Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 /[Ll]ibrary/
 /[Tt]emp/
@@ -10,12 +10,20 @@
 /[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# MemoryCaptures can get excessive in size.
+# They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
+
+# Recordings can get excessive in size
+/[Rr]ecordings/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 
 # Exclude certain directories and meta data for local testing purposes
+Assets/XR*
 Assets/Amatousagi*
 Assets/Examples and Samples Have Moved*
 Assets/lilToon*
@@ -67,6 +75,13 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+# Packed Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Temporary auto-generated Android Assets
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 .idea/.idea.vpm-package-maker/.idea
 Assets/PackageMakerWindowData.asset*
