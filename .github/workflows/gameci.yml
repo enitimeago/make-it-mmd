@@ -30,7 +30,7 @@ jobs:
         repos: |
           https://vpm.nadena.dev/vpm.json
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v4
       with:
         path: Library
         key: Library-${{ runner.os }}-unity-${{ matrix.unity_version }}
@@ -49,7 +49,7 @@ jobs:
         testMode: EditMode
         coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+enitimeago.non-destructive-mmd.*'
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: Test results ${{ matrix.unity_version }}
@@ -69,7 +69,7 @@ jobs:
           https://vpm.nadena.dev/vpm.json
           https://hai-vr.github.io/vpm-listing/index.json
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v4
       with:
         path: Library
         key: Library-${{ runner.os }}-unity-2019.4.31f1
