@@ -21,6 +21,10 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Upgrade to Unity 2022
+      if: ${{ matrix.unity_version == '2022.3.6f1' }}
+      run: git apply --whitespace=fix .github/unity2022.patch
+
     - uses: anatawa12/sh-actions/resolve-vpm-packages@master
       with:
         repos: |
