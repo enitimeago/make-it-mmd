@@ -10,12 +10,20 @@ on:
 
 jobs:
   test:
+    strategy:
+      matrix:
+        unity_version: [ "2019.4.31f1", "2022.3.6f1" ]
+
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+
+    - name: Upgrade to Unity 2022
+      if: ${{ matrix.unity_version == '2022.3.6f1' }}
+      run: git apply --whitespace=fix .github/unity2022.patch
 
     - uses: anatawa12/sh-actions/resolve-vpm-packages@master
       with:
@@ -25,7 +33,7 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: Library
-        key: Library-${{ runner.os }}-unity-2019.4.31f1
+        key: Library-${{ runner.os }}-unity-${{ matrix.unity_version }}
         restore-keys: Library-
 
     - uses: game-ci/unity-test-runner@v4
@@ -35,7 +43,7 @@ jobs:
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       with:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
-        unityVersion: 2019.4.31f1
+        unityVersion: ${{ matrix.unity_version }}
         projectPath: .
         # TODO: PlayMode (incl. All) causes GameCI to hang. figure out if it's needed?
         testMode: EditMode
@@ -44,7 +52,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: Test results
+        name: Test results ${{ matrix.unity_version }}
         path: artifacts
 
   lint:
