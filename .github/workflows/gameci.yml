@@ -52,7 +52,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: Test results
+        name: Test results ${{ matrix.unity_version }}
         path: artifacts
 
   lint:
