@@ -21,7 +21,6 @@ jobs:
       with:
         repos: |
           https://vpm.nadena.dev/vpm.json
-          https://hai-vr.github.io/vpm-listing/index.json
 
     - uses: actions/cache@v2
       with:
