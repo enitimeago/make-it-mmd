@@ -2,12 +2,11 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/enitimeago/make-it-mmd?label=release)
 
-Make It MMD is a suite of **non-destructive** Unity components to help VRChat avatars support MMD worlds.
+Make It MMD is a set of **non-destructive** Unity extensions to help VRChat avatars support MMD worlds.
 
-- 🌟 **"Make MMD BlendShapes"** helps you generate MMD blend shapes based on your avatar's existing facial expressions, without permanently modifying the orignal mesh. It comes with a visual editor that helps you select the right expression for each MMD morph at any time.
-- ✏️ **"Avatar Write Defaults"** helps you enable Write Defaults on all animator layers, without permanently modifying the original animator controller. (May not be compatible with your avatar or gimmicks in your avatar.)
-- 🧹 **"Remove FX Animator Layers"** helps you remove unnecessary animator layers, without permanently modifying the original animator controller.
-- Plus **easy .unitypackage export** helps you share blend shape settings, without the risk of sharing your avatar's 3D mesh.
+- 🌟 **"Make MMD BlendShapes"** helps generate MMD blend shapes based on your avatar's existing facial expressions, without permanently modifying the orignal mesh. It comes with a visual editor that lets you edit expressions for each MMD morph at any time.
+- ✏️ **"Avatar Write Defaults"** and **"Remove FX Animator Layers"** helps modify your avatar's FX animator controller to improve MMD compatibility, without permanently modifying the original animator controller.
+- 💌 Plus ~~**Import simple blend shapes** lets you import settings from compatible destructive MMD tools~~, and **Export .unitypackage** helps you easily share blend shape settings, without the risk of sharing your avatar's 3D mesh.
 
 ## Old intro, TODO remove
 
@@ -78,23 +77,27 @@ You don't need this component if your avatar already uses Write Defaults ON for 
 
 TODO document this
 
+## Acknowledgements
+
+Make It MMD bundles and redistributes code from third-party software. The licenses for these software may be found in the headers of their respective source files. The author would like to acknowledge the developers of these third-party software:
+
+- BlendshapeCombiner by Chigiri Tsutsumi https://github.com/chigirits/BlendShapeCombiner
+- Blendshape Viewer by Haï https://github.com/hai-vr/blendshape-viewer-vcc
+- d4rkAvatarOptimizer by d4rkpl4y3r https://github.com/d4rkc0d3r/d4rkAvatarOptimizer
+- Modular Avatar by bd_ https://github.com/bdunderscore/modular-avatar
+
 ## Development
 
 ### Style
 
 This project uses `dotnet format` with `.editorconfig` to enforce style guidelines.
 
-TODO: Add GitHub Action to automate this.
+These lints will run automatically when creating pull requests.
 
-If csproj files are not generated:
-
-```powershell
-& "C:\Program Files\Unity\Hub\Editor\2019.4.31f1\Editor\Unity.exe" -batchmode -nographics -logFile - -projectPath . -executeMethod Packages.Rider.Editor.RiderScriptEditor.SyncSolution -quit
-```
-
-Then run `dotnet format`:
+You can also run these manually:
 
 ```powershell
 dotnet format .\enitimeago.non-destructive-mmd.editor.csproj
 dotnet format .\enitimeago.non-destructive-mmd.runtime.csproj
+dotnet format .\enitimeago.non-destructive-mmd.tests.csproj
 ```
