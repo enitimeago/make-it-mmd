@@ -73,3 +73,27 @@ msgstr "FX の WriteDefaults を全て強制的に有効化する"
 
 msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOnDescription"
 msgstr "チェックを有効化するとすべてのAnimator State の Write Defaults が有効化されます。Write Defaults ON が前提されていない別途で導入されたギミックがある場合、こちらのギミックまたはアバター自体が正常に機能しなくなる可能性があります。"
+
+msgid "RemoveAnimatorLayersComponentEditor:FXAnimatorControllerLayers"
+msgstr "FXアニメーターコントローラーのレイヤー"
+
+msgid "RemoveAnimatorLayersComponentEditor:AllowCustomLayers"
+msgstr "カスタムのレイヤーを許可する"
+
+msgid "RemoveAnimatorLayersComponentEditor:AllowUnsafeRemovals"
+msgstr "安全でない削除を許可する"
+
+msgid "RemoveAnimatorLayersComponentEditor:EditModeLayersExplanation"
+msgstr "このリストは、アバターがビルドされると変更される場合があり、他のツールがアバターのFXレイヤーを変更すると不正確になる可能性があります。ビルドされたときにアバターが持つレイヤーを確認するには、再生モードに入ってください。"
+
+msgid "RemoveAnimatorLayersComponentEditor:PlayModeLayersExplanation"
+msgstr "現在は再生モードでアバターのFXレイヤーが表示されています。編集モードで見えないレイヤーも含まれる場合があります。削除されたレイヤーは「削除するカスタムのレイヤー」の下にリストされるはずです。"
+
+msgid "RemoveAnimatorLayersComponentEditor:SafeToRemove"
+msgstr "安全に削除できる"
+
+msgid "RemoveAnimatorLayersComponentEditor:UnsafeToRemove"
+msgstr "安全に削除できない"
+
+msgid "RemoveAnimatorLayersComponentEditor:CustomLayersToRemove"
+msgstr "削除するカスタムのレイヤー"

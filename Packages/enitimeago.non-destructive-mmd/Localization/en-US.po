@@ -73,3 +73,27 @@ msgstr "Force all FX Write Defaults ON"
 
 msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOnDescription"
 msgstr "If enabled, all Animator States on this avatar will have Write Defaults enabled. If your avatar has gimmicks not designed for Write Defaults ON, your avatar and/or these gimmicks ***may break***!"
+
+msgid "RemoveAnimatorLayersComponentEditor:FXAnimatorControllerLayers"
+msgstr "FX Animator Controller Layers"
+
+msgid "RemoveAnimatorLayersComponentEditor:AllowCustomLayers"
+msgstr "Allow custom layers"
+
+msgid "RemoveAnimatorLayersComponentEditor:AllowUnsafeRemovals"
+msgstr "Allow unsafe removals"
+
+msgid "RemoveAnimatorLayersComponentEditor:EditModeLayersExplanation"
+msgstr "This list may change when your avatar is built and could be inaccurate if other tools modify your avatar's FX layers. Enter Play Mode to see what layers your avatar has when built."
+
+msgid "RemoveAnimatorLayersComponentEditor:PlayModeLayersExplanation"
+msgstr "You are viewing your avatar's FX layers in Play Mode, which may include layers not seen in Edit Mode. Layers that got removed should be listed under \"Custom Layers To Remove\"."
+
+msgid "RemoveAnimatorLayersComponentEditor:SafeToRemove"
+msgstr "Safe to remove"
+
+msgid "RemoveAnimatorLayersComponentEditor:UnsafeToRemove"
+msgstr "Unsafe to remove"
+
+msgid "RemoveAnimatorLayersComponentEditor:CustomLayersToRemove"
+msgstr "Custom Layers To Remove"
