@@ -70,11 +70,13 @@ namespace enitimeago.NonDestructiveMMD
                 EditorGUILayout.EndHorizontal();
                 GUILayout.Label(
                     EditorApplication.isPlaying ?
-                        "You are currently viewing your avatar's FX layers in Play Mode. Some of these layers may not exist in Edit Mode." :
-                        "This list may change when your avatar is built and could be inaccurate if other tools modify your avatar's FX layers. Enter Play Mode to see what layers your avatar has when built.",
+                        @"You are viewing your avatar's FX layers in Play Mode, which may include layers not seen in Edit Mode. Layers that got removed should be listed under ""Custom Layers To Remove""." :
+                        @"This list may change when your avatar is built and could be inaccurate if other tools modify your avatar's FX layers. Enter Play Mode to see what layers your avatar has when built.",
                     EditorStyles.wordWrappedLabel);
 
                 EditorGUI.indentLevel++;
+                // Disable all edits in play mode, since it will be a clone of not the original FX itself.
+                EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
                 {
                     var layersAfterRemoval = fxController.layers.Where(layer => !data.layersToRemove.Contains(layer.name)).ToList();
                     var firstThreeRect = EditorGUILayout.BeginVertical();
@@ -123,15 +125,21 @@ namespace enitimeago.NonDestructiveMMD
                         }
                     }
                 }
+                EditorGUI.EndDisabledGroup();
                 EditorGUI.indentLevel--;
             }
 
             if (_allowCustomLayers || _persistentData.customLayersToRemove.Length > 0)
             {
-                var persistentData = new SerializedObject(_persistentData);
-                var customLayersToRemoveProperty = persistentData.FindProperty(nameof(PersistentData.customLayersToRemove));
-                EditorGUILayout.PropertyField(customLayersToRemoveProperty);
-                persistentData.ApplyModifiedProperties();
+                // Disable all edits in play mode, since it will be a clone of not the original FX itself.
+                EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
+                {
+                    var persistentData = new SerializedObject(_persistentData);
+                    var customLayersToRemoveProperty = persistentData.FindProperty(nameof(PersistentData.customLayersToRemove));
+                    EditorGUILayout.PropertyField(customLayersToRemoveProperty);
+                    persistentData.ApplyModifiedProperties();
+                }
+                EditorGUI.EndDisabledGroup();
             }
         }
 
