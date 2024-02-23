@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -10,6 +11,6 @@ namespace enitimeago.NonDestructiveMMD
 
         public int dataVersion;
 
-        public string[] layersToRemove;
+        public List<string> layersToRemove;
     }
 }

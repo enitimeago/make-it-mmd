@@ -40,7 +40,7 @@ namespace enitimeago.NonDestructiveMMD
                 return;
             }
             var layersToRemove = removeLayersComponent.layersToRemove;
-            if (layersToRemove.Length == 0)
+            if (layersToRemove.Count == 0)
             {
                 return;
             }
