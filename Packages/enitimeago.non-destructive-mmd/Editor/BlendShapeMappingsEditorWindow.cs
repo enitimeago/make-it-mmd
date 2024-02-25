@@ -33,7 +33,15 @@ namespace enitimeago.NonDestructiveMMD
         private GUIStyle _selectedStyle;
         private GUIStyle _hasValueStyle;
         private GUIStyle _selectedHasValueStyle;
-        private GUIStyle _boldLabelStyle;
+
+        public static void ShowWindow(BlendShapeMappings data)
+        {
+            var window = GetWindow<BlendShapeMappingsEditorWindow>("Make It MMD");
+            window._dataSource = data.GetInstanceID();
+            window.ReloadMappings();
+            window.OnGUI();
+            window.TryExecuteUpdate();
+        }
 
         public void OnEnable()
         {
@@ -51,7 +59,7 @@ namespace enitimeago.NonDestructiveMMD
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         }
 
-        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        public void OnPlayModeStateChanged(PlayModeStateChange state)
         {
             // Reload thumbnails on state change. As with any other data, they will be lost on play mode state.
             if (state == PlayModeStateChange.EnteredPlayMode || state == PlayModeStateChange.EnteredEditMode)
@@ -60,42 +68,7 @@ namespace enitimeago.NonDestructiveMMD
             }
         }
 
-        public static void ShowWindow(BlendShapeMappings data)
-        {
-            var window = GetWindow<BlendShapeMappingsEditorWindow>("Make It MMD");
-            window._dataSource = data.GetInstanceID();
-            window.ReloadMappings();
-            window.OnGUI();
-            window.TryExecuteUpdate();
-        }
-
-        // Update view-side mappings from underlying data.
-        // TODO: this is really inefficient O(n^2) and ugly code. have the underlying data's Validate() deal with dupes?
-        // if that's not possible and this is a bottleneck, will need to persist view-side data and sync with storage.
-        private void ReloadMappings()
-        {
-            var knownMappings = new Dictionary<int, HashSet<string>>();
-            var mappingsToSearch = new LinkedList<MMDToAvatarBlendShape>(MappingsComponent.blendShapeMappings);
-            foreach (var (knownMorph, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
-            {
-                // Iterate all underlying mappings due to risk of duplicate keys.
-                // Use set to avoid potential duplicate values.
-                knownMappings.Add(i, new HashSet<string>());
-                for (var mapping = mappingsToSearch.First; mapping != null; mapping = mapping.Next)
-                {
-                    if (mapping.Value.mmdKey == knownMorph.Name)
-                    {
-                        knownMappings[i].UnionWith(mapping.Value.avatarKeys);
-                        mappingsToSearch.Remove(mapping);
-                    }
-                }
-            }
-            _knownBlendShapeMappings = knownMappings
-                .SelectMany(p => p.Value.Select(x => new { p.Key, Value = x }))
-                .ToLookup(pair => pair.Key, pair => pair.Value);
-        }
-
-        private void OnGUI()
+        public new void OnGUI()
         {
             _defaultStyle = new GUIStyle(GUI.skin.button);
             _selectedStyle = new GUIStyle(GUI.skin.button);
@@ -104,10 +77,6 @@ namespace enitimeago.NonDestructiveMMD
             _hasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.0f, 0.5f, 1f, 1f));
             _selectedHasValueStyle = new GUIStyle(GUI.skin.button);
             _selectedHasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.75f, 1f, 1f));
-            _boldLabelStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontStyle = FontStyle.Bold
-            };
 
             // TODO: should this be moved into ShowWindow?
             // TODO: need to refresh if the scene changes
@@ -141,6 +110,32 @@ namespace enitimeago.NonDestructiveMMD
             if (skinnedMesh == null) return;
             if (!HasGenerationParamsChanged()) return;
             TryExecuteUpdate();
+        }
+
+        // Update view-side mappings from underlying data.
+        // TODO: this is really inefficient O(n^2) and ugly code. have the underlying data's Validate() deal with dupes?
+        // if that's not possible and this is a bottleneck, will need to persist view-side data and sync with storage.
+        private void ReloadMappings()
+        {
+            var knownMappings = new Dictionary<int, HashSet<string>>();
+            var mappingsToSearch = new LinkedList<MMDToAvatarBlendShape>(MappingsComponent.blendShapeMappings);
+            foreach (var (knownMorph, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
+            {
+                // Iterate all underlying mappings due to risk of duplicate keys.
+                // Use set to avoid potential duplicate values.
+                knownMappings.Add(i, new HashSet<string>());
+                for (var mapping = mappingsToSearch.First; mapping != null; mapping = mapping.Next)
+                {
+                    if (mapping.Value.mmdKey == knownMorph.Name)
+                    {
+                        knownMappings[i].UnionWith(mapping.Value.avatarKeys);
+                        mappingsToSearch.Remove(mapping);
+                    }
+                }
+            }
+            _knownBlendShapeMappings = knownMappings
+                .SelectMany(p => p.Value.Select(x => new { p.Key, Value = x }))
+                .ToLookup(pair => pair.Key, pair => pair.Value);
         }
 
         private void DrawMmdMorphsPane()
@@ -214,7 +209,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0)
             {
-                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectedBlendShapes"), _boldLabelStyle);
+                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectedBlendShapes"), EditorStyles.boldLabel);
 
                 foreach (string avatarKey in _knownBlendShapeMappings[_currentMmdKeyIndex])
                 {
@@ -243,7 +238,7 @@ namespace enitimeago.NonDestructiveMMD
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(L.Tr("MappingsEditorWindow:AvatarBlendShapes"), _boldLabelStyle);
+            GUILayout.Label(L.Tr("MappingsEditorWindow:AvatarBlendShapes"), EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
             var settingsButtonContent = EditorGUIUtility.IconContent("_Popup");
             if (GUILayout.Button(settingsButtonContent))
