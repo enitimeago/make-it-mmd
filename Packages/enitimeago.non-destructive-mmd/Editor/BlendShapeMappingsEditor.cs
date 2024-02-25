@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using nadena.dev.ndmf;
-using nadena.dev.ndmf.fluent;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
@@ -10,7 +6,7 @@ using L = enitimeago.NonDestructiveMMD.Localization;
 namespace enitimeago.NonDestructiveMMD
 {
     [CustomEditor(typeof(BlendShapeMappings))]
-    public class MappingsEditor : Editor
+    public class BlendShapeMappingsEditor : Editor
     {
         private CommonChecks _commonChecks;
         private bool _showStoredData = false;
@@ -36,7 +32,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (GUILayout.Button(L.Tr("MappingsEditor:OpenEditor")))
             {
-                MappingsEditorWindow.ShowWindow(data);
+                BlendShapeMappingsEditorWindow.ShowWindow(data);
             }
 
             // Extras menu

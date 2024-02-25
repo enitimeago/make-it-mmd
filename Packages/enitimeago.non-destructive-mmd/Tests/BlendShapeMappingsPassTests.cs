@@ -1,15 +1,14 @@
-﻿using System.Linq;
-using enitimeago.NonDestructiveMMD;
+﻿using enitimeago.NonDestructiveMMD;
 using NUnit.Framework;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
-public class MakeBlendShapesPassTests : TestBase
+public class BlendShapeMappingsPassTests : TestBase
 {
     [Test]
     public void RunPass_WithEmptyMappings_DoesNothing()
     {
-        var pass = new MakeBlendShapesPass();
+        var pass = new BlendShapeMappingsPass();
         var avatar = CreateAvatarWithExpectedFaceName();
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;
@@ -27,7 +26,7 @@ public class MakeBlendShapesPassTests : TestBase
     [Test]
     public void RunPass_WithMappings_ClonesMesh()
     {
-        var pass = new MakeBlendShapesPass();
+        var pass = new BlendShapeMappingsPass();
         var avatar = CreateAvatarWithExpectedFaceName();
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;
@@ -46,7 +45,7 @@ public class MakeBlendShapesPassTests : TestBase
     [Test]
     public void RunPass_WithMappings_AddsMappings()
     {
-        var pass = new MakeBlendShapesPass();
+        var pass = new BlendShapeMappingsPass();
         var avatar = CreateAvatarWithExpectedFaceName();
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;

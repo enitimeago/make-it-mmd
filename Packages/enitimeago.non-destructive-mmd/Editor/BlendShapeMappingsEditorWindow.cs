@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor;
-using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -10,7 +9,7 @@ using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    internal class MappingsEditorWindow : BlendshapeViewerEditorWindowBase
+    internal class BlendShapeMappingsEditorWindow : BlendshapeViewerEditorWindowBase
     {
         private const int MMD_MORPHS_PANE_WIDTH = 150;
         private const int SELECTED_BLEND_SHAPES_PANE_WIDTH = 150;
@@ -63,7 +62,7 @@ namespace enitimeago.NonDestructiveMMD
 
         public static void ShowWindow(BlendShapeMappings data)
         {
-            var window = GetWindow<MappingsEditorWindow>("Make It MMD");
+            var window = GetWindow<BlendShapeMappingsEditorWindow>("Make It MMD");
             window._dataSource = data.GetInstanceID();
             window.ReloadMappings();
             window.OnGUI();

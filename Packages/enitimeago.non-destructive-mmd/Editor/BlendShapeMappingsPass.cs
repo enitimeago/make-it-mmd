@@ -4,14 +4,12 @@ using System.Linq;
 using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner;
 using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner.Editor;
 using nadena.dev.ndmf;
-using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    public class MakeBlendShapesPass : Pass<MakeBlendShapesPass>
+    public class BlendShapeMappingsPass : Pass<BlendShapeMappingsPass>
     {
         public override string DisplayName => "Make blend shapes";
 

@@ -12,7 +12,7 @@ namespace enitimeago.NonDestructiveMMD
         protected override void Configure()
         {
             var seq = InPhase(BuildPhase.Transforming);
-            seq.Run(MakeBlendShapesPass.Instance);
+            seq.Run(BlendShapeMappingsPass.Instance);
             seq.Run(RemoveAnimatorLayersPass.Instance);
             seq.Run(WriteDefaultsPass.Instance);
         }
