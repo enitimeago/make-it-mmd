@@ -1,4 +1,7 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
@@ -10,6 +13,7 @@ namespace enitimeago.NonDestructiveMMD
     {
         private CommonChecks _commonChecks;
         private bool _showStoredData = false;
+        private float _hasMmdShapeKeysHelpBoxHeight = 0;
 
         public void OnEnable()
         {
@@ -27,6 +31,31 @@ namespace enitimeago.NonDestructiveMMD
 
             // Run asserts, however continue rendering GUI if errors are encountered.
             bool avatarOkay = _commonChecks.RunChecks(data) && _commonChecks.RunChecks(avatar);
+
+            bool hasMmdShapeKeys = false;
+            if (!EditorApplication.isPlaying)
+            {
+                // TODO: check all languages
+                var visemeSkinnedMesh = avatar?.VisemeSkinnedMesh;
+                for (int i = 0; i < visemeSkinnedMesh?.sharedMesh.blendShapeCount; i++)
+                {
+                    string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
+                    hasMmdShapeKeys = hasMmdShapeKeys || MmdBlendShapeNames.All.Any(blendShape => blendShape.Name == blendShapeName);
+                }
+            }
+            if (hasMmdShapeKeys)
+            {
+                EditorGUILayout.BeginHorizontal();
+                var helpBoxRect = EditorGUILayout.BeginVertical();
+                EditorGUILayout.HelpBox("This avatar seems to already have MMD blend shapes. If these blend shapes are simple copies of the avatar's existing blend shapes, they can be imported.", MessageType.Info);
+                EditorGUILayout.EndVertical();
+                _hasMmdShapeKeysHelpBoxHeight = helpBoxRect.height > 2 ? helpBoxRect.height - 2 : _hasMmdShapeKeysHelpBoxHeight;
+                if (GUILayout.Button("Import", GUILayout.MinHeight(_hasMmdShapeKeysHelpBoxHeight)))
+                {
+                    BlendShapeMappingsImportWindow.ShowWindow(data);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
 
             EditorGUILayout.BeginHorizontal();
 

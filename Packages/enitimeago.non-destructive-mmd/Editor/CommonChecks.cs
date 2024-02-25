@@ -84,19 +84,6 @@ namespace enitimeago.NonDestructiveMMD
                 return false;
             }
 
-            if (!EditorApplication.isPlaying)
-            {
-                for (int i = 0; i < visemeSkinnedMesh.sharedMesh.blendShapeCount; i++)
-                {
-                    string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);
-                    if (MmdBlendShapeNames.All.Any(blendShape => blendShape.Name == blendShapeName))
-                    {
-                        LogLocalized("CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported", Severity.Warning);
-                        return false;
-                    }
-                }
-            }
-
             return true;
         }
 
