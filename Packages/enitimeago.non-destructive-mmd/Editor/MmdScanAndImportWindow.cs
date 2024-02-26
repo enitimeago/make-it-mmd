@@ -6,7 +6,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    internal class BlendShapeMappingsImportWindow : EditorWindow
+    internal class MmdScanAndImportWindow : EditorWindow
     {
         private VRCAvatarDescriptor _avatar = null;
         private bool _doneSearch = false;
@@ -18,9 +18,15 @@ namespace enitimeago.NonDestructiveMMD
         private List<(string, int)> _nonMmdBlendShapes = new List<(string, int)>();
         private Dictionary<string, string> _mmdToNonMmdBlendShapeMappings = new Dictionary<string, string>();
 
+        [MenuItem("Tools/MMD Scan and Import")]
+        public static void ShowWindow()
+        {
+            GetWindow<MmdScanAndImportWindow>("MMD Scan and Import");
+        }
+
         public static void ShowWindow(VRCAvatarDescriptor avatar)
         {
-            var window = GetWindow<BlendShapeMappingsImportWindow>("MMD Scan and Import");
+            var window = GetWindow<MmdScanAndImportWindow>("MMD Scan and Import");
             window._avatar = avatar;
         }
 

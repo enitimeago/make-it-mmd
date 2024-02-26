@@ -6,7 +6,7 @@ Make It MMD is a set of **non-destructive** Unity extensions to help VRChat avat
 
 - 🌟 **"Make MMD BlendShapes"** helps generate MMD blend shapes based on your avatar's existing facial expressions, without permanently modifying the orignal mesh. It comes with a visual editor that lets you edit expressions for each MMD morph at any time.
 - ✏️ **"Avatar Write Defaults"** and **"Remove FX Animator Layers"** helps modify your avatar's FX animator controller to improve MMD compatibility, without permanently modifying the original animator controller.
-- 💌 Plus ~~**Import simple blend shapes** lets you import settings from compatible destructive MMD tools~~, and **Export .unitypackage** helps you easily share blend shape settings, without the risk of sharing your avatar's 3D mesh.
+- 💌 Plus **MMD Scan and Import** lets you import from self-made blend shapes or compatible destructive MMD tools, and **Export .unitypackage** helps you easily share blend shape settings, without the risk of sharing your avatar's 3D mesh.
 
 ## Old intro, TODO remove
 

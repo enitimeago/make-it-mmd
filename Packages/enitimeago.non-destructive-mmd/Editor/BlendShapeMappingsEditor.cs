@@ -52,7 +52,7 @@ namespace enitimeago.NonDestructiveMMD
                 _hasMmdShapeKeysHelpBoxHeight = helpBoxRect.height > 2 ? helpBoxRect.height - 2 : _hasMmdShapeKeysHelpBoxHeight;
                 if (GUILayout.Button("Import", GUILayout.MinHeight(_hasMmdShapeKeysHelpBoxHeight)))
                 {
-                    BlendShapeMappingsImportWindow.ShowWindow(avatar);
+                    MmdScanAndImportWindow.ShowWindow(avatar);
                 }
                 EditorGUILayout.EndHorizontal();
             }
