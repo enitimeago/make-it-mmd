@@ -47,10 +47,10 @@ namespace enitimeago.NonDestructiveMMD
             {
                 EditorGUILayout.BeginHorizontal();
                 var helpBoxRect = EditorGUILayout.BeginVertical();
-                EditorGUILayout.HelpBox("This avatar seems to already have MMD blend shapes. If these blend shapes are simple copies of the avatar's existing blend shapes, they can be imported.", MessageType.Info);
+                EditorGUILayout.HelpBox(L.Tr("MappingsEditor:ImportBlendShapesSuggestion"), MessageType.Info);
                 EditorGUILayout.EndVertical();
                 _hasMmdShapeKeysHelpBoxHeight = helpBoxRect.height > 2 ? helpBoxRect.height - 2 : _hasMmdShapeKeysHelpBoxHeight;
-                if (GUILayout.Button("Import", GUILayout.MinHeight(_hasMmdShapeKeysHelpBoxHeight)))
+                if (GUILayout.Button(L.Tr("MappingsEditor:ImportBlendShapesButton"), GUILayout.MinHeight(_hasMmdShapeKeysHelpBoxHeight)))
                 {
                     MmdScanAndImportWindow.ShowWindow(avatar);
                 }

@@ -41,6 +41,12 @@ msgstr ".unitypackageで共有する..."
 msgid "MappingsEditor:ShowStoredData"
 msgstr "保存データを表示"
 
+msgid "MappingsEditor:ImportBlendShapesSuggestion"
+msgstr "このアバターはすでにMMDブレンドシェイプを持っているようです。もしこれらのブレンドシェイプがアバターの既存のブレンドシェイプの単純なコピーであれば、インポートできます。"
+
+msgid "MappingsEditor:ImportBlendShapesButton"
+msgstr "インポート"
+
 msgid "MappingsEditorWindow:SelectMMDMorph"
 msgstr "MMDモーフを選んでください"
 
@@ -64,6 +70,54 @@ msgstr "コンピュートシェーダーを有効にする"
 
 msgid "MappingsEditorWindow:ThumbnailSize"
 msgstr "サムネイルサイズ"
+
+msgid "MmdScanAndImportWindow:AvatarToScanField"
+msgstr "スキャンするアバター"
+
+msgid "MmdScanAndImportWindow:ScanButtonNoValidAvatar"
+msgstr "有効なアバターを選択してください"
+
+msgid "MmdScanAndImportWindow:ScanButton"
+msgstr "MMDブレンドシェイプをスキャン"
+
+msgid "MmdScanAndImportWindow:ScanReport"
+msgstr "{0}個のブレンドシェイプをスキャンしました。{1}/{2}個の既知のMMDブレンドシェイプが見つかりました。"
+
+msgid "MmdScanAndImportWindow:NotFoundHeading"
+msgstr "元のブレンドシェイプが見つかりませんでした:"
+
+msgid "MmdScanAndImportWindow:ImportToField"
+msgstr "インポート先"
+
+msgid "MmdScanAndImportWindow:WillImportToField"
+msgstr "インポート先"
+
+msgid "MmdScanAndImportWindow:ReplaceExistingToggle"
+msgstr "既存のものを置き換える"
+
+msgid "MmdScanAndImportWindow:ImportWithReplacementsButton"
+msgstr "{1}個の既存のものを置き換え、{0}個の新しいものをMake It MMD エディタにインポート"
+
+msgid "MmdScanAndImportWindow:ImportButton"
+msgstr "{0}個の新しいものをMake It MMD エディタにインポート"
+
+msgid "MmdScanAndImportWindow:ImportToSelectedGameObjectButton"
+msgstr "選択されたオブジェクトにインポート"
+
+msgid "MmdScanAndImportWindow:ImportToNewBrandedGameObjectButton"
+msgstr "新しいMake It MMDオブジェクトにインポート"
+
+msgid "MmdScanAndImportWindow:ChooseDestinationGameObjectToggle"
+msgstr "目的のオブジェクトを選択"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogTitle"
+msgstr "インポート完了"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogMessage"
+msgstr "{0}個のMMDブレンドシェイプをインポートしました"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogOKButton"
+msgstr "OK"
 
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr ".unitypackageで保存"

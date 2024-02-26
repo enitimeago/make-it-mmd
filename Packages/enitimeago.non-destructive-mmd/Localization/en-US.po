@@ -41,6 +41,12 @@ msgstr "Share as .unitypackage..."
 msgid "MappingsEditor:ShowStoredData"
 msgstr "Show stored data"
 
+msgid "MappingsEditor:ImportBlendShapesSuggestion"
+msgstr "This avatar seems to already have MMD blend shapes. If these blend shapes are simple copies of the avatar's existing blend shapes, they can be imported."
+
+msgid "MappingsEditor:ImportBlendShapesButton"
+msgstr "Import"
+
 msgid "MappingsEditorWindow:SelectMMDMorph"
 msgstr "Select a MMD morph"
 
@@ -64,6 +70,54 @@ msgstr "Enable compute shader"
 
 msgid "MappingsEditorWindow:ThumbnailSize"
 msgstr "Thumbnail size"
+
+msgid "MmdScanAndImportWindow:AvatarToScanField"
+msgstr "Avatar to Scan"
+
+msgid "MmdScanAndImportWindow:ScanButtonNoValidAvatar"
+msgstr "Select a Valid Avatar"
+
+msgid "MmdScanAndImportWindow:ScanButton"
+msgstr "Scan MMD Blend Shapes"
+
+msgid "MmdScanAndImportWindow:ScanReport"
+msgstr "Scanned {0} blend shapes, found matching blend shapes for {1}/{2} known MMD blend shapes."
+
+msgid "MmdScanAndImportWindow:NotFoundHeading"
+msgstr "Couldn't find original blend shapes for:"
+
+msgid "MmdScanAndImportWindow:ImportToField"
+msgstr "Import to"
+
+msgid "MmdScanAndImportWindow:WillImportToField"
+msgstr "Will Import to"
+
+msgid "MmdScanAndImportWindow:ReplaceExistingToggle"
+msgstr "Replace Existing"
+
+msgid "MmdScanAndImportWindow:ImportWithReplacementsButton"
+msgstr "Replace {1} Existing, Import {0} New to Make It MMD Editor"
+
+msgid "MmdScanAndImportWindow:ImportButton"
+msgstr "Import {0} New to Make It MMD Editor"
+
+msgid "MmdScanAndImportWindow:ImportToSelectedGameObjectButton"
+msgstr "Import to Selected Object"
+
+msgid "MmdScanAndImportWindow:ImportToNewBrandedGameObjectButton"
+msgstr "Import to New Make It MMD Object"
+
+msgid "MmdScanAndImportWindow:ChooseDestinationGameObjectToggle"
+msgstr "Choose Destination GameObject"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogTitle"
+msgstr "Import complete"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogMessage"
+msgstr "Imported {0} MMD blend shapes"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogOKButton"
+msgstr "OK"
 
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr "Save .unitypackage"
