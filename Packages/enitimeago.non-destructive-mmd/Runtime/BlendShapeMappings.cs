@@ -65,6 +65,11 @@ namespace enitimeago.NonDestructiveMMD
             var mapping = blendShapeMappings.FirstOrDefault(x => x.mmdKey == mmdKey);
             if (mapping != null && mapping.avatarKeys.Contains(avatarKey))
             {
+                if (mapping.avatarKeys.Length == 1)
+                {
+                    blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
+                    return;
+                }
                 mapping.avatarKeys = mapping.avatarKeys.Where(x => x != avatarKey).ToArray();
             }
         }
@@ -90,6 +95,13 @@ namespace enitimeago.NonDestructiveMMD
             // Run off a duplicate of the original list, so it's safe to delete as we go along.
             foreach (var blendShapeMapping in blendShapeMappings.ToList())
             {
+                // Delete 1:0 mappings.
+                if (blendShapeMapping.avatarKeys.Length == 0)
+                {
+                    blendShapeMappings.Remove(blendShapeMapping);
+                    continue;
+                }
+
                 if (!seenMmdKeys.ContainsKey(blendShapeMapping.mmdKey))
                 {
                     // Mark this as seen.
