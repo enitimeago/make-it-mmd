@@ -1,5 +1,6 @@
 ﻿#if NDMMD_VRCSDK3_AVATARS
 
+using System.Collections.Generic;
 using System.Linq;
 using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner;
 using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner.Editor;
@@ -45,6 +46,36 @@ namespace enitimeago.NonDestructiveMMD
 
             // Duplicate the mesh to allow safe mutation.
             var meshCopy = Object.Instantiate(mesh);
+
+            // Figure out if we'll be replacing existing blend shapes.
+            // TODO: add tests
+            var existingBlendShapes = new List<string>();
+            for (int i = 0; i < mesh.blendShapeCount; i++)
+            {
+                existingBlendShapes.Add(mesh.GetBlendShapeName(i));
+            }
+            if (existingBlendShapes.Any(blendShape => mappingsComponent.blendShapeMappings.Any(x => x.mmdKey == blendShape)))
+            {
+                // Looks like we will be replacing existing blend shapes.
+                // Because there's no way to delete individual, need to delete all and add back desired blend shapes.
+                meshCopy.ClearBlendShapes();
+                foreach (string existingBlendShape in existingBlendShapes)
+                {
+                    // i.e. excluding blend shapes that will be replaced.
+                    if (mappingsComponent.HasBlendShapeMappings(existingBlendShape))
+                    {
+                        continue;
+                    }
+                    int blendShapeIndex = mesh.GetBlendShapeIndex(existingBlendShape);
+                    int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
+                    for (int f = 0; f < frameCount; f++)
+                    {
+                        float weight = mesh.GetBlendShapeFrameWeight(blendShapeIndex, f);
+                        mesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
+                        meshCopy.AddBlendShapeFrame(existingBlendShape, weight, deltaVertices, deltaNormals, deltaTangents);
+                    }
+                }
+            }
 
             // Make divider dummy shape key.
             meshCopy.AddBlendShapeFrame("------Make It MMD------", 0, deltaVertices, deltaNormals, deltaTangents);
