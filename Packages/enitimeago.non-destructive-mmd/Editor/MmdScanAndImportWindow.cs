@@ -10,6 +10,7 @@ namespace enitimeago.NonDestructiveMMD
     {
         private VRCAvatarDescriptor _avatar = null;
         private bool _doneSearch = false;
+        private bool _replaceExisting = false;
         private bool _chooseImportDestination = false;
         private GameObject _customImportDestination = null;
         private Vector2 _blendShapeScrollPosition;
@@ -35,6 +36,12 @@ namespace enitimeago.NonDestructiveMMD
             if (_doneSearch)
             {
                 int totalBlendShapes = _mmdBlendShapes.Count + _nonMmdBlendShapes.Count;
+                var mappingsComponent = _avatar.GetComponentInChildren<BlendShapeMappings>();
+                var existingMappings = mappingsComponent == null ? new List<KeyValuePair<string, string>>()
+                    : _mmdToNonMmdBlendShapeMappings.Where(mapping => mappingsComponent.HasBlendShapeMappings(mapping.Key)).ToList();
+                var newMappings = mappingsComponent == null ? _mmdToNonMmdBlendShapeMappings.ToList()
+                    : _mmdToNonMmdBlendShapeMappings.Where(mapping => !mappingsComponent.HasBlendShapeMappings(mapping.Key)).ToList();
+
                 GUILayout.Label($"Scanned {totalBlendShapes} blend shapes, found matching blend shapes for {_mmdToNonMmdBlendShapeMappings.Count}/{_mmdBlendShapes.Count} known MMD blend shapes:");
                 _blendShapeScrollPosition = EditorGUILayout.BeginScrollView(_blendShapeScrollPosition);
                 foreach (var entry in _mmdToNonMmdBlendShapeMappings)
@@ -53,16 +60,23 @@ namespace enitimeago.NonDestructiveMMD
 
                 EditorGUI.BeginDisabledGroup(_mmdToNonMmdBlendShapeMappings.Count == 0);
                 {
-                    var mappingsComponent = _avatar.GetComponentInChildren<BlendShapeMappings>();
                     if (mappingsComponent != null)
                     {
                         EditorGUI.BeginDisabledGroup(true);
                         EditorGUILayout.ObjectField("Will Import to", mappingsComponent, typeof(BlendShapeMappings), true);
                         EditorGUI.EndDisabledGroup();
-                        if (GUILayout.Button("Import to Existing Make It MMD Editor"))
+
+                        var existing = _mmdToNonMmdBlendShapeMappings.Where(mapping => mappingsComponent.HasBlendShapeMappings(mapping.Key));
+                        _replaceExisting = EditorGUILayout.Toggle("Replace Existing", _replaceExisting);
+
+                        bool noNew = !_replaceExisting && existingMappings.Count == _mmdToNonMmdBlendShapeMappings.Count;
+                        EditorGUI.BeginDisabledGroup(noNew);
+                        if (GUILayout.Button(noNew || (_replaceExisting && existingMappings.Count > 0) ? $"Replace {existingMappings.Count} Existing, Import {newMappings.Count} New to Make It MMD Editor" : $"Import {newMappings.Count} New to Make It MMD Editor"))
                         {
-                            Debug.Log("import");
+                            ImportTo(mappingsComponent, _mmdToNonMmdBlendShapeMappings, _replaceExisting);
+                            EditorGUIUtility.PingObject(mappingsComponent.gameObject);
                         }
+                        EditorGUI.EndDisabledGroup();
                     }
                     else
                     {
@@ -76,7 +90,8 @@ namespace enitimeago.NonDestructiveMMD
                             EditorGUI.BeginDisabledGroup(_customImportDestination == null);
                             if (GUILayout.Button("Import to Selected Object"))
                             {
-                                Debug.Log("import");
+                                ImportTo(AddMappingsComponentTo(_customImportDestination), _mmdToNonMmdBlendShapeMappings, false);
+                                EditorGUIUtility.PingObject(_customImportDestination);
                             }
                             EditorGUI.EndDisabledGroup();
                         }
@@ -84,7 +99,9 @@ namespace enitimeago.NonDestructiveMMD
                         {
                             if (GUILayout.Button("Import to New Make It MMD Object"))
                             {
-                                Debug.Log("import");
+                                var importDestination = CreateGameObject(_avatar);
+                                ImportTo(AddMappingsComponentTo(importDestination), _mmdToNonMmdBlendShapeMappings, false);
+                                EditorGUIUtility.PingObject(importDestination);
                             }
                         }
                         if (GUILayout.Button("▼", EditorStyles.miniButton, GUILayout.Width(20)))
@@ -96,6 +113,41 @@ namespace enitimeago.NonDestructiveMMD
                         EditorGUILayout.EndHorizontal();
                     }
                 }
+            }
+        }
+
+        private static GameObject CreateGameObject(VRCAvatarDescriptor avatar)
+        {
+            var childObject = new GameObject { name = "Make It MMD" };
+            childObject.transform.parent = avatar.gameObject.transform;
+            return childObject;
+        }
+
+        private static BlendShapeMappings AddMappingsComponentTo(GameObject gameObject)
+        {
+            return gameObject.AddComponent<BlendShapeMappings>();
+        }
+
+        private static void ImportTo(BlendShapeMappings mappingsComponent, IEnumerable<KeyValuePair<string, string>> imports, bool replaceExisting)
+        {
+            var mappingsToImport = replaceExisting ? imports : imports.Where(mapping => !mappingsComponent.HasBlendShapeMappings(mapping.Key)).ToList();
+            int mappingsImported = 0;
+            try
+            {
+                foreach (var mmdToNonMmdMapping in mappingsToImport)
+                {
+                    if (mappingsComponent.HasBlendShapeMappings(mmdToNonMmdMapping.Key))
+                    {
+                        mappingsComponent.DeleteAllBlendShapeMappings(mmdToNonMmdMapping.Key);
+                    }
+                    mappingsComponent.AddBlendShapeMapping(mmdToNonMmdMapping.Key, mmdToNonMmdMapping.Value);
+                    mappingsImported++;
+                }
+            }
+            catch { throw; } // Rely on Unity to catch the exception before continuing to show the import complete dialog.
+            finally
+            {
+                EditorUtility.DisplayDialog("Import complete", $"Imported {mappingsImported} MMD blend shapes", "OK");
             }
         }
 

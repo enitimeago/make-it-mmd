@@ -40,13 +40,23 @@ namespace enitimeago.NonDestructiveMMD
             // always assume it may be possible to have duplicate keys.
             // TODO: use NormalizeData to simplify this function.
             var newMappings = new HashSet<string>();
-            if (blendShapeMappings.Any(x => x.mmdKey == mmdKey))
+            if (HasBlendShapeMappings(mmdKey))
             {
                 newMappings.UnionWith(blendShapeMappings.Where(x => x.mmdKey == mmdKey).SelectMany(x => x.avatarKeys));
                 blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
             }
             newMappings.Add(avatarKey);
             blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, newMappings.ToArray()));
+        }
+
+        public bool HasBlendShapeMappings(string mmdKey)
+        {
+            return blendShapeMappings.Any(x => x.mmdKey == mmdKey && x.avatarKeys.Length > 0);
+        }
+
+        public void DeleteAllBlendShapeMappings(string mmdKey)
+        {
+            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
         }
 
         public void DeleteBlendShapeMapping(string mmdKey, string avatarKey)
