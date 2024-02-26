@@ -4,7 +4,7 @@
 
 Make It MMD is a set of **non-destructive** Unity extensions to help VRChat avatars support MMD worlds.
 
-- 🌟 **"Make MMD BlendShapes"** helps generate MMD blend shapes based on your avatar's existing facial expressions, without permanently modifying the orignal mesh. It comes with a visual editor that lets you edit expressions for each MMD morph at any time.
+- 🌟 **"Make MMD BlendShapes"** helps generate MMD blend shapes based on your avatar's existing facial expressions, without permanently modifying the orignal mesh. It comes with a visual editor that lets you edit expressions for each MMD morph at any time. If your avatar already has MMD blend shapes, you can override these too!
 - ✏️ **"Avatar Write Defaults"** and **"Remove FX Animator Layers"** helps modify your avatar's FX animator controller to improve MMD compatibility, without permanently modifying the original animator controller.
 - 💌 Plus **MMD Scan and Import** lets you import from self-made blend shapes or compatible destructive MMD tools, and **Export .unitypackage** helps you easily share blend shape settings, without the risk of sharing your avatar's 3D mesh.
 
@@ -24,13 +24,9 @@ Make It MMDは、VRChatアバターの既存の表情を基づいて、MMDブレ
 
 ## Known Issues
 
-Please be aware this tool currently will not work if the face has any name other than "Body".
+This tool currently will not work if the face has any name other than "Body".
 
-Avatars with existing MMD blend shapes are unsupported. Support is planned for a future release.
-
-アバターの顔のメッシュが「Body」で呼ばれていない場合は、このツールは現在機能しません。
-
-既存のMMDブレンドシェイプを持つアバターはサポートされていません。サポートするのは予定されています。
+現在、アバターの顔のメッシュが「Body」で呼ばれていない場合は、このツールは機能しません。
 
 ## Installation
 
