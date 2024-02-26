@@ -31,6 +31,8 @@ namespace enitimeago.NonDestructiveMMD
         // TODO: move into common class?
         private GUIStyle _defaultStyle;
         private GUIStyle _selectedStyle;
+        private GUIStyle _existingBlendShapeStyle;
+        private GUIStyle _selectedExistingBlendShapeStyle;
         private GUIStyle _hasValueStyle;
         private GUIStyle _selectedHasValueStyle;
 
@@ -68,6 +70,10 @@ namespace enitimeago.NonDestructiveMMD
             _defaultStyle = new GUIStyle(GUI.skin.button);
             _selectedStyle = new GUIStyle(GUI.skin.button);
             _selectedStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.5f, 0.5f, 1f));
+            _existingBlendShapeStyle = new GUIStyle(GUI.skin.button);
+            _existingBlendShapeStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.2f, 0.3f, 0.6f, 1f));
+            _selectedExistingBlendShapeStyle = new GUIStyle(GUI.skin.button);
+            _selectedExistingBlendShapeStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.3f, 0.6f, 1f, 1f));
             _hasValueStyle = new GUIStyle(GUI.skin.button);
             _hasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.0f, 0.5f, 1f, 1f));
             _selectedHasValueStyle = new GUIStyle(GUI.skin.button);
@@ -145,12 +151,23 @@ namespace enitimeago.NonDestructiveMMD
                 GUILayout.Label(grouping.Key.ToString());
                 foreach (var blendShape in grouping)
                 {
-                    var buttonStyle = _knownBlendShapeMappings?[i].Count() > 0 ? _hasValueStyle : _defaultStyle;
+                    bool hasValue = _knownBlendShapeMappings?[i].Count() > 0;
+                    var buttonStyle = hasValue ? _hasValueStyle :
+                        (_faceBlendShapes.Contains(blendShape.Name) ? _existingBlendShapeStyle : _defaultStyle);
                     if (i == _currentMmdKeyIndex)
                     {
-                        buttonStyle = _knownBlendShapeMappings?[i].Count() > 0 ? _selectedHasValueStyle : _selectedStyle;
+                        buttonStyle = hasValue ? _selectedHasValueStyle :
+                            (_faceBlendShapes.Contains(blendShape.Name) ? _selectedExistingBlendShapeStyle : _defaultStyle);
                     }
-                    if (GUILayout.Button(blendShape.Name, buttonStyle))
+
+                    // Hack to have icon next to text until Unity 2023.2
+                    // https://forum.unity.com/threads/button-with-icon.733343/#post-9128917
+                    EditorGUILayout.BeginHorizontal();
+                    var existingIcon = EditorGUIUtility.IconContent("d_playLoopOff");
+                    bool textButton = GUILayout.Button(blendShape.Name, buttonStyle);
+                    bool iconButton = hasValue && _faceBlendShapes.Contains(blendShape.Name) ? GUILayout.Button(existingIcon, buttonStyle, GUILayout.MaxWidth(existingIcon.image.width + 12)) : false;
+                    EditorGUILayout.EndHorizontal();
+                    if (textButton || iconButton)
                     {
                         _currentMmdKeyIndex = i;
                     }
