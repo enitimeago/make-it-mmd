@@ -80,7 +80,7 @@ namespace enitimeago.NonDestructiveMMD
             _selectedHasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.75f, 1f, 1f));
 
             // TODO: need to refresh if the scene changes
-            if (MappingsComponent.gameObject != null)
+            if (MappingsComponent?.gameObject != null)
             {
                 var avatar = MappingsComponent.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
                 if (!_commonChecks.RunChecks(avatar))
@@ -162,11 +162,18 @@ namespace enitimeago.NonDestructiveMMD
 
                     // Hack to have icon next to text until Unity 2023.2
                     // https://forum.unity.com/threads/button-with-icon.733343/#post-9128917
-                    EditorGUILayout.BeginHorizontal();
+                    var rect = EditorGUILayout.BeginHorizontal();
+                    bool hasTwoButtons = hasValue && _faceBlendShapes.Contains(blendShape.Name);
+                    if (hasTwoButtons)
+                    {
+                        // Hack to fill in the gap in-between the two buttons
+                        EditorGUI.DrawRect(rect, buttonStyle.normal.background.GetPixel(0, 0));
+                    }
                     var existingIcon = EditorGUIUtility.IconContent("d_playLoopOff");
                     bool textButton = GUILayout.Button(blendShape.Name, buttonStyle);
-                    bool iconButton = hasValue && _faceBlendShapes.Contains(blendShape.Name) ? GUILayout.Button(existingIcon, buttonStyle, GUILayout.MaxWidth(existingIcon.image.width + 12)) : false;
+                    bool iconButton = hasTwoButtons ? GUILayout.Button(existingIcon, buttonStyle, GUILayout.MaxWidth(existingIcon.image.width + 12)) : false;
                     EditorGUILayout.EndHorizontal();
+
                     if (textButton || iconButton)
                     {
                         _currentMmdKeyIndex = i;
