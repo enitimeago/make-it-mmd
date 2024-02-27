@@ -19,7 +19,7 @@ namespace enitimeago.NonDestructiveMMD
 
         static Localization()
         {
-            _localizationAssets = Directory.GetFiles("Packages/enitimeago.non-destructive-mmd/Localization")
+            _localizationAssets = Directory.GetFiles(AssetDatabase.GUIDToAssetPath("85d7850cb8f79884ab5fe8d20e382df5"))
                 .Select(AssetDatabase.LoadAssetAtPath<LocalizationAsset>)
                 .Where(asset => asset != null)
                 .OrderBy(asset => asset.localeIsoCode)
