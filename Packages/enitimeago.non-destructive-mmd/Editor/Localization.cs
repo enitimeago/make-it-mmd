@@ -19,11 +19,23 @@ namespace enitimeago.NonDestructiveMMD
 
         static Localization()
         {
-            _localizationAssets = Directory.GetFiles(AssetDatabase.GUIDToAssetPath("85d7850cb8f79884ab5fe8d20e382df5"))
+            string localizationDir = AssetDatabase.GUIDToAssetPath("85d7850cb8f79884ab5fe8d20e382df5");
+            string[] localizationDirFiles = Directory.GetFiles(localizationDir);
+            if (localizationDirFiles.Length == 0)
+            {
+                Debug.LogError($"Make It MMD translation files not found! Tried searching {localizationDir}");
+                return;
+            }
+            _localizationAssets = localizationDirFiles
                 .Select(AssetDatabase.LoadAssetAtPath<LocalizationAsset>)
                 .Where(asset => asset != null)
                 .OrderBy(asset => asset.localeIsoCode)
                 .ToList();
+            if (_localizationAssets.Count == 0)
+            {
+                Debug.LogError("Make It MMD translation files failed to be loaded!");
+                return;
+            }
             _localeCodes = _localizationAssets
                 .Select(asset => asset.localeIsoCode.ToLower())
                 .ToArray();
@@ -52,10 +64,12 @@ namespace enitimeago.NonDestructiveMMD
 
         public static string Tr(string key, string fallback)
         {
-            if (Localizer.TryGetLocalizedString(key, out var value))
+            if (Localizer != null && Localizer.TryGetLocalizedString(key, out var value))
             {
                 return value;
             }
+            // Note this will silently fallback, it would be too noisy to log on every message fetch failure.
+            // Instead rely on debug messages on init being caught.
             return fallback;
         }
 
