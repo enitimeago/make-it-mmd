@@ -1,58 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using nadena.dev.ndmf.localization;
 using UnityEditor;
 using UnityEngine;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    [InitializeOnLoad]
     internal static class Localization
     {
-        private static List<LocalizationAsset> _localizationAssets;
-        private static string[] _localeCodes;
-        private static string[] _localeNames;
-        private static int _currentLocaleIndex;
+        private class Locale
+        {
+            public string IsoCode;
+            public LocalizationAsset Asset;
+        }
+
         public static Localizer Localizer { get; private set; }
+        private static Locale[] _locales = new Locale[]
+        {
+            new Locale { IsoCode = "en-us" },
+            new Locale { IsoCode = "ja-jp" },
+        };
+        private static int _currentLocaleIndex = 0;
 
         static Localization()
         {
-            string localizationDir = AssetDatabase.GUIDToAssetPath("85d7850cb8f79884ab5fe8d20e382df5");
-            string[] localizationDirFiles = Directory.GetFiles(localizationDir);
-            if (localizationDirFiles.Length == 0)
-            {
-                Debug.LogError($"Make It MMD translation files not found! Tried searching {localizationDir}");
-                return;
-            }
-            _localizationAssets = localizationDirFiles
-                .Select(AssetDatabase.LoadAssetAtPath<LocalizationAsset>)
+            Localizer = new Localizer("en-us", () =>
+                _locales.Select(locale =>
+                {
+                    if (locale.Asset == null)
+                    {
+                        string localizationDir = AssetDatabase.GUIDToAssetPath("85d7850cb8f79884ab5fe8d20e382df5");
+                        locale.Asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>($"{localizationDir}/{locale.IsoCode}.po");
+                        if (locale.Asset != null)
+                        {
+                            Debug.Log($"Make It MMD successfully loaded LocalizationAsset for {locale.IsoCode}");
+                        }
+                        else
+                        {
+                            Debug.LogError($"Make It MMD failed to load LocalizationAsset for {locale.IsoCode}");
+                        }
+                    }
+                    return locale.Asset;
+                })
                 .Where(asset => asset != null)
-                .OrderBy(asset => asset.localeIsoCode)
-                .ToList();
-            if (_localizationAssets.Count == 0)
-            {
-                Debug.LogError("Make It MMD translation files failed to be loaded!");
-                return;
-            }
-            _localeCodes = _localizationAssets
-                .Select(asset => asset.localeIsoCode.ToLower())
-                .ToArray();
-            _localeNames = _localizationAssets
-                .Select(asset => asset.GetLocalizedString($"locale:{asset.localeIsoCode}"))
-                .ToArray();
-            Localizer = new Localizer("en-US", () => _localizationAssets);
-            OnLanguageChange();
+                .ToList());
             LanguagePrefs.RegisterLanguageChangeCallback(typeof(Localization), _ => OnLanguageChange());
         }
 
         public static void DrawLanguagePicker()
         {
-            int newLocaleIndex = EditorGUILayout.Popup(_currentLocaleIndex, _localeNames);
+            int newLocaleIndex = EditorGUILayout.Popup(
+                _currentLocaleIndex,
+                _locales
+                    .Select(locale => locale.Asset?.GetLocalizedString($"locale:{locale.IsoCode}") ?? locale.IsoCode)
+                    .ToArray());
             if (newLocaleIndex != _currentLocaleIndex)
             {
-                LanguagePrefs.Language = _localeCodes[newLocaleIndex];
+                LanguagePrefs.Language = _locales[newLocaleIndex].IsoCode;
                 _currentLocaleIndex = newLocaleIndex;
             }
         }
@@ -68,14 +71,12 @@ namespace enitimeago.NonDestructiveMMD
             {
                 return value;
             }
-            // Note this will silently fallback, it would be too noisy to log on every message fetch failure.
-            // Instead rely on debug messages on init being caught.
             return fallback;
         }
 
         private static void OnLanguageChange()
         {
-            _currentLocaleIndex = Array.IndexOf(_localeCodes, LanguagePrefs.Language);
+            _currentLocaleIndex = _locales.TakeWhile(locale => locale.IsoCode != LanguagePrefs.Language).Count();
         }
     }
 }

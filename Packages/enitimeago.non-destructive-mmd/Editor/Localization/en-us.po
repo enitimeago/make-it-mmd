@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Language: en-US\n"
+"Language: en-us\n"
 
-msgid "locale:en-US"
+msgid "locale:en-us"
 msgstr "English"
 
 msgid "CommonChecks:NoMMDComponents"

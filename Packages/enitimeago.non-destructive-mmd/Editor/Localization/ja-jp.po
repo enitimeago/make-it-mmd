@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Language: ja-JP\n"
+"Language: ja-jp\n"
 
-msgid "locale:ja-JP"
+msgid "locale:ja-jp"
 msgstr "日本語"
 
 msgid "CommonChecks:NoMMDComponents"
