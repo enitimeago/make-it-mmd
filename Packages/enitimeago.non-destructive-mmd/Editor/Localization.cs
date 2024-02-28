@@ -28,7 +28,7 @@ namespace enitimeago.NonDestructiveMMD
                 {
                     if (locale.Asset == null)
                     {
-                        string localizationDir = AssetDatabase.GUIDToAssetPath("85d7850cb8f79884ab5fe8d20e382df5");
+                        string localizationDir = AssetDatabase.GUIDToAssetPath("28b1340a11795724997e5bcda57804da");
                         locale.Asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>($"{localizationDir}/{locale.IsoCode}.po");
                         if (locale.Asset != null)
                         {
