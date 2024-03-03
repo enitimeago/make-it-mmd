@@ -124,7 +124,7 @@ namespace enitimeago.NonDestructiveMMD
             var packageExporter = VpaiPackageExporter.WithConfig(
                 "Packages/enitimeago.non-destructive-mmd/Editor/vendor/ExportPackageWithVpai/com.anatawa12.vpm-package-auto-installer.dll",
                 new List<string> { "https://enitimeago.github.io/vpm-repos/index.json" },
-                new Dictionary<string, string> { { "enitimeago.non-destructive-mmd", "^0.7.0" } },
+                new Dictionary<string, string> { { "enitimeago.non-destructive-mmd", "^1.0.0" } },
                 silentIfInstalled: true);
             packageExporter.ExportPackage(prefabPath, packagePath);
 
