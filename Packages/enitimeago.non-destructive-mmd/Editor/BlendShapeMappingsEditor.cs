@@ -167,7 +167,8 @@ namespace enitimeago.NonDestructiveMMD
   ],
   ""vpmDependencies"": {
     ""enitimeago.non-destructive-mmd"": ""^0.7.0""
-  }
+  },
+  ""silentIfInstalled"": true
 }";
                         string configMeta = @"fileFormatVersion: 2
 guid: 9028b92d14f444e2b8c389be130d573f
