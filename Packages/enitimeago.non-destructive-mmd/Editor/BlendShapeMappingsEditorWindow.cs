@@ -233,7 +233,7 @@ namespace enitimeago.NonDestructiveMMD
                     {
                         if (GUILayout.Button("x"))
                         {
-                            Debug.Log("Delete blendshape: " + avatarKey);
+                            Undo.RecordObject(MappingsComponent, "Delete MMD Blend Shape Selection");
                             MappingsComponent.DeleteBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, avatarKey);
                         }
                     }
@@ -322,7 +322,7 @@ namespace enitimeago.NonDestructiveMMD
                         buttonContent.text = blendShapeName;
                         if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Width(width)))
                         {
-                            Debug.Log("Add blendshape: " + blendShapeName);
+                            Undo.RecordObject(MappingsComponent, "Add MMD Blend Shape Selection");
                             MappingsComponent.AddBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, blendShapeName);
                         }
 
