@@ -32,6 +32,9 @@ msgstr "Avatar face mesh has no blend shapes!"
 msgid "CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported"
 msgstr "Avatars with pre-existing MMD blend shapes are currently unsupported!"
 
+msgid "CommonChecks:MorphReferencesNonExistingBlendShape"
+msgstr "MMD morph \"{0}\" references a blend shape \"{1}\" which doesn't exist on this avatar. This MMD blend shape will not be generated."
+
 msgid "MappingsEditor:OpenEditor"
 msgstr "Open Editor"
 

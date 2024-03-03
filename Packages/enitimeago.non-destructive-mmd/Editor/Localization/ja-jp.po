@@ -32,6 +32,9 @@ msgstr "アバターのFace Meshに、メッシュがブレンドシェープが
 msgid "CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported"
 msgstr "現在、すでにMMDブレンドシェープあるアバターはサポートされていません！"
 
+msgid "CommonChecks:MorphReferencesNonExistingBlendShape"
+msgstr "MMDモーフ「{0}」はこのアバターに存在しないブレンドシェープ「{1}」に参照しています。このMMDブレンドシェープは生成しません。"
+
 msgid "MappingsEditor:OpenEditor"
 msgstr "エディターを開く"
 

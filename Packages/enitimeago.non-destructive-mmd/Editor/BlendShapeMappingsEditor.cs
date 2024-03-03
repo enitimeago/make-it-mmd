@@ -30,7 +30,7 @@ namespace enitimeago.NonDestructiveMMD
             EditorGUILayout.EndHorizontal();
 
             // Run asserts, however continue rendering GUI if errors are encountered.
-            bool avatarOkay = _commonChecks.RunChecks(data) && _commonChecks.RunChecks(avatar);
+            bool avatarOkay = _commonChecks.RunChecks(avatar.gameObject);
 
             bool hasMmdShapeKeys = false;
             if (!EditorApplication.isPlaying)

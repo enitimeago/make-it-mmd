@@ -38,7 +38,28 @@ namespace enitimeago.NonDestructiveMMD
                 LogLocalized(Severity.Error, "CommonChecks:MultipleMMDComponents");
                 return false;
             }
-            return RunChecks(mappingsComponents.First()) && RunChecks(avatarDescriptor);
+            if (!RunChecks(mappingsComponents.First()) || !RunChecks(avatarDescriptor))
+            {
+                return false;
+            }
+            var mesh = avatarDescriptor.VisemeSkinnedMesh.sharedMesh;
+            bool foundNonExistingReference = false;
+            foreach (var mapping in mappingsComponents.First().blendShapeMappings)
+            {
+                foreach (string avatarKey in mapping.avatarKeys)
+                {
+                    if (mesh.GetBlendShapeIndex(avatarKey) < 0)
+                    {
+                        LogLocalized(Severity.Warning, "CommonChecks:MorphReferencesNonExistingBlendShape", mapping.mmdKey, avatarKey);
+                        foundNonExistingReference = true;
+                    }
+                }
+            }
+            if (foundNonExistingReference)
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool RunChecks(BlendShapeMappings blendShapeMappings)
