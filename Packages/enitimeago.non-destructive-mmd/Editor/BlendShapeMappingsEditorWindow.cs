@@ -39,6 +39,7 @@ namespace enitimeago.NonDestructiveMMD
         public static void ShowWindow(BlendShapeMappings data)
         {
             var window = GetWindow<BlendShapeMappingsEditorWindow>("Make It MMD");
+            window.minSize = new Vector2(640, 480);
             window._dataSource = data.GetInstanceID();
             window.OnGUI();
             window.TryExecuteUpdate();
