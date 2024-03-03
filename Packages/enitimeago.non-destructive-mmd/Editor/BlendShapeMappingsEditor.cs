@@ -122,7 +122,7 @@ namespace enitimeago.NonDestructiveMMD
 
             // Export the prefab as a package.
             var packageExporter = VpaiPackageExporter.WithConfig(
-                "Packages/enitimeago.non-destructive-mmd/Editor/vendor/com.anatawa12.vpm-package-auto-installer.dll",
+                "Packages/enitimeago.non-destructive-mmd/Editor/vendor/ExportPackageWithVpai/com.anatawa12.vpm-package-auto-installer.dll",
                 new List<string> { "https://enitimeago.github.io/vpm-repos/index.json" },
                 new Dictionary<string, string> { { "enitimeago.non-destructive-mmd", "^0.7.0" } },
                 silentIfInstalled: true);
