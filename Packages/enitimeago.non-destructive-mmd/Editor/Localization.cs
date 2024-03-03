@@ -44,6 +44,7 @@ namespace enitimeago.NonDestructiveMMD
                 .Where(asset => asset != null)
                 .ToList());
             LanguagePrefs.RegisterLanguageChangeCallback(typeof(Localization), _ => OnLanguageChange());
+            OnLanguageChange();
         }
 
         public static void DrawLanguagePicker()
@@ -76,7 +77,8 @@ namespace enitimeago.NonDestructiveMMD
 
         private static void OnLanguageChange()
         {
-            _currentLocaleIndex = _locales.TakeWhile(locale => locale.IsoCode != LanguagePrefs.Language).Count();
+            _currentLocaleIndex = _locales.TakeWhile(locale => locale.IsoCode != LanguagePrefs.Language.ToLower()).Count();
+            Debug.Log($"currentLocale {_currentLocaleIndex}");
         }
     }
 }
