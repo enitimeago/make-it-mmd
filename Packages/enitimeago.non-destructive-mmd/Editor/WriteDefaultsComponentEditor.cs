@@ -27,7 +27,14 @@ namespace enitimeago.NonDestructiveMMD
             // Run asserts, however continue rendering GUI if errors are encountered.
             _commonChecks.RunChecks(avatar);
 
-            data.forceAvatarWriteDefaults = EditorGUILayout.Toggle(L.Tr("WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"), data.forceAvatarWriteDefaults);
+            Undo.RecordObject(target, "Toggle");
+            EditorGUI.BeginChangeCheck();
+            bool forceAvatarWriteDefaults = EditorGUILayout.Toggle(L.Tr("WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"), data.forceAvatarWriteDefaults);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(target, "Toggle");
+                data.forceAvatarWriteDefaults = forceAvatarWriteDefaults;
+            }
 
             GUILayout.Label(L.Tr("WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOnDescription"), EditorStyles.wordWrappedLabel);
         }
