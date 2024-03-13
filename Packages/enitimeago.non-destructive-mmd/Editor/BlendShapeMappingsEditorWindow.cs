@@ -20,7 +20,7 @@ namespace enitimeago.NonDestructiveMMD
         private int _dataSource;
         private BlendShapeMappings MappingsComponent => (BlendShapeMappings)EditorUtility.InstanceIDToObject(_dataSource);
         // View-side representation of underlying mapping data for fast accesses.
-        private ILookup<int, string> _knownBlendShapeMappings;
+        private ILookup<int, (string, float)> _knownBlendShapeMappings;
 
         private int _currentMmdKeyIndex = -1;
         private Vector2 _leftPaneScroll;
@@ -103,24 +103,44 @@ namespace enitimeago.NonDestructiveMMD
             // Seems like it's not too slow to rerun in OnGUI loop though.
             if (_dataSource != 0)
             {
-                var knownMappings = new Dictionary<int, HashSet<string>>();
+                // TODO: technical debt that would be resolved with ISerializationCallbackReceiver this is terrible this is terrible this is terrible
+                var knownMappings = new Dictionary<int, (HashSet<string>, Dictionary<string, float>)>();
                 var mappingsToSearch = new LinkedList<MMDToAvatarBlendShape>(MappingsComponent.blendShapeMappings);
                 foreach (var (knownMorph, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
                 {
                     // Iterate all underlying mappings due to risk of duplicate keys.
                     // Use set to avoid potential duplicate values.
-                    knownMappings.Add(i, new HashSet<string>());
+                    knownMappings.Add(i, (new HashSet<string>(), new Dictionary<string, float>()));
                     for (var mapping = mappingsToSearch.First; mapping != null; mapping = mapping.Next)
                     {
                         if (mapping.Value.mmdKey == knownMorph.Name)
                         {
-                            knownMappings[i].UnionWith(mapping.Value.avatarKeys);
+                            // TODO: technical debt that would be resolved with ISerializationCallbackReceiver this is terrible this is terrible this is terrible
+                            if (mapping.Value.avatarKeyScaleOverrides?.Length > 0)
+                            {
+                                foreach (var avatarKey in mapping.Value.avatarKeys.Zip(mapping.Value.avatarKeyScaleOverrides, (key, scale) => new { Key = key, Scale = scale }))
+                                {
+                                    knownMappings[i].Item1.Add(avatarKey.Key);
+                                    if (avatarKey.Scale != 1.0f)
+                                    {
+                                        knownMappings[i].Item2[avatarKey.Key] = avatarKey.Scale;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (string avatarKey in mapping.Value.avatarKeys)
+                                {
+                                    knownMappings[i].Item1.Add(avatarKey);
+                                }
+                            }
                             mappingsToSearch.Remove(mapping);
                         }
                     }
                 }
+                // TODO: technical debt that would be resolved with ISerializationCallbackReceiver this is terrible this is terrible this is terrible
                 _knownBlendShapeMappings = knownMappings
-                    .SelectMany(p => p.Value.Select(x => new { p.Key, Value = x }))
+                    .SelectMany(p => p.Value.Item1.Select(x => new { p.Key, Value = (x, p.Value.Item2.TryGetValue(x, out float scale) ? scale : 1.0f) }))
                     .ToLookup(pair => pair.Key, pair => pair.Value);
             }
 
@@ -225,8 +245,10 @@ namespace enitimeago.NonDestructiveMMD
             {
                 GUILayout.Label(L.Tr("MappingsEditorWindow:SelectedBlendShapes"), EditorStyles.boldLabel);
 
-                foreach (string avatarKey in _knownBlendShapeMappings[_currentMmdKeyIndex])
+                foreach ((string avatarKey, float scale) in _knownBlendShapeMappings[_currentMmdKeyIndex])
                 {
+                    EditorGUILayout.BeginVertical();
+
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Label(avatarKey);
                     GUILayout.FlexibleSpace();
@@ -240,6 +262,15 @@ namespace enitimeago.NonDestructiveMMD
                     }
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.EndHorizontal();
+
+                    float newScale = EditorGUILayout.Slider(scale, 0, 1);
+
+                    if (newScale != scale)
+                    {
+                        MappingsComponent.UpdateBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, avatarKey, newScale);
+                    }
+
+                    EditorGUILayout.EndVertical();
                 }
             }
 
@@ -314,7 +345,7 @@ namespace enitimeago.NonDestructiveMMD
                             GUILayout.FlexibleSpace();
                         }
 
-                        bool isSelected = _knownBlendShapeMappings != null && _knownBlendShapeMappings[_currentMmdKeyIndex].Contains(blendShapeName);
+                        bool isSelected = _knownBlendShapeMappings != null && _knownBlendShapeMappings[_currentMmdKeyIndex].Any(x => x.Item1 == blendShapeName);
 
                         var buttonStyle = new GUIStyle(isSelected ? _hasValueStyle : _defaultStyle);
                         buttonStyle.imagePosition = ImagePosition.ImageAbove;
