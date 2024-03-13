@@ -82,7 +82,7 @@ namespace enitimeago.NonDestructiveMMD
             faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
             // Run simple copies of single keys.
-            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() == 1))
+            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() == 1 && (x.avatarKeyScaleOverrides == null || x.avatarKeyScaleOverrides.Length == 0)))
             {
                 int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKeys[0]);
                 Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKeys[0] + " (found " + mapping.avatarKeys[0] + " as index " + blendShapeIndex + ")");
@@ -95,8 +95,8 @@ namespace enitimeago.NonDestructiveMMD
                 }
             }
 
-            // Run BlendShapeCombiner on multiple keys.
-            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() > 1);
+            // Run BlendShapeCombiner on multiple keys or scaled keys.
+            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() > 1 || x.avatarKeyScaleOverrides?.Length > 0);
             if (multiMappings.Count() > 0)
             {
                 faceSkinnedMeshRenderer.sharedMesh = CombinerImpl.MergeBlendShapes(new BlendShapeCombiner
@@ -107,9 +107,9 @@ namespace enitimeago.NonDestructiveMMD
                         .Select(mapping => new NewKey
                         {
                             name = mapping.mmdKey,
-                            sourceKeys = mapping.avatarKeys
-                                .Select(avatarKey => new SourceKey { name = avatarKey })
-                                .ToArray()
+                            sourceKeys = mapping.avatarKeyScaleOverrides?.Length > 0
+                                ? mapping.avatarKeys.Zip(mapping.avatarKeyScaleOverrides, (avatarKey, scale) => new SourceKey { name = avatarKey, scale = scale }).ToArray()
+                                : mapping.avatarKeys.Select(avatarKey => new SourceKey { name = avatarKey }).ToArray()
                         })
                         .ToArray()
                 });
