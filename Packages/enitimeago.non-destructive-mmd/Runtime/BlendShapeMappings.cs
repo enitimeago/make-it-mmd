@@ -133,6 +133,21 @@ namespace enitimeago.NonDestructiveMMD
                     blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
                     return;
                 }
+
+                // TODO: please adopt ISerializationCallbackReceiver this parallel deletion is really ugly
+                if (mapping.avatarKeyScaleOverrides != null && mapping.avatarKeyScaleOverrides.Length == mapping.avatarKeys.Length)
+                {
+                    var newScaleOverrides = new List<float>();
+                    for (int i = 0; i < mapping.avatarKeys.Length; i++)
+                    {
+                        if (mapping.avatarKeys[i] != avatarKey)
+                        {
+                            newScaleOverrides.Add(mapping.avatarKeyScaleOverrides[i]);
+                        }
+                    }
+                    mapping.avatarKeyScaleOverrides = newScaleOverrides.ToArray();
+                }
+
                 mapping.avatarKeys = mapping.avatarKeys.Where(x => x != avatarKey).ToArray();
             }
         }
