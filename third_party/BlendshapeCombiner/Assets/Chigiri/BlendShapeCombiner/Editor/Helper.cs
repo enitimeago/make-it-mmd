@@ -143,7 +143,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner.Editor
                     lastBone = currBone;
                     currBone = currBone.parent;
                 }
-                roots.Add(currBone ?? lastBone);
+                if (lastBone != null) roots.Add(currBone ?? lastBone);
             }
 
             if (0 < roots.Count)

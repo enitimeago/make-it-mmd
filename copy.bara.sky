@@ -248,6 +248,12 @@ core.workflow(
             after = "enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner",
             paths = glob(["**/*.cs"]),
         ),
+        # Patch for SMR null bones. TODO: Contribute this upstream
+        core.replace(
+            before = "roots.Add(currBone ?? lastBone);",
+            after = "if (lastBone != null) roots.Add(currBone ?? lastBone);",
+            paths = glob(["Assets/Chigiri/BlendShapeCombiner/Editor/Helper.cs"]),
+        ),
         # Move to third_party location.
         core.move("", "third_party/BlendshapeCombiner"),
     ],
