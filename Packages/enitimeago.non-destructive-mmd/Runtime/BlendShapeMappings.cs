@@ -29,7 +29,7 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
-    // TODO: add unit tests for this class, this translation logic is not trivial and i'd like a safe way to transition to ISerializationCallbackReceiver to make this data easier to reason about
+    // TODO: transition to ISerializationCallbackReceiver to make this data easier to reason about
     [AddComponentMenu("Make It MMD/MIM Make MMD BlendShapes")]
     [DisallowMultipleComponent]
     public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
@@ -103,6 +103,7 @@ namespace enitimeago.NonDestructiveMMD
                     else
                     {
                         newScaleOverrides = currentMapping.avatarKeys.Select(_ => 1.0f).ToList();
+                        newScaleOverrides[avatarKeyIndex] = newScale;
                     }
 
                     var newMapping = new MMDToAvatarBlendShape(mmdKey, currentMapping.avatarKeys.ToArray(), newScaleOverrides);
