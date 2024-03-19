@@ -158,7 +158,7 @@ namespace enitimeago.NonDestructiveMMD
             if (dataVersion == 0)
             {
                 var newMappings = blendShapeMappings
-                    .Select(x => new MMDToAvatarBlendShape(x.mmdKey, new string[] { x.legacyAvatarKey }))
+                    .Select(x => new MMDToAvatarBlendShape(x.mmdKey, string.IsNullOrEmpty(x.legacyAvatarKey) ? Array.Empty<string>() : new string[] { x.legacyAvatarKey }))
                     .ToList();
                 blendShapeMappings.Clear();
                 blendShapeMappings.AddRange(newMappings);
