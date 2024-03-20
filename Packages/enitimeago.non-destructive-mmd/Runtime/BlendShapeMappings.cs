@@ -6,7 +6,10 @@ using UnityEngine.Serialization;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    [System.Serializable]
+    /// <summary>
+    /// Serializable representation of a mapping from an MMD morph to blend shape(s), along with optional corresponding scale values, on a mesh.
+    /// </summary>
+    [Serializable]
     public class MMDToAvatarBlendShape
     {
         public string mmdKey;
@@ -29,15 +32,37 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
+    /// <summary>
+    /// In-memory representation of blend shape(s), along with optional corresponding scale values, on a mesh.
+    /// </summary>
+    public class BlendShapeSelections
+    {
+
+    }
+
     // TODO: transition to ISerializationCallbackReceiver to make this data easier to reason about
     [AddComponentMenu("Make It MMD/MIM Make MMD BlendShapes")]
     [DisallowMultipleComponent]
-    public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
+    public class BlendShapeMappings : MonoBehaviour, ISerializationCallbackReceiver, VRC.SDKBase.IEditorOnly
     {
         public const int CURRENT_DATA_VERSION = 1;
 
         public int dataVersion;
-        public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
+
+        [FormerlySerializedAs("blendShapeMappings")]
+        [SerializeField]
+        internal List<MMDToAvatarBlendShape> _blendShapeMappings = new List<MMDToAvatarBlendShape>();
+        public Dictionary<string, MMDToAvatarBlendShape> blendShapeMappings = new Dictionary<string, MMDToAvatarBlendShape>();
+
+        public void OnBeforeSerialize()
+        {
+            _blendShapeMappings.Clear();
+
+            foreach (var mapping in blendShapeMappings)
+            {
+                _blendShapeMappings.Add(mapping.Value);
+            }
+        }
 
         public void OnValidate()
         {
