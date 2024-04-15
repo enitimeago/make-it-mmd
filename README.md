@@ -92,6 +92,16 @@ All development occurs on the `main` branch:
 - Therefore, `main` will have changes that may not be ready for broader release.
 - Older releases are supported by cherry-picking to `support/x.x` branches, a practice inspired by GitFlow.
 
+### Setup
+
+On macOS, you will need `vrc-get` which you can install with `brew install vrc-get`.
+
+Then run:
+
+```shell
+vrc-get resolve --project .
+```
+
 ### Code style
 
 This project uses `dotnet format` with `.editorconfig` to enforce style guidelines.
