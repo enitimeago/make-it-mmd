@@ -48,7 +48,6 @@ namespace enitimeago.NonDestructiveMMD
             var meshCopy = Object.Instantiate(mesh);
 
             // Figure out if we'll be replacing existing blend shapes.
-            // TODO: add tests
             var existingBlendShapes = new List<string>();
             for (int i = 0; i < mesh.blendShapeCount; i++)
             {

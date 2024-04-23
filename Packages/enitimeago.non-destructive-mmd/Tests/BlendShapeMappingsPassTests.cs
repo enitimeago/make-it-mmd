@@ -43,7 +43,7 @@ public class BlendShapeMappingsPassTests : TestBase
     }
 
     [Test]
-    public void RunPass_WithMappings_AddsMappings()
+    public void RunPass_WithNewBlendShapesOnly_AddsMappings()
     {
         var pass = new BlendShapeMappingsPass();
         var avatar = CreateAvatarWithExpectedFaceName();
@@ -69,6 +69,39 @@ public class BlendShapeMappingsPassTests : TestBase
         AssertBlendShapesEqual(newMesh, "あ", "vrc.v_aa");
         AssertBlendShapesEqual(newMesh, "い", "vrc.v_ih");
         AssertBlendShapesEqual(newMesh, "う", "vrc.v_ou");
+    }
+
+    [Test]
+    public void RunPass_WithReplacedBlendShapes_ReplacesBlendShapes()
+    {
+        var pass = new BlendShapeMappingsPass();
+        var avatar = CreateAvatarWithExpectedFaceName();
+        var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
+        var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;
+        int blendShapeCount = mesh.blendShapeCount;
+        var mmdObject = new GameObject();
+        mmdObject.transform.parent = avatar.transform;
+        var mappings = mmdObject.AddComponent<BlendShapeMappings>();
+        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("あ", new string[] { "vrc.v_aa" }));
+        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("い", new string[] { "vrc.v_ih" }));
+        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("vrc.v_oh", new string[] { "vrc.v_ou" }));
+
+        pass.Execute(avatar);
+
+        var newMesh = descriptor.VisemeSkinnedMesh.sharedMesh;
+        int newBlendShapeCount = newMesh.blendShapeCount;
+        Assert.AreEqual(newBlendShapeCount, blendShapeCount + 3);
+        Assert.Less(newBlendShapeCount - 4, newMesh.GetBlendShapeIndex("vrc.v_oh"));
+        Assert.Less(newMesh.GetBlendShapeIndex("vrc._aa"), newBlendShapeCount - 4);
+        Assert.Less(newMesh.GetBlendShapeIndex("vrc._ih"), newBlendShapeCount - 4);
+        Assert.Less(newMesh.GetBlendShapeIndex("vrc._ou"), newBlendShapeCount - 4);
+        Assert.AreEqual(newMesh.GetBlendShapeName(newBlendShapeCount - 4), "------Make It MMD------");
+        Assert.AreEqual(newMesh.GetBlendShapeName(newBlendShapeCount - 3), "あ");
+        Assert.AreEqual(newMesh.GetBlendShapeName(newBlendShapeCount - 2), "い");
+        Assert.AreEqual(newMesh.GetBlendShapeName(newBlendShapeCount - 1), "vrc.v_oh");
+        AssertBlendShapesEqual(newMesh, "あ", "vrc.v_aa");
+        AssertBlendShapesEqual(newMesh, "い", "vrc.v_ih");
+        AssertBlendShapesEqual(newMesh, "vrc.v_oh", "vrc.v_ou");
     }
 
     private void AssertBlendShapesEqual(Mesh mesh, string newBlendShapeName, string oldBlendShapeName)
