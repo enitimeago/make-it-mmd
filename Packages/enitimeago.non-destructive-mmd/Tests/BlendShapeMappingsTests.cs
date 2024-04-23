@@ -1,10 +1,76 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using enitimeago.NonDestructiveMMD;
 using NUnit.Framework;
 using UnityEngine;
 
 public class BlendShapeMappingsTests
 {
+    [Test]
+    public void OnBeforeSerialize_SerializesInMemoryData()
+    {
+        var blendShapeMappings = new BlendShapeMappings
+        {
+            blendShapeMappings = new Dictionary<string, List<BlendShapeSelection>>
+            {
+                { "MmdKey1", new List<BlendShapeSelection>
+                    {
+                        new BlendShapeSelection { blendShapeName = "AvatarKey1", scale = 1.0f },
+                        new BlendShapeSelection { blendShapeName = "AvatarKey2", scale = 0.5f }
+                    }
+                },
+                { "MmdKey2", new List<BlendShapeSelection>
+                    {
+                        new BlendShapeSelection { blendShapeName = "AvatarKey3", scale = 1.0f }
+                    }
+                }
+            }
+        };
+
+        blendShapeMappings.OnBeforeSerialize();
+
+        Assert.AreEqual(2, blendShapeMappings._blendShapeMappings.Count);
+        Assert.AreEqual("MmdKey1", blendShapeMappings._blendShapeMappings[0].mmdKey);
+        Assert.AreEqual(new[] { "AvatarKey1", "AvatarKey2" }, blendShapeMappings._blendShapeMappings[0].avatarKeys);
+        Assert.AreEqual(new[] { 1.0f, 0.5f }, blendShapeMappings._blendShapeMappings[0].avatarKeyScaleOverrides);
+        Assert.AreEqual("MmdKey2", blendShapeMappings._blendShapeMappings[1].mmdKey);
+        Assert.AreEqual(new[] { "AvatarKey3" }, blendShapeMappings._blendShapeMappings[1].avatarKeys);
+        Assert.IsNull(blendShapeMappings._blendShapeMappings[1].avatarKeyScaleOverrides);
+    }
+
+    [Test]
+    public void OnAfterDeserialize_DeserializesAtRestData()
+    {
+        var blendShapeMappings = new BlendShapeMappings
+        {
+            _blendShapeMappings = new List<MMDToAvatarBlendShape>
+            {
+                new MMDToAvatarBlendShape("MmdKey1", new[] { "AvatarKey1", "AvatarKey2" }, new[] { 1.0f, 0.5f }),
+                new MMDToAvatarBlendShape("MmdKey2", new[] { "AvatarKey3" }, new[] { 1.0f }),
+                new MMDToAvatarBlendShape("MmdKey3", new[] { "AvatarKey4" })
+            }
+        };
+
+        blendShapeMappings.OnAfterDeserialize();
+
+        Assert.AreEqual(3, blendShapeMappings.blendShapeMappings.Count);
+        Assert.IsTrue(blendShapeMappings.blendShapeMappings.ContainsKey("MmdKey1"));
+        Assert.IsTrue(blendShapeMappings.blendShapeMappings.ContainsKey("MmdKey2"));
+        Assert.IsTrue(blendShapeMappings.blendShapeMappings.ContainsKey("MmdKey3"));
+        // TODO: can BlendShapeSelection be compared?
+        Assert.AreEqual(2, blendShapeMappings.blendShapeMappings["MmdKey1"].Count);
+        Assert.AreEqual("AvatarKey1", blendShapeMappings.blendShapeMappings["MmdKey1"][0].blendShapeName);
+        Assert.AreEqual(1.0f, blendShapeMappings.blendShapeMappings["MmdKey1"][0].scale);
+        Assert.AreEqual("AvatarKey2", blendShapeMappings.blendShapeMappings["MmdKey1"][1].blendShapeName);
+        Assert.AreEqual(0.5f, blendShapeMappings.blendShapeMappings["MmdKey1"][1].scale);
+        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings["MmdKey2"].Count);
+        Assert.AreEqual("AvatarKey3", blendShapeMappings.blendShapeMappings["MmdKey2"][0].blendShapeName);
+        Assert.AreEqual(1.0f, blendShapeMappings.blendShapeMappings["MmdKey2"][0].scale);
+        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings["MmdKey3"].Count);
+        Assert.AreEqual("AvatarKey4", blendShapeMappings.blendShapeMappings["MmdKey3"][0].blendShapeName);
+        Assert.AreEqual(1.0f, blendShapeMappings.blendShapeMappings["MmdKey3"][0].scale);
+    }
+
     [Test]
     public void AddBlendShapeMapping_NewMapping_AddsMapping()
     {
