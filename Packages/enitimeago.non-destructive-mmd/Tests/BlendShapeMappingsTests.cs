@@ -11,11 +11,12 @@ public class BlendShapeMappingsTests
         var blendShapeMappings = new GameObject().AddComponent<BlendShapeMappings>();
 
         blendShapeMappings.AddBlendShapeMapping("MmdKey", "AvatarKey");
+        blendShapeMappings.OnBeforeSerialize();
 
         Assert.IsTrue(blendShapeMappings.HasBlendShapeMappings("MmdKey"));
-        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings.Count);
-        Assert.AreEqual("MmdKey", blendShapeMappings.blendShapeMappings[0].mmdKey);
-        Assert.AreEqual(new string[] { "AvatarKey" }, blendShapeMappings.blendShapeMappings[0].avatarKeys);
+        Assert.AreEqual(1, blendShapeMappings._blendShapeMappings.Count);
+        Assert.AreEqual("MmdKey", blendShapeMappings._blendShapeMappings[0].mmdKey);
+        Assert.AreEqual(new string[] { "AvatarKey" }, blendShapeMappings._blendShapeMappings[0].avatarKeys);
     }
 
     [Test]
@@ -25,11 +26,12 @@ public class BlendShapeMappingsTests
 
         blendShapeMappings.AddBlendShapeMapping("MmdKey", "AvatarKey1");
         blendShapeMappings.AddBlendShapeMapping("MmdKey", "AvatarKey2");
+        blendShapeMappings.OnBeforeSerialize();
 
         Assert.IsTrue(blendShapeMappings.HasBlendShapeMappings("MmdKey"));
-        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings.Count);
-        Assert.AreEqual("MmdKey", blendShapeMappings.blendShapeMappings[0].mmdKey);
-        Assert.AreEqual(new string[] { "AvatarKey1", "AvatarKey2" }, blendShapeMappings.blendShapeMappings[0].avatarKeys);
+        Assert.AreEqual(1, blendShapeMappings._blendShapeMappings.Count);
+        Assert.AreEqual("MmdKey", blendShapeMappings._blendShapeMappings[0].mmdKey);
+        Assert.AreEqual(new string[] { "AvatarKey1", "AvatarKey2" }, blendShapeMappings._blendShapeMappings[0].avatarKeys);
     }
 
     [Test]
@@ -39,12 +41,13 @@ public class BlendShapeMappingsTests
         blendShapeMappings.AddBlendShapeMapping("MmdKey", "AvatarKey");
 
         blendShapeMappings.UpdateBlendShapeMapping("MmdKey", "AvatarKey", 0.33f);
+        blendShapeMappings.OnBeforeSerialize();
 
         Assert.IsTrue(blendShapeMappings.HasBlendShapeMappings("MmdKey"));
-        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings.Count);
-        Assert.AreEqual("MmdKey", blendShapeMappings.blendShapeMappings[0].mmdKey);
-        Assert.AreEqual(new string[] { "AvatarKey" }, blendShapeMappings.blendShapeMappings[0].avatarKeys);
-        Assert.AreEqual(new float[] { 0.33f }, blendShapeMappings.blendShapeMappings[0].avatarKeyScaleOverrides);
+        Assert.AreEqual(1, blendShapeMappings._blendShapeMappings.Count);
+        Assert.AreEqual("MmdKey", blendShapeMappings._blendShapeMappings[0].mmdKey);
+        Assert.AreEqual(new string[] { "AvatarKey" }, blendShapeMappings._blendShapeMappings[0].avatarKeys);
+        Assert.AreEqual(new float[] { 0.33f }, blendShapeMappings._blendShapeMappings[0].avatarKeyScaleOverrides);
     }
 
     [Test]
@@ -77,7 +80,7 @@ public class BlendShapeMappingsTests
         blendShapeMappings.DeleteAllBlendShapeMappings("MmdKey");
 
         Assert.IsFalse(blendShapeMappings.HasBlendShapeMappings("MmdKey"));
-        Assert.AreEqual(0, blendShapeMappings.blendShapeMappings.Count);
+        Assert.AreEqual(0, blendShapeMappings._blendShapeMappings.Count);
     }
 
     [Test]
@@ -88,11 +91,12 @@ public class BlendShapeMappingsTests
         blendShapeMappings.AddBlendShapeMapping("MmdKey", "AvatarKey2");
 
         blendShapeMappings.DeleteBlendShapeMapping("MmdKey", "AvatarKey1");
+        blendShapeMappings.OnBeforeSerialize();
 
         Assert.IsTrue(blendShapeMappings.HasBlendShapeMappings("MmdKey"));
-        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings.Count);
-        Assert.AreEqual("MmdKey", blendShapeMappings.blendShapeMappings[0].mmdKey);
-        Assert.AreEqual(new string[] { "AvatarKey2" }, blendShapeMappings.blendShapeMappings[0].avatarKeys);
+        Assert.AreEqual(1, blendShapeMappings._blendShapeMappings.Count);
+        Assert.AreEqual("MmdKey", blendShapeMappings._blendShapeMappings[0].mmdKey);
+        Assert.AreEqual(new string[] { "AvatarKey2" }, blendShapeMappings._blendShapeMappings[0].avatarKeys);
     }
 
     [Test]
@@ -100,15 +104,15 @@ public class BlendShapeMappingsTests
     {
         var blendShapeMappings = new GameObject().AddComponent<BlendShapeMappings>();
         blendShapeMappings.dataVersion = 0;
-        blendShapeMappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("MmdKey1", new string[] { }) { legacyAvatarKey = "LegacyAvatarKey1" });
-        blendShapeMappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("MmdKey2", new string[] { }) { legacyAvatarKey = "LegacyAvatarKey2" });
+        blendShapeMappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("MmdKey1", new string[] { }) { legacyAvatarKey = "LegacyAvatarKey1" });
+        blendShapeMappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("MmdKey2", new string[] { }) { legacyAvatarKey = "LegacyAvatarKey2" });
 
         blendShapeMappings.OnValidate();
 
         Assert.AreEqual(1, blendShapeMappings.dataVersion);
         Assert.AreEqual(2, blendShapeMappings.blendShapeMappings.Count);
-        var mmdKey1Mapping = blendShapeMappings.blendShapeMappings.FirstOrDefault(x => x.mmdKey == "MmdKey1");
-        var mmdKey2Mapping = blendShapeMappings.blendShapeMappings.FirstOrDefault(x => x.mmdKey == "MmdKey2");
+        var mmdKey1Mapping = blendShapeMappings._blendShapeMappings.FirstOrDefault(x => x.mmdKey == "MmdKey1");
+        var mmdKey2Mapping = blendShapeMappings._blendShapeMappings.FirstOrDefault(x => x.mmdKey == "MmdKey2");
         Assert.IsNotNull(mmdKey1Mapping);
         Assert.IsNotNull(mmdKey2Mapping);
         Assert.AreEqual(new string[] { "LegacyAvatarKey1" }, mmdKey1Mapping.avatarKeys);

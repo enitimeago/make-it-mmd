@@ -48,13 +48,13 @@ namespace enitimeago.NonDestructiveMMD
             var meshCopy = Object.Instantiate(mesh);
 
             // Figure out if we'll be replacing existing blend shapes.
-            // TODO: add tests
+            // TODO: add tests !!!!!
             var existingBlendShapes = new List<string>();
             for (int i = 0; i < mesh.blendShapeCount; i++)
             {
                 existingBlendShapes.Add(mesh.GetBlendShapeName(i));
             }
-            if (existingBlendShapes.Any(blendShape => mappingsComponent.blendShapeMappings.Any(x => x.mmdKey == blendShape)))
+            if (existingBlendShapes.Any(blendShape => mappingsComponent.blendShapeMappings.ContainsKey(blendShape)))
             {
                 // Looks like we will be replacing existing blend shapes.
                 // Because there's no way to delete individual, need to delete all and add back desired blend shapes.
@@ -82,22 +82,23 @@ namespace enitimeago.NonDestructiveMMD
             faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
             // Run simple copies of single keys.
-            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() == 1 && (x.avatarKeyScaleOverrides == null || x.avatarKeyScaleOverrides.Length == 0)))
+            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.Value.Count == 1 && x.Value.All(s => s.scale == 1.0f)))
             {
-                int blendShapeIndex = mesh.GetBlendShapeIndex(mapping.avatarKeys[0]);
-                Debug.Log("Create MMD shape key " + mapping.mmdKey + " as copy of " + mapping.avatarKeys[0] + " (found " + mapping.avatarKeys[0] + " as index " + blendShapeIndex + ")");
+                string blendShapeName = mapping.Value[0].blendShapeName;
+                int blendShapeIndex = mesh.GetBlendShapeIndex(blendShapeName);
+                Debug.Log("Create MMD shape key " + mapping.Key + " as copy of " + blendShapeName + " (found " + blendShapeName + " as index " + blendShapeIndex + ")");
                 int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
                 for (int f = 0; f < frameCount; f++)
                 {
                     float weight = mesh.GetBlendShapeFrameWeight(blendShapeIndex, f);
                     mesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
-                    meshCopy.AddBlendShapeFrame(mapping.mmdKey, weight, deltaVertices, deltaNormals, deltaTangents);
+                    meshCopy.AddBlendShapeFrame(mapping.Key, weight, deltaVertices, deltaNormals, deltaTangents);
                 }
             }
 
             // Run BlendShapeCombiner on multiple keys or scaled keys.
-            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.avatarKeys.Count() > 1 || x.avatarKeyScaleOverrides?.Length > 0);
-            if (multiMappings.Count() > 0)
+            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.Value.Count > 1 || x.Value.Any(s => s.scale != 1.0f));
+            if (multiMappings.Any())
             {
                 faceSkinnedMeshRenderer.sharedMesh = CombinerImpl.MergeBlendShapes(new BlendShapeCombiner
                 {
@@ -106,10 +107,10 @@ namespace enitimeago.NonDestructiveMMD
                     newKeys = multiMappings
                         .Select(mapping => new NewKey
                         {
-                            name = mapping.mmdKey,
-                            sourceKeys = mapping.avatarKeyScaleOverrides?.Length > 0
-                                ? mapping.avatarKeys.Zip(mapping.avatarKeyScaleOverrides, (avatarKey, scale) => new SourceKey { name = avatarKey, scale = scale }).ToArray()
-                                : mapping.avatarKeys.Select(avatarKey => new SourceKey { name = avatarKey }).ToArray()
+                            name = mapping.Key,
+                            sourceKeys = mapping.Value
+                                .Select(selection => new SourceKey { name = selection.blendShapeName, scale = selection.scale })
+                                .ToArray()
                         })
                         .ToArray()
                 });

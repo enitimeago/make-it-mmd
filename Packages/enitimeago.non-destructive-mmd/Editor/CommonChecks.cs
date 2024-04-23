@@ -46,11 +46,11 @@ namespace enitimeago.NonDestructiveMMD
             bool foundNonExistingReference = false;
             foreach (var mapping in mappingsComponents.First().blendShapeMappings)
             {
-                foreach (string avatarKey in mapping.avatarKeys)
+                foreach (string avatarKey in mapping.Value.Select(x => x.blendShapeName))
                 {
                     if (mesh.GetBlendShapeIndex(avatarKey) < 0)
                     {
-                        LogLocalized(Severity.Warning, "CommonChecks:MorphReferencesNonExistingBlendShape", mapping.mmdKey, avatarKey);
+                        LogLocalized(Severity.Warning, "CommonChecks:MorphReferencesNonExistingBlendShape", mapping.Key, avatarKey);
                         foundNonExistingReference = true;
                     }
                 }

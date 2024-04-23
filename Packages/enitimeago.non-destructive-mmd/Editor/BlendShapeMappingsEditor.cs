@@ -101,10 +101,13 @@ namespace enitimeago.NonDestructiveMMD
 
             // Create a new GameObject with a clone of current mappings.
             // The name doesn't matter because it will match the prefab's name.
-            // TODO: implement a copyinto method, or see if it's possible to clone the BlendShapeMappings object and add it into the new GameObject.
             var newGameObject = new GameObject();
             var newMappingsComponent = newGameObject.AddComponent<BlendShapeMappings>();
-            newMappingsComponent.blendShapeMappings.AddRange(mappingsComponent.blendShapeMappings);
+            // TODO: implement a copyinto method, or see if it's possible to clone the BlendShapeMappings object and add it into the new GameObject.
+            foreach (var mapping in mappingsComponent.blendShapeMappings)
+            {
+                newMappingsComponent.blendShapeMappings[mapping.Key] = new List<BlendShapeSelection>(mapping.Value);
+            }
 
             // Ensure a unique path for the prefab.
             // TODO: choose a temp folder so that this doesn't turn into "MakeItMMD 1" etc. if it already exists?

@@ -98,49 +98,23 @@ namespace enitimeago.NonDestructiveMMD
             }
 
             // Update view-side mappings from underlying data.
-            // TODO: this is really inefficient O(n^2) and ugly code. have the underlying data's Validate() deal with dupes?
-            // if that's not possible and this is a bottleneck, will need to persist view-side data and sync with storage.
-            // Seems like it's not too slow to rerun in OnGUI loop though.
             if (_dataSource != 0)
             {
-                // TODO: technical debt that would be resolved with ISerializationCallbackReceiver this is terrible this is terrible this is terrible
-                var knownMappings = new Dictionary<int, (HashSet<string>, Dictionary<string, float>)>();
-                var mappingsToSearch = new LinkedList<MMDToAvatarBlendShape>(MappingsComponent.blendShapeMappings);
+                var knownMappings = new Dictionary<int, HashSet<(string, float)>>();
                 foreach (var (knownMorph, i) in MmdBlendShapeNames.All.Select((value, i) => (value, i)))
                 {
-                    // Iterate all underlying mappings due to risk of duplicate keys.
-                    // Use set to avoid potential duplicate values.
-                    knownMappings.Add(i, (new HashSet<string>(), new Dictionary<string, float>()));
-                    for (var mapping = mappingsToSearch.First; mapping != null; mapping = mapping.Next)
+                    knownMappings.Add(i, new HashSet<(string, float)>());
+                    if (MappingsComponent.blendShapeMappings.TryGetValue(knownMorph.Name, out var selections))
                     {
-                        if (mapping.Value.mmdKey == knownMorph.Name)
+                        // TODO: Clean up the in-memory representation so this is safe (i.e. there's no duplicate mappings).
+                        foreach (var selection in selections)
                         {
-                            // TODO: technical debt that would be resolved with ISerializationCallbackReceiver this is terrible this is terrible this is terrible
-                            if (mapping.Value.avatarKeyScaleOverrides?.Length > 0)
-                            {
-                                foreach (var avatarKey in mapping.Value.avatarKeys.Zip(mapping.Value.avatarKeyScaleOverrides, (key, scale) => new { Key = key, Scale = scale }))
-                                {
-                                    knownMappings[i].Item1.Add(avatarKey.Key);
-                                    if (avatarKey.Scale != 1.0f)
-                                    {
-                                        knownMappings[i].Item2[avatarKey.Key] = avatarKey.Scale;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                foreach (string avatarKey in mapping.Value.avatarKeys)
-                                {
-                                    knownMappings[i].Item1.Add(avatarKey);
-                                }
-                            }
-                            mappingsToSearch.Remove(mapping);
+                            knownMappings[i].Add((selection.blendShapeName, selection.scale));
                         }
                     }
                 }
-                // TODO: technical debt that would be resolved with ISerializationCallbackReceiver this is terrible this is terrible this is terrible
                 _knownBlendShapeMappings = knownMappings
-                    .SelectMany(p => p.Value.Item1.Select(x => new { p.Key, Value = (x, p.Value.Item2.TryGetValue(x, out float scale) ? scale : 1.0f) }))
+                    .SelectMany(p => p.Value.Select(x => new { p.Key, Value = x }))
                     .ToLookup(pair => pair.Key, pair => pair.Value);
             }
 
