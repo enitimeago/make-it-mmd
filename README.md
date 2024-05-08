@@ -84,6 +84,16 @@ Make It MMD bundles and redistributes code from third-party software. The licens
 
 ## Development
 
+### Setup
+
+On macOS, you will need `vrc-get` which you can install with `brew install vrc-get`.
+
+Then run:
+
+```shell
+vrc-get resolve --project .
+```
+
 ### Style
 
 This project uses `dotnet format` with `.editorconfig` to enforce style guidelines.
