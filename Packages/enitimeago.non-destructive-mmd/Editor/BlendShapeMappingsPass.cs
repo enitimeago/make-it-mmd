@@ -114,6 +114,8 @@ namespace enitimeago.NonDestructiveMMD
                         .ToArray()
                 });
             }
+
+            Object.DestroyImmediate(mappingsComponent);
         }
     }
 }

@@ -69,6 +69,8 @@ namespace enitimeago.NonDestructiveMMD
                     state.state.writeDefaultValues = true;
                 }
             }
+
+            Object.DestroyImmediate(mappingsComponent);
         }
     }
 }
