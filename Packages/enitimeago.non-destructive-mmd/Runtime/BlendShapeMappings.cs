@@ -6,12 +6,14 @@ using UnityEngine.Serialization;
 
 namespace enitimeago.NonDestructiveMMD
 {
-    [System.Serializable]
+    /// <summary>
+    /// At-rest representation of a mapping from an MMD morph to a mesh's blend shape(s), along with optional corresponding scale values.
+    /// </summary>
+    [Serializable]
     public class MMDToAvatarBlendShape
     {
         public string mmdKey;
         public string[] avatarKeys;
-        // TODO: consider creating an AvatarBlendShape class to hold metadata. this is being avoided for now so that dataVersion stays at 1.
         public float[] avatarKeyScaleOverrides;
         [FormerlySerializedAs("avatarKey")] public string legacyAvatarKey;
 
@@ -29,173 +31,177 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
-    // TODO: transition to ISerializationCallbackReceiver to make this data easier to reason about
+    public class BlendShapeSelectionOptions
+    {
+        public float scale;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return scale == ((BlendShapeSelectionOptions)obj).scale;
+        }
+
+        public override int GetHashCode()
+        {
+            return scale.GetHashCode();
+        }
+    }
+
+    /// <summary>
+    /// In-memory representation of selections of a mesh's blend shape, along with options for each selection.
+    /// </summary>
+    public class BlendShapeSelections : Dictionary<string, BlendShapeSelectionOptions>
+    {
+        public BlendShapeSelections() { }
+
+        /// <summary>
+        /// Performs a shallow clone.
+        /// </summary>
+        public BlendShapeSelections Clone()
+        {
+            return (BlendShapeSelections)this.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+    }
+
+    /// <summary>
+    /// Unity component that holds mappings from MMD keys to a mesh's blend shapes.
+    /// </summary>
     [AddComponentMenu("Make It MMD/MIM Make MMD BlendShapes")]
     [DisallowMultipleComponent]
-    public class BlendShapeMappings : MonoBehaviour, VRC.SDKBase.IEditorOnly
+    public class BlendShapeMappings : MonoBehaviour, ISerializationCallbackReceiver, VRC.SDKBase.IEditorOnly
     {
         public const int CURRENT_DATA_VERSION = 1;
 
         public int dataVersion;
-        public List<MMDToAvatarBlendShape> blendShapeMappings = new List<MMDToAvatarBlendShape>();
+
+        [FormerlySerializedAs("blendShapeMappings")]
+        [SerializeField]
+        internal List<MMDToAvatarBlendShape> _blendShapeMappings = new List<MMDToAvatarBlendShape>();
+        public Dictionary<string, BlendShapeSelections> blendShapeMappings = new Dictionary<string, BlendShapeSelections>();
+
+        public void OnBeforeSerialize()
+        {
+            _blendShapeMappings.Clear();
+
+            foreach (var (mmdKey, blendShapeSelections) in blendShapeMappings.Select(x => (x.Key, x.Value)))
+            {
+                var avatarKeys = blendShapeSelections.Keys.ToArray();
+                if (blendShapeSelections.Values.Any(s => s.scale != 1.0f)) // TODO: use comparison with epsilon instead?
+                {
+                    var avatarKeyScaleOverrides = avatarKeys.Select(key => blendShapeSelections[key].scale).ToArray();
+                    _blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, avatarKeys, avatarKeyScaleOverrides));
+                    continue;
+                }
+                _blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, avatarKeys));
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+            blendShapeMappings = new Dictionary<string, BlendShapeSelections>();
+
+            foreach (var mapping in _blendShapeMappings)
+            {
+                var blendShapeSelections = new BlendShapeSelections();
+
+                for (int i = 0; i < mapping.avatarKeys.Length; i++)
+                {
+                    string avatarKey = mapping.avatarKeys[i];
+                    // TODO: handle if avatarKey is seen more than once
+                    // TODO: show error to user when reading malformed data so they have a chance to recover
+                    blendShapeSelections[avatarKey] = new BlendShapeSelectionOptions
+                    {
+                        scale = mapping.avatarKeyScaleOverrides != null && i < mapping.avatarKeyScaleOverrides.Length
+                            ? mapping.avatarKeyScaleOverrides[i] : 1.0f
+                    };
+                }
+
+                blendShapeMappings[mapping.mmdKey] = blendShapeSelections;
+            }
+        }
 
         public void OnValidate()
         {
             RunMigrations();
-            NormalizeData();
-        }
-
-        public void AddBlendShapeMapping(string mmdKey, string avatarKey)
-        {
-            // Always assume it might be possible that the underlying data is not comformant.
-            // Once cleaned up we can make safer assumptions.
-            // TODO: this is also why i want to move to ISerializationCallbackReceiver, it's risky to forget to add this and then cause unexpected things to happen
-            NormalizeData();
-
-            if (HasBlendShapeMappings(mmdKey))
-            {
-                var currentMapping = blendShapeMappings.First(x => x.mmdKey == mmdKey);
-                if (currentMapping.avatarKeys.Contains(avatarKey))
-                {
-                    // Nothing to do here, mapping already exists.
-                    return;
-                }
-
-                blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
-                var newAvatarKeys = new List<string>(currentMapping.avatarKeys) { avatarKey };
-
-                // Depending on whether overrides exist...
-                // TODO: again this is why i should probably move to ISerializationCallbackReceiver
-                if (currentMapping.avatarKeyScaleOverrides?.Length > 0) // TODO: oh no null checks.. which means avatarKeys could be null too..
-                {
-                    var newAvatarKeyScaleOverrides = new List<float>(currentMapping.avatarKeyScaleOverrides) { 1.0f };
-                    blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, newAvatarKeys, newAvatarKeyScaleOverrides));
-                }
-                else
-                {
-                    blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, newAvatarKeys));
-                }
-            }
-            else
-            {
-                blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, new string[] { avatarKey }));
-            }
-        }
-
-        // Does nothing if the blend shape isn't set.
-        public void UpdateBlendShapeMapping(string mmdKey, string avatarKey, float newScale)
-        {
-            // TODO: please adopt ISerializationCallbackReceiver the technical debt of writing this class like this makes me really sad
-            NormalizeData();
-
-            if (HasBlendShapeMappings(mmdKey))
-            {
-                var currentMapping = blendShapeMappings.First(x => x.mmdKey == mmdKey);
-                if (currentMapping.avatarKeys.Contains(avatarKey))
-                {
-                    int avatarKeyIndex = Array.IndexOf(currentMapping.avatarKeys, avatarKey);
-                    List<float> newScaleOverrides;
-                    if (currentMapping.avatarKeyScaleOverrides?.Length > 0)
-                    {
-                        newScaleOverrides = new List<float>(currentMapping.avatarKeyScaleOverrides);
-                        newScaleOverrides[avatarKeyIndex] = newScale;
-                    }
-                    else
-                    {
-                        newScaleOverrides = currentMapping.avatarKeys.Select(_ => 1.0f).ToList();
-                        newScaleOverrides[avatarKeyIndex] = newScale;
-                    }
-
-                    var newMapping = new MMDToAvatarBlendShape(mmdKey, currentMapping.avatarKeys.ToArray(), newScaleOverrides);
-                    blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
-                    blendShapeMappings.Add(newMapping);
-                }
-            }
         }
 
         public bool HasBlendShapeMappings(string mmdKey)
         {
-            return blendShapeMappings.Any(x => x.mmdKey == mmdKey && x.avatarKeys.Length > 0);
+            return blendShapeMappings.ContainsKey(mmdKey);
+        }
+
+        public bool HasBlendShapeMappings(string mmdKey, out BlendShapeSelections blendShapeSelections)
+        {
+            return blendShapeMappings.TryGetValue(mmdKey, out blendShapeSelections);
+        }
+
+        /// <summary>
+        /// Adds a mapping from an MMD key to a blend shape on the avatar. If such a mapping already exists, leaves it unmodified.
+        /// </summary>
+        public void AddBlendShapeMapping(string mmdKey, string avatarKey)
+        {
+            if (HasBlendShapeMappings(mmdKey, out var selections) && !selections.ContainsKey(avatarKey))
+            {
+                selections[avatarKey] = new BlendShapeSelectionOptions { scale = 1.0f };
+            }
+            else
+            {
+                blendShapeMappings[mmdKey] = new BlendShapeSelections
+                {
+                    { avatarKey, new BlendShapeSelectionOptions { scale = 1.0f } }
+                };
+            }
+        }
+
+        /// <summary>
+        /// Updates the scale for an existing mapping. Does nothing if the mapping doesn't exist.
+        /// </summary>
+        public void UpdateBlendShapeMapping(string mmdKey, string avatarKey, float newScale)
+        {
+            if (HasBlendShapeMappings(mmdKey, out var selections))
+            {
+                if (selections.TryGetValue(avatarKey, out var selection))
+                {
+                    selection.scale = newScale;
+                }
+            }
         }
 
         public void DeleteAllBlendShapeMappings(string mmdKey)
         {
-            blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
+            blendShapeMappings.Remove(mmdKey);
         }
 
         public void DeleteBlendShapeMapping(string mmdKey, string avatarKey)
         {
-            NormalizeData();
-            var mapping = blendShapeMappings.FirstOrDefault(x => x.mmdKey == mmdKey);
-            if (mapping != null && mapping.avatarKeys.Contains(avatarKey))
+            if (HasBlendShapeMappings(mmdKey, out var selections))
             {
-                if (mapping.avatarKeys.Length == 1)
+                if (selections.ContainsKey(avatarKey))
                 {
-                    blendShapeMappings.RemoveAll(x => x.mmdKey == mmdKey);
-                    return;
+                    selections.Remove(avatarKey);
                 }
-
-                // TODO: please adopt ISerializationCallbackReceiver this parallel deletion is really ugly
-                if (mapping.avatarKeyScaleOverrides != null && mapping.avatarKeyScaleOverrides.Length == mapping.avatarKeys.Length)
+                if (selections.Count == 0)
                 {
-                    var newScaleOverrides = new List<float>();
-                    for (int i = 0; i < mapping.avatarKeys.Length; i++)
-                    {
-                        if (mapping.avatarKeys[i] != avatarKey)
-                        {
-                            newScaleOverrides.Add(mapping.avatarKeyScaleOverrides[i]);
-                        }
-                    }
-                    mapping.avatarKeyScaleOverrides = newScaleOverrides.ToArray();
+                    blendShapeMappings.Remove(mmdKey);
                 }
-
-                mapping.avatarKeys = mapping.avatarKeys.Where(x => x != avatarKey).ToArray();
             }
         }
 
-        // TODO: add unit test to verify migration
         private void RunMigrations()
         {
             if (dataVersion == 0)
             {
-                var newMappings = blendShapeMappings
+                var newMappings = _blendShapeMappings
                     .Select(x => new MMDToAvatarBlendShape(x.mmdKey, string.IsNullOrEmpty(x.legacyAvatarKey) ? Array.Empty<string>() : new string[] { x.legacyAvatarKey }))
                     .ToList();
-                blendShapeMappings.Clear();
-                blendShapeMappings.AddRange(newMappings);
+                _blendShapeMappings.Clear();
+                _blendShapeMappings.AddRange(newMappings);
                 dataVersion = 1;
-            }
-        }
-
-        // TODO: unit test?
-        private void NormalizeData()
-        {
-            var seenMmdKeys = new Dictionary<string, MMDToAvatarBlendShape>();
-            // Run off a duplicate of the original list, so it's safe to delete as we go along.
-            foreach (var blendShapeMapping in blendShapeMappings.ToList())
-            {
-                // Delete 1:0 mappings.
-                if (blendShapeMapping.avatarKeys.Length == 0)
-                {
-                    blendShapeMappings.Remove(blendShapeMapping);
-                    continue;
-                }
-
-                if (!seenMmdKeys.ContainsKey(blendShapeMapping.mmdKey))
-                {
-                    // Mark this as seen.
-                    // TODO: dedup avatar keys.
-                    seenMmdKeys[blendShapeMapping.mmdKey] = blendShapeMapping;
-                }
-                else
-                {
-                    // First unify both sets.
-                    var newMappings = new HashSet<string>(seenMmdKeys[blendShapeMapping.mmdKey].avatarKeys);
-                    newMappings.UnionWith(blendShapeMapping.avatarKeys);
-                    seenMmdKeys[blendShapeMapping.mmdKey].avatarKeys = newMappings.ToArray();
-                    // Then delete this mapping.
-                    blendShapeMappings.Remove(blendShapeMapping);
-                }
+                OnAfterDeserialize();
             }
         }
     }

@@ -33,9 +33,10 @@ public class BlendShapeMappingsPassTests : TestBase
         var mmdObject = new GameObject();
         mmdObject.transform.parent = avatar.transform;
         var mappings = mmdObject.AddComponent<BlendShapeMappings>();
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("あ", new string[] { "vrc.v_aa" }));
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("い", new string[] { "vrc.v_ih" }));
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("う", new string[] { "vrc.v_ou" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("あ", new string[] { "vrc.v_aa" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("い", new string[] { "vrc.v_ih" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("う", new string[] { "vrc.v_ou" }));
+        mappings.OnAfterDeserialize();
 
         pass.Execute(avatar);
 
@@ -53,9 +54,10 @@ public class BlendShapeMappingsPassTests : TestBase
         var mmdObject = new GameObject();
         mmdObject.transform.parent = avatar.transform;
         var mappings = mmdObject.AddComponent<BlendShapeMappings>();
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("あ", new string[] { "vrc.v_aa" }));
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("い", new string[] { "vrc.v_ih" }));
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("う", new string[] { "vrc.v_ou" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("あ", new string[] { "vrc.v_aa" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("い", new string[] { "vrc.v_ih" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("う", new string[] { "vrc.v_ou" }));
+        mappings.OnAfterDeserialize();
 
         pass.Execute(avatar);
 
@@ -82,9 +84,10 @@ public class BlendShapeMappingsPassTests : TestBase
         var mmdObject = new GameObject();
         mmdObject.transform.parent = avatar.transform;
         var mappings = mmdObject.AddComponent<BlendShapeMappings>();
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("あ", new string[] { "vrc.v_aa" }));
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("い", new string[] { "vrc.v_ih" }));
-        mappings.blendShapeMappings.Add(new MMDToAvatarBlendShape("vrc.v_oh", new string[] { "vrc.v_ou" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("あ", new string[] { "vrc.v_aa" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("い", new string[] { "vrc.v_ih" }));
+        mappings._blendShapeMappings.Add(new MMDToAvatarBlendShape("vrc.v_oh", new string[] { "vrc.v_ou" }));
+        mappings.OnAfterDeserialize();
 
         pass.Execute(avatar);
 
