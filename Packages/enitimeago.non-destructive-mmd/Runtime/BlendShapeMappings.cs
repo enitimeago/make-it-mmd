@@ -32,13 +32,40 @@ namespace enitimeago.NonDestructiveMMD
         }
     }
 
-    /// <summary>
-    /// In-memory representation of a selection of a mesh's blend shape, along with a scale value.
-    /// </summary>
-    public class BlendShapeSelection
+    public class BlendShapeSelectionOptions
     {
-        public string blendShapeName;
         public float scale;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return scale == ((BlendShapeSelectionOptions)obj).scale;
+        }
+
+        public override int GetHashCode()
+        {
+            return scale.GetHashCode();
+        }
+    }
+
+    /// <summary>
+    /// In-memory representation of selections of a mesh's blend shape, along with options for each selection.
+    /// </summary>
+    public class BlendShapeSelections : Dictionary<string, BlendShapeSelectionOptions>
+    {
+        public BlendShapeSelections() { }
+
+        /// <summary>
+        /// Performs a shallow clone.
+        /// </summary>
+        public BlendShapeSelections Clone()
+        {
+            return (BlendShapeSelections)this.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
     }
 
     /// <summary>
@@ -55,18 +82,18 @@ namespace enitimeago.NonDestructiveMMD
         [FormerlySerializedAs("blendShapeMappings")]
         [SerializeField]
         internal List<MMDToAvatarBlendShape> _blendShapeMappings = new List<MMDToAvatarBlendShape>();
-        public Dictionary<string, List<BlendShapeSelection>> blendShapeMappings = new Dictionary<string, List<BlendShapeSelection>>();
+        public Dictionary<string, BlendShapeSelections> blendShapeMappings = new Dictionary<string, BlendShapeSelections>();
 
         public void OnBeforeSerialize()
         {
             _blendShapeMappings.Clear();
 
-            foreach (var (mmdKey, selectionsForMmdKey) in blendShapeMappings.Select(x => (x.Key, x.Value)))
+            foreach (var (mmdKey, blendShapeSelections) in blendShapeMappings.Select(x => (x.Key, x.Value)))
             {
-                var avatarKeys = selectionsForMmdKey.Select(s => s.blendShapeName).ToArray();
-                if (selectionsForMmdKey.Any(s => s.scale != 1.0f)) // TODO: use comparison with epsilon instead?
+                var avatarKeys = blendShapeSelections.Keys.ToArray();
+                if (blendShapeSelections.Values.Any(s => s.scale != 1.0f)) // TODO: use comparison with epsilon instead?
                 {
-                    var avatarKeyScaleOverrides = selectionsForMmdKey.Select(s => s.scale).ToArray();
+                    var avatarKeyScaleOverrides = avatarKeys.Select(key => blendShapeSelections[key].scale).ToArray();
                     _blendShapeMappings.Add(new MMDToAvatarBlendShape(mmdKey, avatarKeys, avatarKeyScaleOverrides));
                     continue;
                 }
@@ -76,20 +103,21 @@ namespace enitimeago.NonDestructiveMMD
 
         public void OnAfterDeserialize()
         {
-            blendShapeMappings = new Dictionary<string, List<BlendShapeSelection>>();
+            // TODO: show error to user when reading malformed data so they have a chance to recover
+            blendShapeMappings = new Dictionary<string, BlendShapeSelections>();
 
             foreach (var mapping in _blendShapeMappings)
             {
-                var blendShapeSelections = new List<BlendShapeSelection>();
+                var blendShapeSelections = new BlendShapeSelections();
 
                 for (int i = 0; i < mapping.avatarKeys.Length; i++)
                 {
-                    blendShapeSelections.Add(new BlendShapeSelection
+                    string avatarKey = mapping.avatarKeys[i];
+                    blendShapeSelections[avatarKey] = new BlendShapeSelectionOptions
                     {
-                        blendShapeName = mapping.avatarKeys[i],
                         scale = mapping.avatarKeyScaleOverrides != null && i < mapping.avatarKeyScaleOverrides.Length
                             ? mapping.avatarKeyScaleOverrides[i] : 1.0f
-                    });
+                    };
                 }
 
                 blendShapeMappings[mapping.mmdKey] = blendShapeSelections;
@@ -107,7 +135,7 @@ namespace enitimeago.NonDestructiveMMD
             return blendShapeMappings.ContainsKey(mmdKey);
         }
 
-        public bool HasBlendShapeMappings(string mmdKey, out List<BlendShapeSelection> blendShapeSelections)
+        public bool HasBlendShapeMappings(string mmdKey, out BlendShapeSelections blendShapeSelections)
         {
             return blendShapeMappings.TryGetValue(mmdKey, out blendShapeSelections);
         }
@@ -117,19 +145,15 @@ namespace enitimeago.NonDestructiveMMD
         /// </summary>
         public void AddBlendShapeMapping(string mmdKey, string avatarKey)
         {
-            // Always assume it might be possible that the underlying data is not comformant.
-            // TODO: Clean up the in-memory representation so this isn't necessary.
-            NormalizeData();
-
-            if (HasBlendShapeMappings(mmdKey, out var selections) && !selections.Any(s => s.blendShapeName == avatarKey))
+            if (HasBlendShapeMappings(mmdKey, out var selections) && !selections.ContainsKey(avatarKey))
             {
-                selections.Add(new BlendShapeSelection { blendShapeName = avatarKey, scale = 1.0f });
+                selections[avatarKey] = new BlendShapeSelectionOptions { scale = 1.0f };
             }
             else
             {
-                blendShapeMappings[mmdKey] = new List<BlendShapeSelection>
+                blendShapeMappings[mmdKey] = new BlendShapeSelections
                 {
-                    new BlendShapeSelection { blendShapeName = avatarKey, scale = 1.0f }
+                    { avatarKey, new BlendShapeSelectionOptions { scale = 1.0f } }
                 };
             }
         }
@@ -139,14 +163,9 @@ namespace enitimeago.NonDestructiveMMD
         /// </summary>
         public void UpdateBlendShapeMapping(string mmdKey, string avatarKey, float newScale)
         {
-            // TODO: Clean up the in-memory representation so this isn't necessary.
-            NormalizeData();
-
             if (HasBlendShapeMappings(mmdKey, out var selections))
             {
-                // TODO: Clean up the in-memory representation so this isn't necessary.
-                var selection = selections.FirstOrDefault(s => s.blendShapeName == avatarKey);
-                if (selection != null)
+                if (selections.TryGetValue(avatarKey, out var selection))
                 {
                     selection.scale = newScale;
                 }
@@ -160,15 +179,11 @@ namespace enitimeago.NonDestructiveMMD
 
         public void DeleteBlendShapeMapping(string mmdKey, string avatarKey)
         {
-            // TODO: Clean up the in-memory representation so this isn't necessary.
-            NormalizeData();
-
             if (HasBlendShapeMappings(mmdKey, out var selections))
             {
-                var selection = selections.FirstOrDefault(s => s.blendShapeName == avatarKey);
-                if (selection != null)
+                if (selections.ContainsKey(avatarKey))
                 {
-                    selections.Remove(selection);
+                    selections.Remove(avatarKey);
                 }
                 if (selections.Count == 0)
                 {

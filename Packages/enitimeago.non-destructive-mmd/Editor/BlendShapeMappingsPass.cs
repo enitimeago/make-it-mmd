@@ -81,9 +81,9 @@ namespace enitimeago.NonDestructiveMMD
             faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
             // Run simple copies of single keys.
-            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.Value.Count == 1 && x.Value.All(s => s.scale == 1.0f)))
+            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.Value.Count == 1 && x.Value.All(s => s.Value.scale == 1.0f)))
             {
-                string blendShapeName = mapping.Value[0].blendShapeName;
+                string blendShapeName = mapping.Value.First().Key;
                 int blendShapeIndex = mesh.GetBlendShapeIndex(blendShapeName);
                 Debug.Log("Create MMD shape key " + mapping.Key + " as copy of " + blendShapeName + " (found " + blendShapeName + " as index " + blendShapeIndex + ")");
                 int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
@@ -96,7 +96,7 @@ namespace enitimeago.NonDestructiveMMD
             }
 
             // Run BlendShapeCombiner on multiple keys or scaled keys.
-            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.Value.Count > 1 || x.Value.Any(s => s.scale != 1.0f));
+            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.Value.Count > 1 || x.Value.Any(s => s.Value.scale != 1.0f));
             if (multiMappings.Any())
             {
                 faceSkinnedMeshRenderer.sharedMesh = CombinerImpl.MergeBlendShapes(new BlendShapeCombiner
@@ -108,7 +108,7 @@ namespace enitimeago.NonDestructiveMMD
                         {
                             name = mapping.Key,
                             sourceKeys = mapping.Value
-                                .Select(selection => new SourceKey { name = selection.blendShapeName, scale = selection.scale })
+                                .Select(selection => new SourceKey { name = selection.Key, scale = selection.Value.scale })
                                 .ToArray()
                         })
                         .ToArray()

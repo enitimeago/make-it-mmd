@@ -11,17 +11,17 @@ public class BlendShapeMappingsTests
     {
         var blendShapeMappings = new BlendShapeMappings
         {
-            blendShapeMappings = new Dictionary<string, List<BlendShapeSelection>>
+            blendShapeMappings = new Dictionary<string, BlendShapeSelections>
             {
-                { "MmdKey1", new List<BlendShapeSelection>
+                { "MmdKey1", new BlendShapeSelections
                     {
-                        new BlendShapeSelection { blendShapeName = "AvatarKey1", scale = 1.0f },
-                        new BlendShapeSelection { blendShapeName = "AvatarKey2", scale = 0.5f }
+                        { "AvatarKey1", new BlendShapeSelectionOptions { scale = 1.0f } },
+                        { "AvatarKey2", new BlendShapeSelectionOptions { scale = 0.5f } }
                     }
                 },
-                { "MmdKey2", new List<BlendShapeSelection>
+                { "MmdKey2", new BlendShapeSelections
                     {
-                        new BlendShapeSelection { blendShapeName = "AvatarKey3", scale = 1.0f }
+                        { "AvatarKey3", new BlendShapeSelectionOptions { scale = 1.0f } }
                     }
                 }
             }
@@ -57,18 +57,9 @@ public class BlendShapeMappingsTests
         Assert.IsTrue(blendShapeMappings.blendShapeMappings.ContainsKey("MmdKey1"));
         Assert.IsTrue(blendShapeMappings.blendShapeMappings.ContainsKey("MmdKey2"));
         Assert.IsTrue(blendShapeMappings.blendShapeMappings.ContainsKey("MmdKey3"));
-        // TODO: can BlendShapeSelection be compared?
-        Assert.AreEqual(2, blendShapeMappings.blendShapeMappings["MmdKey1"].Count);
-        Assert.AreEqual("AvatarKey1", blendShapeMappings.blendShapeMappings["MmdKey1"][0].blendShapeName);
-        Assert.AreEqual(1.0f, blendShapeMappings.blendShapeMappings["MmdKey1"][0].scale);
-        Assert.AreEqual("AvatarKey2", blendShapeMappings.blendShapeMappings["MmdKey1"][1].blendShapeName);
-        Assert.AreEqual(0.5f, blendShapeMappings.blendShapeMappings["MmdKey1"][1].scale);
-        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings["MmdKey2"].Count);
-        Assert.AreEqual("AvatarKey3", blendShapeMappings.blendShapeMappings["MmdKey2"][0].blendShapeName);
-        Assert.AreEqual(1.0f, blendShapeMappings.blendShapeMappings["MmdKey2"][0].scale);
-        Assert.AreEqual(1, blendShapeMappings.blendShapeMappings["MmdKey3"].Count);
-        Assert.AreEqual("AvatarKey4", blendShapeMappings.blendShapeMappings["MmdKey3"][0].blendShapeName);
-        Assert.AreEqual(1.0f, blendShapeMappings.blendShapeMappings["MmdKey3"][0].scale);
+        CollectionAssert.AreEquivalent(new BlendShapeSelections { { "AvatarKey1", new BlendShapeSelectionOptions { scale = 1.0f } }, { "AvatarKey2", new BlendShapeSelectionOptions { scale = 0.5f } } }.ToList(), blendShapeMappings.blendShapeMappings["MmdKey1"].ToList());
+        CollectionAssert.AreEquivalent(new BlendShapeSelections { { "AvatarKey3", new BlendShapeSelectionOptions { scale = 1.0f } } }.ToList(), blendShapeMappings.blendShapeMappings["MmdKey2"].ToList());
+        CollectionAssert.AreEquivalent(new BlendShapeSelections { { "AvatarKey4", new BlendShapeSelectionOptions { scale = 1.0f } } }.ToList(), blendShapeMappings.blendShapeMappings["MmdKey3"].ToList());
     }
 
     [Test]

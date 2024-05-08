@@ -46,7 +46,7 @@ namespace enitimeago.NonDestructiveMMD
             bool foundNonExistingReference = false;
             foreach (var mapping in mappingsComponents.First().blendShapeMappings)
             {
-                foreach (string avatarKey in mapping.Value.Select(x => x.blendShapeName))
+                foreach (string avatarKey in mapping.Value.Select(x => x.Key))
                 {
                     if (mesh.GetBlendShapeIndex(avatarKey) < 0)
                     {
