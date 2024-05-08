@@ -106,7 +106,6 @@ namespace enitimeago.NonDestructiveMMD
                     knownMappings.Add(i, new HashSet<(string, float)>());
                     if (MappingsComponent.blendShapeMappings.TryGetValue(knownMorph.Name, out var selections))
                     {
-                        // TODO: Clean up the in-memory representation so this is safe (i.e. there's no duplicate mappings).
                         foreach (var selection in selections)
                         {
                             knownMappings[i].Add((selection.Key, selection.Value.scale));

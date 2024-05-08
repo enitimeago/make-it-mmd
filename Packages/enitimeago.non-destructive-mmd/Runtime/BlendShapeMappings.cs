@@ -14,7 +14,6 @@ namespace enitimeago.NonDestructiveMMD
     {
         public string mmdKey;
         public string[] avatarKeys;
-        // TODO: consider creating an AvatarBlendShape class to hold metadata. this is being avoided for now so that dataVersion stays at 1.
         public float[] avatarKeyScaleOverrides;
         [FormerlySerializedAs("avatarKey")] public string legacyAvatarKey;
 
@@ -103,7 +102,6 @@ namespace enitimeago.NonDestructiveMMD
 
         public void OnAfterDeserialize()
         {
-            // TODO: show error to user when reading malformed data so they have a chance to recover
             blendShapeMappings = new Dictionary<string, BlendShapeSelections>();
 
             foreach (var mapping in _blendShapeMappings)
@@ -113,6 +111,8 @@ namespace enitimeago.NonDestructiveMMD
                 for (int i = 0; i < mapping.avatarKeys.Length; i++)
                 {
                     string avatarKey = mapping.avatarKeys[i];
+                    // TODO: handle if avatarKey is seen more than once
+                    // TODO: show error to user when reading malformed data so they have a chance to recover
                     blendShapeSelections[avatarKey] = new BlendShapeSelectionOptions
                     {
                         scale = mapping.avatarKeyScaleOverrides != null && i < mapping.avatarKeyScaleOverrides.Length
@@ -127,7 +127,6 @@ namespace enitimeago.NonDestructiveMMD
         public void OnValidate()
         {
             RunMigrations();
-            NormalizeData();
         }
 
         public bool HasBlendShapeMappings(string mmdKey)
@@ -192,7 +191,6 @@ namespace enitimeago.NonDestructiveMMD
             }
         }
 
-        // TODO: add unit test to verify migration
         private void RunMigrations()
         {
             if (dataVersion == 0)
@@ -205,12 +203,6 @@ namespace enitimeago.NonDestructiveMMD
                 dataVersion = 1;
                 OnAfterDeserialize();
             }
-        }
-
-        // TODO: unit test?
-        private void NormalizeData()
-        {
-            // TODO: delete 1:0 mappings, duplicate blend shape mappings
         }
     }
 
