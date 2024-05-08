@@ -240,6 +240,7 @@ namespace enitimeago.NonDestructiveMMD
 
                     if (newScale != scale)
                     {
+                        Undo.RecordObject(MappingsComponent, "Adjust MMD Blend Shape Scale");
                         MappingsComponent.UpdateBlendShapeMapping(MmdBlendShapeNames.All[_currentMmdKeyIndex].Name, avatarKey, newScale);
                     }
 
