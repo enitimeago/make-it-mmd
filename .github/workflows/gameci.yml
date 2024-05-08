@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:    
-      - main
+  # Review permissions carefully; will cause arbitrary code execution of pull requests!
+  pull_request_target: {}
 
 jobs:
   test:
@@ -20,6 +19,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        ref: ${{ github.event.pull_request.head.sha }}
 
     - name: Upgrade to Unity 2022
       if: ${{ matrix.unity_version == '2022.3.6f1' }}
