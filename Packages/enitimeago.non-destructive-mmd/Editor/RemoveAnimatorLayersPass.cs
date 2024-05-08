@@ -68,6 +68,8 @@ namespace enitimeago.NonDestructiveMMD
 
             // Remove the undesired layer(s).
             fxController.layers = fxController.layers.Where(layer => !layersToRemove.Contains(layer.name)).ToArray();
+
+            Object.DestroyImmediate(removeLayersComponent);
         }
     }
 }
