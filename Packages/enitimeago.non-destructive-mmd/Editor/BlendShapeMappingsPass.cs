@@ -2,11 +2,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner;
-using enitimeago.NonDestructiveMMD.vendor.BlendShapeCombiner.Editor;
 using nadena.dev.ndmf;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
+using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -38,20 +37,20 @@ namespace enitimeago.NonDestructiveMMD
 
             // Find the avatar's face mesh.
             var faceSkinnedMeshRenderer = descriptor.VisemeSkinnedMesh;
-            var mesh = faceSkinnedMeshRenderer.sharedMesh;
+            var originalMesh = faceSkinnedMeshRenderer.sharedMesh;
 
-            var deltaVertices = new Vector3[mesh.vertexCount];
-            var deltaNormals = new Vector3[mesh.vertexCount];
-            var deltaTangents = new Vector3[mesh.vertexCount];
+            var deltaVertices = new Vector3[originalMesh.vertexCount];
+            var deltaNormals = new Vector3[originalMesh.vertexCount];
+            var deltaTangents = new Vector3[originalMesh.vertexCount];
 
             // Duplicate the mesh to allow safe mutation.
-            var meshCopy = Object.Instantiate(mesh);
+            var meshCopy = Object.Instantiate(originalMesh);
 
             // Figure out if we'll be replacing existing blend shapes.
             var existingBlendShapes = new List<string>();
-            for (int i = 0; i < mesh.blendShapeCount; i++)
+            for (int i = 0; i < originalMesh.blendShapeCount; i++)
             {
-                existingBlendShapes.Add(mesh.GetBlendShapeName(i));
+                existingBlendShapes.Add(originalMesh.GetBlendShapeName(i));
             }
             if (existingBlendShapes.Any(blendShape => mappingsComponent.blendShapeMappings.ContainsKey(blendShape)))
             {
@@ -65,12 +64,12 @@ namespace enitimeago.NonDestructiveMMD
                     {
                         continue;
                     }
-                    int blendShapeIndex = mesh.GetBlendShapeIndex(existingBlendShape);
-                    int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
+                    int blendShapeIndex = originalMesh.GetBlendShapeIndex(existingBlendShape);
+                    int frameCount = originalMesh.GetBlendShapeFrameCount(blendShapeIndex);
                     for (int f = 0; f < frameCount; f++)
                     {
-                        float weight = mesh.GetBlendShapeFrameWeight(blendShapeIndex, f);
-                        mesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
+                        float weight = originalMesh.GetBlendShapeFrameWeight(blendShapeIndex, f);
+                        originalMesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
                         meshCopy.AddBlendShapeFrame(existingBlendShape, weight, deltaVertices, deltaNormals, deltaTangents);
                     }
                 }
@@ -80,39 +79,77 @@ namespace enitimeago.NonDestructiveMMD
             meshCopy.AddBlendShapeFrame("------Make It MMD------", 0, deltaVertices, deltaNormals, deltaTangents);
             faceSkinnedMeshRenderer.sharedMesh = meshCopy;
 
-            // Run simple copies of single keys.
-            foreach (var mapping in mappingsComponent.blendShapeMappings.Where(x => x.Value.Count == 1 && x.Value.All(s => s.Value.scale == 1.0f)))
+            foreach (var mapping in mappingsComponent.blendShapeMappings)
             {
-                string blendShapeName = mapping.Value.First().Key;
-                int blendShapeIndex = mesh.GetBlendShapeIndex(blendShapeName);
-                Debug.Log("Create MMD shape key " + mapping.Key + " as copy of " + blendShapeName + " (found " + blendShapeName + " as index " + blendShapeIndex + ")");
-                int frameCount = mesh.GetBlendShapeFrameCount(blendShapeIndex);
-                for (int f = 0; f < frameCount; f++)
-                {
-                    float weight = mesh.GetBlendShapeFrameWeight(blendShapeIndex, f);
-                    mesh.GetBlendShapeFrameVertices(blendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
-                    meshCopy.AddBlendShapeFrame(mapping.Key, weight, deltaVertices, deltaNormals, deltaTangents);
-                }
-            }
+                string destBlendShape = mapping.Key;
 
-            // Run BlendShapeCombiner on multiple keys or scaled keys.
-            var multiMappings = mappingsComponent.blendShapeMappings.Where(x => x.Value.Count > 1 || x.Value.Any(s => s.Value.scale != 1.0f));
-            if (multiMappings.Any())
-            {
-                faceSkinnedMeshRenderer.sharedMesh = CombinerImpl.MergeBlendShapes(new BlendShapeCombiner
+                // Run simple copies of single blend shapes. This allows multiple frames.
+                // TODO add test for scaling.
+                if (mapping.Value.Count == 1)
                 {
-                    targetRenderer = faceSkinnedMeshRenderer,
-                    sourceMesh = meshCopy,
-                    newKeys = multiMappings
-                        .Select(mapping => new NewKey
+                    string sourceBlendShape = mapping.Value.First().Key;
+                    int sourceBlendShapeIndex = originalMesh.GetBlendShapeIndex(sourceBlendShape);
+                    int sourceBlendShapeFrames = originalMesh.GetBlendShapeFrameCount(sourceBlendShapeIndex);
+                    float scale = mapping.Value.First().Value.scale;
+                    Debug.Log($"Create MMD shape key {destBlendShape} (scale={scale}) as copy of {sourceBlendShape} (found {sourceBlendShape} as index {sourceBlendShapeIndex})");
+                    for (int f = 0; f < sourceBlendShapeFrames; f++)
+                    {
+                        float weight = originalMesh.GetBlendShapeFrameWeight(sourceBlendShapeIndex, f);
+                        originalMesh.GetBlendShapeFrameVertices(sourceBlendShapeIndex, f, deltaVertices, deltaNormals, deltaTangents);
+                        if (scale != 1)
                         {
-                            name = mapping.Key,
-                            sourceKeys = mapping.Value
-                                .Select(selection => new SourceKey { name = selection.Key, scale = selection.Value.scale })
-                                .ToArray()
-                        })
-                        .ToArray()
-                });
+                            for (int v = 0; v < originalMesh.vertexCount; v++)
+                            {
+                                deltaVertices[v] *= scale;
+                                deltaNormals[v] *= scale;
+                                deltaTangents[v] *= scale;
+                            }
+                        }
+                        meshCopy.AddBlendShapeFrame(destBlendShape, weight, deltaVertices, deltaNormals, deltaTangents);
+                    }
+                }
+                // Multiple blend shapes have their deltas combined.
+                else
+                {
+                    var sourceBlendShapes = mapping.Value;
+                    if (sourceBlendShapes
+                        .Select(sourceBlendShape => originalMesh.GetBlendShapeIndex(sourceBlendShape.Key))
+                        .Select(originalMesh.GetBlendShapeFrameCount)
+                        .Any(frames => frames > 1))
+                    {
+                        // Do not handle multiple frames for now, as it's not common and interpolation doesn't seem straightforward.
+                        // TODO: show error in the UI as well.
+                        ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported");
+                        continue;
+                    }
+
+                    Debug.Log($"Create MMD shape key {destBlendShape} as combination of {sourceBlendShapes.Count} blend shapes.");
+
+                    // Accumulated deltas for the single frame.
+                    float accumulatedWeight = 0;
+                    var accumulatedVertices = new Vector3[originalMesh.vertexCount];
+                    var accumulatedNormals = new Vector3[originalMesh.vertexCount];
+                    var accumulatedTangents = new Vector3[originalMesh.vertexCount];
+
+                    foreach (var sourceBlendShape in sourceBlendShapes)
+                    {
+                        int sourceBlendShapeIndex = originalMesh.GetBlendShapeIndex(sourceBlendShape.Key);
+                        int sourceBlendShapeFrames = originalMesh.GetBlendShapeFrameCount(sourceBlendShapeIndex);
+                        float scale = sourceBlendShape.Value.scale;
+                        Debug.Log($"Adding deltas from blend shape {sourceBlendShape.Key} (scale={scale})");
+                        accumulatedWeight += originalMesh.GetBlendShapeFrameWeight(sourceBlendShapeIndex, 0);
+                        originalMesh.GetBlendShapeFrameVertices(sourceBlendShapeIndex, 0, deltaVertices, deltaNormals, deltaTangents);
+                        for (int v = 0; v < originalMesh.vertexCount; v++)
+                        {
+                            accumulatedVertices[v] += deltaVertices[v] * scale;
+                            accumulatedNormals[v] += deltaNormals[v] * scale;
+                            accumulatedTangents[v] += deltaTangents[v] * scale;
+                        }
+                    }
+
+                    float averageWeight = accumulatedWeight / sourceBlendShapes.Count;
+                    meshCopy.AddBlendShapeFrame(destBlendShape, averageWeight, accumulatedVertices, accumulatedNormals, accumulatedTangents);
+                }
             }
 
             Object.DestroyImmediate(mappingsComponent);

@@ -5,6 +5,9 @@ msgstr ""
 msgid "locale:ja-jp"
 msgstr "日本語"
 
+msgid "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"
+msgstr "現在、複数のブレンドシェイプを複数フレームで組み合わせることはサポートされていません。この機能をリクエストしたい場合は、本ツールの開発者にお問い合わせしてお願いいたします。"
+
 msgid "CommonChecks:NoMMDComponents"
 msgstr "アバターにMake It MMDコンポーネントが見つかりません。処理するものがありません"
 

@@ -5,6 +5,9 @@ msgstr ""
 msgid "locale:en-us"
 msgstr "English"
 
+msgid "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"
+msgstr "Currently, combining multiple blend shapes with more than one frame is unsupported. Please contact the developer if you would like to request this feature."
+
 msgid "CommonChecks:NoMMDComponents"
 msgstr "No Make It MMD component found in avatar. Nothing to do"
 
