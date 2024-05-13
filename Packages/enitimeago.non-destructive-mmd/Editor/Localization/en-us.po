@@ -8,6 +8,12 @@ msgstr "English"
 msgid "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"
 msgstr "Currently, combining multiple blend shapes with more than one frame is unsupported. Please contact the developer if you would like to request this feature."
 
+msgid "BlendShapeMappingsPass:MissingSourceBlendShapes"
+msgstr "MMD morph \"{0}\" references blend shape(s) {1} (when combining {2} blend shapes) that weren't found. These blend shape(s) may have been removed by other tools in your Unity project. If this is unexpected, please report this to the developer along with the tools installed in your project if possible."
+
+msgid "BlendShapeMappingsPass:SkippingMmdMorph"
+msgstr "Found error(s) when generating MMD morph \"{0}\". This MMD blend shape will not be generated."
+
 msgid "CommonChecks:NoMMDComponents"
 msgstr "No Make It MMD component found in avatar. Nothing to do"
 

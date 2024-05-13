@@ -82,15 +82,26 @@ namespace enitimeago.NonDestructiveMMD
             foreach (var mapping in mappingsComponent.blendShapeMappings)
             {
                 string destBlendShape = mapping.Key;
+                var sourceBlendShapes = mapping.Value;
+
+                // It may be possible for a source blend shape to no longer exist, for example if another tool removes it. Report these to the user.
+                // TODO: add test.
+                var missingBlendShapes = sourceBlendShapes.Where(sourceBlendShape => originalMesh.GetBlendShapeIndex(sourceBlendShape.Key) < 0);
+                if (missingBlendShapes.Any())
+                {
+                    ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:MissingSourceBlendShape", destBlendShape, string.Join(",", missingBlendShapes.Select(x => x.Key)), sourceBlendShapes.Count);
+                    ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:SkippingMmdMorph", destBlendShape);
+                    continue;
+                }
 
                 // Run simple copies of single blend shapes. This allows multiple frames.
                 // TODO add test for scaling.
                 if (mapping.Value.Count == 1)
                 {
-                    string sourceBlendShape = mapping.Value.First().Key;
+                    string sourceBlendShape = sourceBlendShapes.First().Key;
                     int sourceBlendShapeIndex = originalMesh.GetBlendShapeIndex(sourceBlendShape);
                     int sourceBlendShapeFrames = originalMesh.GetBlendShapeFrameCount(sourceBlendShapeIndex);
-                    float scale = mapping.Value.First().Value.scale;
+                    float scale = sourceBlendShapes.First().Value.scale;
                     Debug.Log($"Create MMD shape key {destBlendShape} (scale={scale}) as copy of {sourceBlendShape} (found {sourceBlendShape} as index {sourceBlendShapeIndex})");
                     for (int f = 0; f < sourceBlendShapeFrames; f++)
                     {
@@ -111,7 +122,6 @@ namespace enitimeago.NonDestructiveMMD
                 // Multiple blend shapes have their deltas combined.
                 else
                 {
-                    var sourceBlendShapes = mapping.Value;
                     if (sourceBlendShapes
                         .Select(sourceBlendShape => originalMesh.GetBlendShapeIndex(sourceBlendShape.Key))
                         .Select(originalMesh.GetBlendShapeFrameCount)
@@ -120,6 +130,7 @@ namespace enitimeago.NonDestructiveMMD
                         // Do not handle multiple frames for now, as it's not common and interpolation doesn't seem straightforward.
                         // TODO: show error in the UI as well.
                         ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported");
+                        ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:SkippingMmdMorph", destBlendShape);
                         continue;
                     }
 

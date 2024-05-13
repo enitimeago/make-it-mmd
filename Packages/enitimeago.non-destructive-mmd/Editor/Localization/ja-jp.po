@@ -8,6 +8,12 @@ msgstr "日本語"
 msgid "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"
 msgstr "現在、複数のブレンドシェイプを複数フレームで組み合わせることはサポートされていません。この機能をリクエストしたい場合は、本ツールの開発者にお問い合わせしてお願いいたします。"
 
+msgid "BlendShapeMappingsPass:MissingSourceBlendShapes"
+msgstr "MMDモーフ「{0}」は、ブレンドシェイプを組み合わせる際（{1}個のブレンドシェイプを組み合わせる中）に参照されるブレンドシェイプ {1} を探しましたが、見つかりませんでした。これらのブレンドシェイプは、Unityプロジェクトの他のツールによって削除された可能性があります。これが予期しないものである場合は、可能であればプロジェクトにインストールされているツールと共に、この問題を開発者に報告していただければ幸いです。"
+
+msgid "BlendShapeMappingsPass:SkippingMmdMorph"
+msgstr "MMDモーフ「{0}」を生成する際にエラーが発見されました。このMMDブレンドシェイプは生成しません。"
+
 msgid "CommonChecks:NoMMDComponents"
 msgstr "アバターにMake It MMDコンポーネントが見つかりません。処理するものがありません"
 
