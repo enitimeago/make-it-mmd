@@ -13,6 +13,7 @@ namespace enitimeago.NonDestructiveMMD
         {
             var seq = InPhase(BuildPhase.Transforming);
             seq.Run(BlendShapeMappingsPass.Instance);
+            seq.Run(RenameFaceForMmdPass.Instance);
             seq.Run(RemoveAnimatorLayersPass.Instance);
             seq.Run(WriteDefaultsPass.Instance);
         }
