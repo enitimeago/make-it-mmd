@@ -37,17 +37,17 @@ public class TestBase
         return avatarRootObject;
     }
 
-    protected GameObject CreateAvatarWithExpectedFaceName()
+    protected GameObject CreateAvatarWithFaceName(string faceName)
     {
         var avatarRootObject = CreateAvatar();
         var vrcAvatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
-        vrcAvatarDescriptor.VisemeSkinnedMesh.gameObject.name = "Body";
+        vrcAvatarDescriptor.VisemeSkinnedMesh.gameObject.name = faceName;
         return avatarRootObject;
     }
 
-    protected GameObject CreateAvatarWithExpectedFaceNameAndFX()
+    protected GameObject CreateAvatarWithFaceNameAndFX(string faceName)
     {
-        var avatarRootObject = CreateAvatarWithExpectedFaceName();
+        var avatarRootObject = CreateAvatarWithFaceName(faceName);
         var vrcAvatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
         string path = AssetDatabase.GUIDToAssetPath(FXGuid);
         var animatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
@@ -58,6 +58,7 @@ public class TestBase
             animatorController = animatorController
         };
         vrcAvatarDescriptor.baseAnimationLayers = new VRCAvatarDescriptor.CustomAnimLayer[] { customAnimLayer };
+        vrcAvatarDescriptor.specialAnimationLayers = new VRCAvatarDescriptor.CustomAnimLayer[0];
         return avatarRootObject;
     }
 }

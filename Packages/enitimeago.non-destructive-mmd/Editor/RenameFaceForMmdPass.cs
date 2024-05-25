@@ -45,7 +45,7 @@ namespace enitimeago.NonDestructiveMMD
             {
                 if (skinnedMeshRenderer.name == "Body")
                 {
-                    skinnedMeshRenderer.name = "Body__";
+                    skinnedMeshRenderer.name = "Body__ORIGINAL";
                 }
             }
 

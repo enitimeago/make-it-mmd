@@ -13,7 +13,7 @@ public class WriteDefaultsPassTests : TestBase
     public void RunPass_NoComponent_DoesNothing()
     {
         var pass = new WriteDefaultsPass();
-        var avatar = CreateAvatarWithExpectedFaceNameAndFX();
+        var avatar = CreateAvatarWithFaceNameAndFX("Body");
         var buildContext = new BuildContext(avatar, null);
         AnimationUtil.CloneAllControllers(buildContext);
 
@@ -26,7 +26,7 @@ public class WriteDefaultsPassTests : TestBase
     public void RunPass_WithBasicAvatar_SetsWriteDefaultOn()
     {
         var pass = new WriteDefaultsPass();
-        var avatar = CreateAvatarWithExpectedFaceNameAndFX();
+        var avatar = CreateAvatarWithFaceNameAndFX("Body");
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var buildContext = new BuildContext(avatar, null);
         AnimationUtil.CloneAllControllers(buildContext);

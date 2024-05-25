@@ -9,7 +9,7 @@ public class BlendShapeMappingsPassTests : TestBase
     public void RunPass_WithEmptyMappings_DoesNothing()
     {
         var pass = new BlendShapeMappingsPass();
-        var avatar = CreateAvatarWithExpectedFaceName();
+        var avatar = CreateAvatarWithFaceName("Body");
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;
         int blendShapeCount = mesh.blendShapeCount;
@@ -27,7 +27,7 @@ public class BlendShapeMappingsPassTests : TestBase
     public void RunPass_WithMappings_ClonesMesh()
     {
         var pass = new BlendShapeMappingsPass();
-        var avatar = CreateAvatarWithExpectedFaceName();
+        var avatar = CreateAvatarWithFaceName("Body");
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;
         var mmdObject = new GameObject();
@@ -47,7 +47,7 @@ public class BlendShapeMappingsPassTests : TestBase
     public void RunPass_WithNewBlendShapesOnly_AddsMappings()
     {
         var pass = new BlendShapeMappingsPass();
-        var avatar = CreateAvatarWithExpectedFaceName();
+        var avatar = CreateAvatarWithFaceName("Body");
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;
         int blendShapeCount = mesh.blendShapeCount;
@@ -77,7 +77,7 @@ public class BlendShapeMappingsPassTests : TestBase
     public void RunPass_WithReplacedBlendShapes_ReplacesBlendShapes()
     {
         var pass = new BlendShapeMappingsPass();
-        var avatar = CreateAvatarWithExpectedFaceName();
+        var avatar = CreateAvatarWithFaceName("Body");
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var mesh = descriptor.VisemeSkinnedMesh.sharedMesh;
         int blendShapeCount = mesh.blendShapeCount;
