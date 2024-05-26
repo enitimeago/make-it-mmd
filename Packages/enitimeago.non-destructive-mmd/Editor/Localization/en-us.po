@@ -163,3 +163,18 @@ msgstr "Unsafe to remove"
 
 msgid "RemoveAnimatorLayersComponentEditor:CustomLayersToRemove"
 msgstr "Custom Layers To Remove"
+
+msgid "RenameFaceForMmdComponentEditor:AlreadyCalledBody"
+msgstr "Your avatar's face mesh is already called \"Body\". This component is not required."
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerform"
+msgstr "This component will non-destructively rename your avatar's face mesh \"{0}\" to the required name for MMD \"Body\"."
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerformHasConflicts"
+msgstr "Your avatar already has another \"Body\" that is not a face mesh, which will also be renamed."
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerformSuffix"
+msgstr "The following renames will be performed:"
+
+msgid "RenameFaceForMmdComponentEditor:IsPlaying"
+msgstr "Currently in play mode. Renames have been applied if necessary."
