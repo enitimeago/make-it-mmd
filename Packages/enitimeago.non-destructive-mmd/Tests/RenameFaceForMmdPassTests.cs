@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using enitimeago.NonDestructiveMMD;
 using enitimeago.NonDestructiveMMD.vendor;
@@ -42,7 +43,7 @@ public class RenameFaceForMmdPassTests : TestBase
     }
 
     [Test]
-    public void RunPass_WithFaceAndBodyObjects_RenamesFaceAndBody()
+    public void RunPass_WithFaceAndBodyObjects_RenamesBoth()
     {
         var pass = new RenameFaceForMmdPass();
         var avatar = CreateAvatarWithFaceNameAndFX("Face");
@@ -58,10 +59,62 @@ public class RenameFaceForMmdPassTests : TestBase
 
         pass.Execute(avatar);
 
-        var faceObject = buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject;
-        var bodyObject = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").First();
-        Assert.AreEqual("Body", faceObject.name);
-        Assert.AreEqual("Body (Original)", bodyObject.name);
+        Assert.AreEqual("Body", buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject.name);
+        var nonBodyNames = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").Select(gameObject => gameObject.name);
+        CollectionAssert.AreEquivalent(new List<string> { "Body (Original)" }, nonBodyNames.ToList());
+    }
+
+    [Test]
+    public void RunPass_WithFaceAndMultipleBodyObjects_RenamesAll()
+    {
+        var pass = new RenameFaceForMmdPass();
+        var avatar = CreateAvatarWithFaceNameAndFX("Face");
+        var buildContext = new BuildContext(avatar, null);
+        buildContext.ActivateExtensionContext<AnimationServicesContext>();
+        AnimationUtil.CloneAllControllers(buildContext);
+        var newMesh = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
+        newMesh.name = "Body";
+        newMesh.transform.parent = avatar.transform;
+        var newMesh2 = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
+        newMesh2.name = "Body";
+        newMesh2.transform.parent = avatar.transform;
+        var newObject = new GameObject();
+        newObject.transform.parent = avatar.transform;
+        newObject.AddComponent<RenameFaceForMmdComponent>();
+
+        pass.Execute(avatar);
+
+        Assert.AreEqual("Body", buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject.name);
+        var nonBodyNames = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").Select(gameObject => gameObject.name);
+        CollectionAssert.AreEquivalent(new List<string> { "Body (Original)", "Body (Original) (1)" }, nonBodyNames.ToList());
+    }
+
+    [Test]
+    public void RunPass_WithFaceAndConflictingBodyObjects_RenamesAll()
+    {
+        var pass = new RenameFaceForMmdPass();
+        var avatar = CreateAvatarWithFaceNameAndFX("Face");
+        var buildContext = new BuildContext(avatar, null);
+        buildContext.ActivateExtensionContext<AnimationServicesContext>();
+        AnimationUtil.CloneAllControllers(buildContext);
+        var newMesh = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
+        newMesh.name = "Body";
+        newMesh.transform.parent = avatar.transform;
+        var newMesh2 = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
+        newMesh2.name = "Body";
+        newMesh2.transform.parent = avatar.transform;
+        var newMesh3 = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
+        newMesh3.name = "Body (Original)";
+        newMesh3.transform.parent = avatar.transform;
+        var newObject = new GameObject();
+        newObject.transform.parent = avatar.transform;
+        newObject.AddComponent<RenameFaceForMmdComponent>();
+
+        pass.Execute(avatar);
+
+        Assert.AreEqual("Body", buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject.name);
+        var nonBodyNames = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").Select(gameObject => gameObject.name);
+        CollectionAssert.AreEquivalent(new List<string> { "Body (Original)", "Body (Original) (1)", "Body (Original) (2)" }, nonBodyNames.ToList());
     }
 
     [Test]
