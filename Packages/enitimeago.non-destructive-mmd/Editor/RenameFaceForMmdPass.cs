@@ -1,9 +1,5 @@
-using System.Linq;
-using enitimeago.NonDestructiveMMD.vendor;
 using nadena.dev.ndmf;
-using UnityEditor.Animations;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
