@@ -83,7 +83,16 @@ Make It MMD bundles and redistributes code from third-party software. The licens
 
 ## Development
 
-### Style
+### Release management
+
+All development occurs on the `main` branch:
+
+- New releases are cut from the `main` branch as appropriate, so long as it is green.
+- There is no `develop` branch.
+- Therefore, `main` will have changes that may not be ready for broader release.
+- Older releases are supported by cherry-picking to `support/x.x` branches, a practice inspired by GitFlow.
+
+### Code style
 
 This project uses `dotnet format` with `.editorconfig` to enforce style guidelines.
 
