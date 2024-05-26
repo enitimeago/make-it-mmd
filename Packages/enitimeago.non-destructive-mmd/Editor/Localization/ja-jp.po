@@ -163,3 +163,18 @@ msgstr "安全に削除できない"
 
 msgid "RemoveAnimatorLayersComponentEditor:CustomLayersToRemove"
 msgstr "削除するカスタムのレイヤー"
+
+msgid "RenameFaceForMmdComponentEditor:AlreadyCalledBody"
+msgstr "このアバターの顔メッシュはすでに「Body」という名前が付けられています。このコンポーネントの必要はありません。"
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerform"
+msgstr "このコンポーネントは、非破壊的にアバターの顔のメッシュの名前を「{0}」からMMD用の名前「Body」に変更します。"
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerformHasConflicts"
+msgstr "このアバターはすでに顔じゃない「Body」オブジェクトがあるため、追加に変更します。"
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerformSuffix"
+msgstr "下記の名前の変更を行います："
+
+msgid "RenameFaceForMmdComponentEditor:IsPlaying"
+msgstr "現在はプレイモードに入っています。必要な名前変更は行いました。"

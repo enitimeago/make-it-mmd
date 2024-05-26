@@ -72,7 +72,8 @@ namespace enitimeago.NonDestructiveMMD
             return true;
         }
 
-        public bool RunChecks(VRCAvatarDescriptor avatarDescriptor)
+        // TODO: use an enum or types to decide what checks to skip?
+        public bool RunChecks(VRCAvatarDescriptor avatarDescriptor, bool ignoreBodyName = false)
         {
             if (avatarDescriptor == null)
             {
@@ -87,7 +88,7 @@ namespace enitimeago.NonDestructiveMMD
                 return false;
             }
 
-            if (visemeSkinnedMesh.name != "Body")
+            if (visemeSkinnedMesh.name != "Body" && !ignoreBodyName)
             {
                 LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotCalledBody");
                 return false;

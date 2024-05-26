@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using nadena.dev.ndmf;
 using UnityEngine;
+using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
 
 namespace enitimeago.NonDestructiveMMD
@@ -27,28 +31,60 @@ namespace enitimeago.NonDestructiveMMD
             {
                 return;
             }
-            var faceObject = renameFaceForMmdComponent.faceObject;
-            if (faceObject == null)
+            var descriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
+            if (descriptor.VisemeSkinnedMesh == null)
             {
                 Debug.LogWarning("No face object to rename for MMD, skipping");
+                return;
+            }
+            if (descriptor.VisemeSkinnedMesh.name == "Body")
+            {
+                Debug.LogWarning("Face object is already called Body, skipping");
                 return;
             }
 
             var skinnedMeshRenderers = avatarRootObject.GetComponentsInChildren<SkinnedMeshRenderer>();
 
-            // If "Body" exists on the avatar, it needs to be renamed to something else.
+            // Objects called "Body" on the avatar need to be renamed to something else.
+            // TODO: maybe this only needs to happen to top-level objects. or only Body needs to be top-level.
+            var renames = DetermineRenames(skinnedMeshRenderers);
+            foreach (var rename in renames)
+            {
+                rename.skinnedMeshRenderer.name = rename.newName;
+            }
+
+            // Rename the face object to "Body".
+            descriptor.VisemeSkinnedMesh.name = "Body";
+
+            Object.DestroyImmediate(renameFaceForMmdComponent);
+        }
+
+        public struct RenameInfo
+        {
+            public SkinnedMeshRenderer skinnedMeshRenderer;
+            public string newName;
+        }
+
+        public static List<RenameInfo> DetermineRenames(IEnumerable<SkinnedMeshRenderer> skinnedMeshRenderers)
+        {
+            var renames = new List<RenameInfo>();
+            int suffixCount = 0;
+            var existingNames = skinnedMeshRenderers.Select(smr => smr.name).ToImmutableHashSet();
             foreach (var skinnedMeshRenderer in skinnedMeshRenderers)
             {
                 if (skinnedMeshRenderer.name == "Body")
                 {
-                    skinnedMeshRenderer.name = "Body__ORIGINAL";
+                    string candidateName;
+                    do
+                    {
+                        candidateName = "Body (Original)" + (suffixCount > 0 ? $" ({suffixCount})" : "");
+                        suffixCount++;
+                    }
+                    while (existingNames.Contains(candidateName));
+                    renames.Add(new RenameInfo { skinnedMeshRenderer = skinnedMeshRenderer, newName = candidateName });
                 }
             }
-
-            // Rename the face object to "Body".
-            faceObject.name = "Body";
-
-            Object.DestroyImmediate(renameFaceForMmdComponent);
+            return renames;
         }
     }
 }

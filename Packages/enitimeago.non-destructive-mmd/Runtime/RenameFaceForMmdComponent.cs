@@ -9,7 +9,5 @@ namespace enitimeago.NonDestructiveMMD
         public const int CURRENT_DATA_VERSION = 0;
 
         public int dataVersion;
-
-        public GameObject faceObject;
     }
 }

@@ -33,8 +33,7 @@ public class RenameFaceForMmdPassTests : TestBase
         AnimationUtil.CloneAllControllers(buildContext);
         var newObject = new GameObject();
         newObject.transform.parent = avatar.transform;
-        var removeFaceForMmdComponent = newObject.AddComponent<RenameFaceForMmdComponent>();
-        removeFaceForMmdComponent.faceObject = buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject;
+        newObject.AddComponent<RenameFaceForMmdComponent>();
 
         pass.Execute(avatar);
 
@@ -55,15 +54,14 @@ public class RenameFaceForMmdPassTests : TestBase
         newMesh.transform.parent = avatar.transform;
         var newObject = new GameObject();
         newObject.transform.parent = avatar.transform;
-        var removeFaceForMmdComponent = newObject.AddComponent<RenameFaceForMmdComponent>();
-        removeFaceForMmdComponent.faceObject = buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject;
+        newObject.AddComponent<RenameFaceForMmdComponent>();
 
         pass.Execute(avatar);
 
         var faceObject = buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject;
         var bodyObject = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").First();
         Assert.AreEqual("Body", faceObject.name);
-        Assert.AreEqual("Body__ORIGINAL", bodyObject.name);
+        Assert.AreEqual("Body (Original)", bodyObject.name);
     }
 
     [Test]
@@ -80,8 +78,7 @@ public class RenameFaceForMmdPassTests : TestBase
         newMesh.transform.parent = avatar.transform;
         var newObject = new GameObject();
         newObject.transform.parent = avatar.transform;
-        var removeFaceForMmdComponent = newObject.AddComponent<RenameFaceForMmdComponent>();
-        removeFaceForMmdComponent.faceObject = buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject;
+        newObject.AddComponent<RenameFaceForMmdComponent>();
 
         pass.Execute(avatar);
         buildContext.DeactivateExtensionContext<AnimationServicesContext>();
