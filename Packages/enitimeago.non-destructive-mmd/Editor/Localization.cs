@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using nadena.dev.ndmf.localization;
 using UnityEditor;
 using UnityEngine;
@@ -18,6 +18,7 @@ namespace enitimeago.NonDestructiveMMD
         {
             new Locale { IsoCode = "en-us" },
             new Locale { IsoCode = "ja-jp" },
+            new Locale { IsoCode = "zh-hant" },
         };
         private static int _currentLocaleIndex = 0;
 
