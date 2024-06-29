@@ -62,6 +62,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        ref: ${{ github.event.pull_request.head.sha }}
 
     - uses: anatawa12/sh-actions/resolve-vpm-packages@master
       with:
