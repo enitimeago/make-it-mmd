@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using nadena.dev.ndmf.localization;
 using UnityEditor;
 using UnityEngine;
