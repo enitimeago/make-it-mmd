@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Language: zh-hant\n"
+
+msgid "locale:zh-hant"
+msgstr "繁體中文"
+
+msgid "CommonChecks:NoMMDComponents"
+msgstr "未在 Avatar 中發現 「Make It MMD」 元件，無事可做"
+
+msgid "CommonChecks:MultipleMMDComponents"
+msgstr "在 Avatar 中發現多個 「Make It MMD」 元件！"
+
+msgid "CommonChecks:NewerDataVersion"
+msgstr "資料似乎來自較新版本的 Make It MMD，請更新 Make It MMD 或刪除此元件。"
+
+msgid "CommonChecks:AvatarNotFound"
+msgstr "沒有發現 Avatar！"
+
+msgid "CommonChecks:AvatarNoFaceMeshSet"
+msgstr "Avatar 尚未設定臉部網格！"
+
+msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
+msgstr "Avatar 的臉部網格必須稱為「Body」！"
+
+msgid "CommonChecks:AvatarFaceSMRNoMesh"
+msgstr "找不到 Avatar 的臉部網格！"
+
+msgid "CommonChecks:AvatarFaceSMRNoBlendShapes"
+msgstr "Avatar 的臉部網格沒有 blendshapes！"
+
+msgid "CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported"
+msgstr "目前不支援已有 MMD blendshapes 的 Avatar！"
+
+msgid "CommonChecks:MorphReferencesNonExistingBlendShape"
+msgstr "MMD blendshape「{0}」引用了此 Avatar 上不存在的 blendshape「{1}」。此 MMD blendshape 將不被生成。"
+
+msgid "MappingsEditor:OpenEditor"
+msgstr "開啟編輯器"
+
+msgid "MappingsEditor:ShareAsUnitypackage"
+msgstr "以 .unitypackage 匯出"
+
+msgid "MappingsEditor:ShowStoredData"
+msgstr "顯示已儲存的資料"
+
+msgid "MappingsEditor:ImportBlendShapesSuggestion"
+msgstr "這個 Avatar 似乎已有 MMD blendshape。如果這些 blendshape 是 Avatar 現有 blendshape 的簡單副本，則可匯入它們。"
+
+msgid "MappingsEditor:ImportBlendShapesButton"
+msgstr "匯入"
+
+msgid "MappingsEditorWindow:SelectMMDMorph"
+msgstr "選擇一個 MMD 的 blendshape"
+
+msgid "MappingsEditorWindow:EditingBlendShapesFor"
+msgstr "正在編輯 「{0}」 的 blendshapes..."
+
+msgid "MappingsEditorWindow:ViewingBlendShapesForInPlayMode"
+msgstr "正在查看 「{0}」 的 blendshapes（退出播放模式以進行編輯）..."
+
+msgid "MappingsEditorWindow:SelectedBlendShapes"
+msgstr "已選擇的 blendshapes"
+
+msgid "MappingsEditorWindow:AvatarBlendShapes"
+msgstr "Avatar 的 blendshapes"
+
+msgid "MappingsEditorWindow:HighlightDifferences"
+msgstr "凸顯差異"
+
+msgid "MappingsEditorWindow:EnableComputeShader"
+msgstr "啟用 compute shader"
+
+msgid "MappingsEditorWindow:ThumbnailSize"
+msgstr "縮圖尺寸"
+
+msgid "MmdScanAndImportWindow:AvatarToScanField"
+msgstr "要掃描的 Avatar"
+
+msgid "MmdScanAndImportWindow:ScanButtonNoValidAvatar"
+msgstr "選擇一個有效的 Avatar"
+
+msgid "MmdScanAndImportWindow:ScanButton"
+msgstr "掃描 MMD BlendShapes"
+
+msgid "MmdScanAndImportWindow:ScanReport"
+msgstr "已掃描 {0} 個 blendshapes, 發現 {1}/{2} 個已知匹配的 MMD BlendShape。"
+
+msgid "MmdScanAndImportWindow:NotFoundHeading"
+msgstr "找不到原始 blendshapes："
+
+msgid "MmdScanAndImportWindow:ImportToField"
+msgstr "匯入至"
+
+msgid "MmdScanAndImportWindow:WillImportToField"
+msgstr "將會匯入至"
+
+msgid "MmdScanAndImportWindow:ReplaceExistingToggle"
+msgstr "替換現有的 blendshapes"
+
+msgid "MmdScanAndImportWindow:ImportWithReplacementsButton"
+msgstr "替換 {1} 個現有的 blendshape，匯入 {0} 個新的 blendshape 至 Make It MMD 編輯器"
+
+msgid "MmdScanAndImportWindow:ImportButton"
+msgstr "匯入 {0} 個新的 blendshape 至 Make It MMD 編輯器"
+
+msgid "MmdScanAndImportWindow:ImportToSelectedGameObjectButton"
+msgstr "匯入至選定的對象"
+
+msgid "MmdScanAndImportWindow:ImportToNewBrandedGameObjectButton"
+msgstr "匯入到新的 Make It MMD 物件"
+
+msgid "MmdScanAndImportWindow:ChooseDestinationGameObjectToggle"
+msgstr "選擇目標物件"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogTitle"
+msgstr "匯入完成"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogMessage"
+msgstr "已匯入 {0} 個 MMD blendshapes"
+
+msgid "MmdScanAndImportWindow:ImportCompleteDialogOKButton"
+msgstr "好的"
+
+msgid "SaveFilePanel:SaveUnitypackage"
+msgstr "儲存 .unitypackage"
+
+msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"
+msgstr "強制 FX Write Defaults ON"
+
+msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOnDescription"
+msgstr "如果啟用，此 Avatar 的所有 Animator 狀態都會是 Write Defaults ON。\n若 Avatar 有不是為了 Write Defaults ON 而設計的東西，可能會故障！"
+
+msgid "RemoveAnimatorLayersComponentEditor:FXAnimatorControllerLayers"
+msgstr "FX Animator Controller Layers"
+
+msgid "RemoveAnimatorLayersComponentEditor:AllowCustomLayers"
+msgstr "允許自定義 layers"
+
+msgid "RemoveAnimatorLayersComponentEditor:AllowUnsafeRemovals"
+msgstr "允許不安全的更改"
+
+msgid "RemoveAnimatorLayersComponentEditor:EditModeLayersExplanation"
+msgstr "這個列表在 Avatar 建置後可能會發生變化，或是因為其他工具修改了 Avatar 的 FX 導致不準確。進入播放模式查看 Avatar 建置後的 layers。"
+
+msgid "RemoveAnimatorLayersComponentEditor:PlayModeLayersExplanation"
+msgstr "你正在播放模式下查看 Avatar 的 FX layer（可能包含了在編輯模式下看不到的 layer）。要被移除的 layer 應列在「要移除的自定義 Layers」。"."
+
+msgid "RemoveAnimatorLayersComponentEditor:SafeToRemove"
+msgstr "可安全移除"
+
+msgid "RemoveAnimatorLayersComponentEditor:UnsafeToRemove"
+msgstr "不安全的移除"
+
+msgid "RemoveAnimatorLayersComponentEditor:CustomLayersToRemove"
+msgstr "要移除的自定義 Layers"
