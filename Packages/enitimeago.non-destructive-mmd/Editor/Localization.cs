@@ -18,6 +18,7 @@ namespace enitimeago.NonDestructiveMMD
         {
             new Locale { IsoCode = "en-us" },
             new Locale { IsoCode = "ja-jp" },
+            new Locale { IsoCode = "zh-hant" },
         };
         private static int _currentLocaleIndex = 0;
 
