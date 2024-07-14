@@ -89,6 +89,7 @@ namespace enitimeago.NonDestructiveMMD
             // Eyebrow
             new MmdBlendShapeName("にこり", "Smily", "Cheerful", MmdBlendShapeCategory.Eyebrow),
             new MmdBlendShapeName("上", "Up", "Upper", MmdBlendShapeCategory.Eyebrow),
+            new MmdBlendShapeName("下", "Down", "Lower", MmdBlendShapeCategory.Eyebrow),
             new MmdBlendShapeName("真面目", "Serious", "Serious", MmdBlendShapeCategory.Eyebrow),
             new MmdBlendShapeName("困る", "Trouble", "Sadness", MmdBlendShapeCategory.Eyebrow),
             new MmdBlendShapeName("怒り", "Get angry", "Anger", MmdBlendShapeCategory.Eyebrow),
