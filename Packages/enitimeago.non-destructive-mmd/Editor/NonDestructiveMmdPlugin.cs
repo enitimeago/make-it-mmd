@@ -13,6 +13,7 @@ namespace enitimeago.NonDestructiveMMD
         protected override void Configure()
         {
             var seq = InPhase(BuildPhase.Transforming);
+            seq.AfterPlugin("nadena.dev.modular-avatar");
             seq.Run(BlendShapeMappingsPass.Instance);
             seq.WithRequiredExtension(typeof(AnimationServicesContext), _ =>
             {
