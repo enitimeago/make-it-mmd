@@ -108,43 +108,46 @@ namespace enitimeago.NonDestructiveMMD
                     LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotCalledBody");
                 }
 
-                if (avatarDescriptor?.baseAnimationLayers != null)
+                if (AvatarHasWriteDefaultOff(avatarDescriptor))
                 {
-                    VRCAvatarDescriptor.CustomAnimLayer fxLayer;
-                    AnimatorController fxController = null;
-                    foreach (var layer in avatarDescriptor.baseAnimationLayers)
-                    {
-                        if (layer.type == VRCAvatarDescriptor.AnimLayerType.FX && layer.animatorController != null)
-                        {
-                            fxLayer = layer;
-                            fxController = layer.animatorController as AnimatorController;
-                            break;
-                        }
-                    }
-                    if (fxController != null)
-                    {
-                        bool foundWriteDefaultOff = false;
-                        foreach (var layer in fxController.layers)
-                        {
-                            foreach (var state in layer.stateMachine.states)
-                            {
-                                if (!state.state.writeDefaultValues)
-                                {
-                                    foundWriteDefaultOff = true;
-                                    break;
-                                }
-                            }
-                            if (foundWriteDefaultOff) break;
-                        }
-                        if (foundWriteDefaultOff)
-                        {
-                            LogLocalized(Severity.Warning, "CommonChecks:AvatarWriteDefaultOffFound");
-                        }
-                    }
+                    LogLocalized(Severity.Warning, "CommonChecks:AvatarWriteDefaultOffFound");
                 }
             }
 
             return true;
+        }
+
+        public bool AvatarHasWriteDefaultOff(VRCAvatarDescriptor avatarDescriptor)
+        {
+            if (avatarDescriptor?.baseAnimationLayers == null)
+            {
+                return false;
+            }
+            VRCAvatarDescriptor.CustomAnimLayer fxLayer;
+            AnimatorController fxController = null;
+            foreach (var layer in avatarDescriptor.baseAnimationLayers)
+            {
+                if (layer.type == VRCAvatarDescriptor.AnimLayerType.FX && layer.animatorController != null)
+                {
+                    fxLayer = layer;
+                    fxController = layer.animatorController as AnimatorController;
+                    break;
+                }
+            }
+            if (fxController != null)
+            {
+                foreach (var layer in fxController.layers)
+                {
+                    foreach (var state in layer.stateMachine.states)
+                    {
+                        if (!state.state.writeDefaultValues)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
 #if UNITY_2021_3_OR_NEWER

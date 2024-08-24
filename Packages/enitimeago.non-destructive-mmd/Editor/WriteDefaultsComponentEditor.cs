@@ -25,7 +25,7 @@ namespace enitimeago.NonDestructiveMMD
             EditorGUILayout.EndHorizontal();
 
             // Run asserts, however continue rendering GUI if errors are encountered.
-            _commonChecks.RunChecks(avatar);
+            _commonChecks.RunChecks(avatar, isBuildTime: false);
 
             Undo.RecordObject(target, "Toggle");
             EditorGUI.BeginChangeCheck();

@@ -50,6 +50,31 @@ namespace enitimeago.NonDestructiveMMD
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.EndHorizontal();
             }
+            var writeDefaultsComponents = avatar?.gameObject.GetComponentsInChildren<WriteDefaultsComponent>();
+            if (!data.ignoreWriteDefaultsOff && _commonChecks.AvatarHasWriteDefaultOff(avatar) && writeDefaultsComponents.All(x => !x.forceAvatarWriteDefaults))
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.HelpBox(L.Tr("CommonChecks:AvatarWriteDefaultOffFound"), MessageType.Info);
+                EditorGUILayout.BeginVertical();
+                if (GUILayout.Button(L.Tr("Common:FixThis")))
+                {
+                    if (writeDefaultsComponents.Count() == 0)
+                    {
+                        var newComponent = data.gameObject.AddComponent<WriteDefaultsComponent>();
+                        newComponent.forceAvatarWriteDefaults = true;
+                    }
+                    else
+                    {
+                        writeDefaultsComponents.First().forceAvatarWriteDefaults = true;
+                    }
+                }
+                if (GUILayout.Button(L.Tr("Common:Ignore")))
+                {
+                    data.ignoreWriteDefaultsOff = true;
+                }
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
+            }
 
             bool hasMmdShapeKeys = false;
             if (!EditorApplication.isPlaying)
