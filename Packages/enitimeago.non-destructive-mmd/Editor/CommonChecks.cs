@@ -3,6 +3,7 @@
 using System.Linq;
 using nadena.dev.ndmf;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
@@ -88,12 +89,6 @@ namespace enitimeago.NonDestructiveMMD
                 return false;
             }
 
-            if (visemeSkinnedMesh.name != "Body" && isBuildTime)
-            {
-                LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotCalledBody");
-                return false;
-            }
-
             if (visemeSkinnedMesh.sharedMesh == null)
             {
                 LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNoMesh");
@@ -104,6 +99,49 @@ namespace enitimeago.NonDestructiveMMD
             {
                 LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNoBlendShapes");
                 return false;
+            }
+
+            if (isBuildTime)
+            {
+                if (visemeSkinnedMesh.name != "Body")
+                {
+                    LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotCalledBody");
+                }
+
+                if (avatarDescriptor?.baseAnimationLayers != null)
+                {
+                    VRCAvatarDescriptor.CustomAnimLayer fxLayer;
+                    AnimatorController fxController = null;
+                    foreach (var layer in avatarDescriptor.baseAnimationLayers)
+                    {
+                        if (layer.type == VRCAvatarDescriptor.AnimLayerType.FX && layer.animatorController != null)
+                        {
+                            fxLayer = layer;
+                            fxController = layer.animatorController as AnimatorController;
+                            break;
+                        }
+                    }
+                    if (fxController != null)
+                    {
+                        bool foundWriteDefaultOff = false;
+                        foreach (var layer in fxController.layers)
+                        {
+                            foreach (var state in layer.stateMachine.states)
+                            {
+                                if (!state.state.writeDefaultValues)
+                                {
+                                    foundWriteDefaultOff = true;
+                                    break;
+                                }
+                            }
+                            if (foundWriteDefaultOff) break;
+                        }
+                        if (foundWriteDefaultOff)
+                        {
+                            LogLocalized(Severity.Warning, "CommonChecks:AvatarWriteDefaultOffFound");
+                        }
+                    }
+                }
             }
 
             return true;

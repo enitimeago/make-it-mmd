@@ -36,7 +36,10 @@ msgid "CommonChecks:AvatarNoFaceMeshSet"
 msgstr "アバターのFace Meshが設定されていません！"
 
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
-msgstr "アバターの Face Mesh は MMD ワールドで認識されるために 「Body」 と名前を付ける必要があります。 本ツールの 「MIM Rename Face For MMD」 コンポーネントを使用してこれを修正できます。"
+msgstr "アバターの Face Mesh は MMD ワールドで認識されるために 「Body」 と名前を付ける必要があります。 「MIM Rename Face For MMD」 コンポーネントを使用してこれを修正できます。"
+
+msgid "CommonChecks:AvatarWriteDefaultOffFound"
+msgstr "アバターの Animator State に Write Default が無効になっている設定が見つかりました。 MMD ワールドでの非互換性の原因となります。 「MIM Avatar Write Defaults」 コンポーネントを使用してこれを修正できます。"
 
 msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "アバターのFace Meshに、メッシュが設定されていません！"

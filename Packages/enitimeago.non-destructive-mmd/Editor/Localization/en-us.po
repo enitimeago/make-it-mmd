@@ -38,6 +38,9 @@ msgstr "Avatar has not set a face mesh!"
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
 msgstr "Avatar face mesh must be called \"Body\" to be recognized in MMD worlds. You can use the \"MIM Rename Face For MMD\" component to fix this."
 
+msgid "CommonChecks:AvatarWriteDefaultOffFound"
+msgstr "Animator States on this avatar with Write Default OFF were found, which can cause incompatibility with MMD worlds. You can use the \"MIM Avatar Write Defaults\" component to fix this."
+
 msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "Avatar face mesh is missing!"
 
