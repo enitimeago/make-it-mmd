@@ -68,17 +68,28 @@ namespace enitimeago.NonDestructiveMMD
 
         public new void OnGUI()
         {
+            var selectedBackground = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.5f, 0.5f, 1f));
+            var existedBlendShapeBackground = MakeBackgroundTexture(2, 2, new Color(0.2f, 0.3f, 0.6f, 1f));
+            var selectedExistingBlendShapeBackground = MakeBackgroundTexture(2, 2, new Color(0.3f, 0.6f, 1f, 1f));
+            var hasValueBackground = MakeBackgroundTexture(2, 2, new Color(0.0f, 0.5f, 1f, 1f));
+            var selectedHasValueBackground = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.75f, 1f, 1f));
+
             _defaultStyle = new GUIStyle(GUI.skin.button);
             _selectedStyle = new GUIStyle(GUI.skin.button);
-            _selectedStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.5f, 0.5f, 1f));
+            _selectedStyle.normal.background = selectedBackground;
+            _selectedStyle.normal.scaledBackgrounds = new[] { selectedBackground };
             _existingBlendShapeStyle = new GUIStyle(GUI.skin.button);
-            _existingBlendShapeStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.2f, 0.3f, 0.6f, 1f));
+            _existingBlendShapeStyle.normal.background = existedBlendShapeBackground;
+            _existingBlendShapeStyle.normal.scaledBackgrounds = new[] { existedBlendShapeBackground };
             _selectedExistingBlendShapeStyle = new GUIStyle(GUI.skin.button);
-            _selectedExistingBlendShapeStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.3f, 0.6f, 1f, 1f));
+            _selectedExistingBlendShapeStyle.normal.background = selectedExistingBlendShapeBackground;
+            _selectedExistingBlendShapeStyle.normal.scaledBackgrounds = new[] { selectedExistingBlendShapeBackground };
             _hasValueStyle = new GUIStyle(GUI.skin.button);
-            _hasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.0f, 0.5f, 1f, 1f));
+            _hasValueStyle.normal.background = hasValueBackground;
+            _hasValueStyle.normal.scaledBackgrounds = new[] { hasValueBackground };
             _selectedHasValueStyle = new GUIStyle(GUI.skin.button);
-            _selectedHasValueStyle.normal.background = MakeBackgroundTexture(2, 2, new Color(0.5f, 0.75f, 1f, 1f));
+            _selectedHasValueStyle.normal.background = selectedHasValueBackground;
+            _selectedHasValueStyle.normal.scaledBackgrounds = new[] { selectedHasValueBackground };
 
             // TODO: need to refresh if the scene changes
             if (MappingsComponent?.gameObject != null)
