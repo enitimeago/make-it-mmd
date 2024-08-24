@@ -95,7 +95,7 @@ namespace enitimeago.NonDestructiveMMD
             if (MappingsComponent?.gameObject != null)
             {
                 var avatar = MappingsComponent.gameObject.GetComponentInParent<VRCAvatarDescriptor>();
-                if (!_commonChecks.RunChecks(avatar))
+                if (!_commonChecks.RunChecks(avatar, isBuildTime: false))
                 {
                     return;
                 }
