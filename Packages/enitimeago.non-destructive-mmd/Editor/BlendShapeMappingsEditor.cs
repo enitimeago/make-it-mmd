@@ -30,13 +30,31 @@ namespace enitimeago.NonDestructiveMMD
             EditorGUILayout.EndHorizontal();
 
             // Run asserts, however continue rendering GUI if errors are encountered.
-            bool avatarOkay = _commonChecks.RunChecks(avatar.gameObject);
+            bool avatarOkay = _commonChecks.RunChecks(avatar.gameObject, isBuildTime: false);
+
+            var visemeSkinnedMesh = avatar?.VisemeSkinnedMesh;
+            var renameFaceForMmdComponents = avatar?.gameObject.GetComponentsInChildren<RenameFaceForMmdComponent>();
+            if (!data.ignoreFaceMeshName && visemeSkinnedMesh.name != "Body" && renameFaceForMmdComponents.Count() == 0)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.HelpBox(L.Tr("CommonChecks:AvatarFaceSMRNotCalledBody"), MessageType.Info);
+                EditorGUILayout.BeginVertical();
+                if (GUILayout.Button(L.Tr("Common:FixThis")))
+                {
+                    data.gameObject.AddComponent<RenameFaceForMmdComponent>();
+                }
+                if (GUILayout.Button(L.Tr("Common:Ignore")))
+                {
+                    data.ignoreFaceMeshName = true;
+                }
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
+            }
 
             bool hasMmdShapeKeys = false;
             if (!EditorApplication.isPlaying)
             {
                 // TODO: check all languages
-                var visemeSkinnedMesh = avatar?.VisemeSkinnedMesh;
                 for (int i = 0; i < visemeSkinnedMesh?.sharedMesh.blendShapeCount; i++)
                 {
                     string blendShapeName = visemeSkinnedMesh.sharedMesh.GetBlendShapeName(i);

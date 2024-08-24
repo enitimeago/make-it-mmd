@@ -5,6 +5,12 @@ msgstr ""
 msgid "locale:zh-hant"
 msgstr "繁體中文"
 
+msgid "Common:FixThis"
+msgstr "修正"
+
+msgid "Common:Ignore"
+msgstr "忽略"
+
 msgid "CommonChecks:NoMMDComponents"
 msgstr "未在 Avatar 中發現 「Make It MMD」 元件，無事可做"
 
@@ -21,7 +27,7 @@ msgid "CommonChecks:AvatarNoFaceMeshSet"
 msgstr "Avatar 尚未設定臉部網格！"
 
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
-msgstr "Avatar 的臉部網格必須稱為「Body」！"
+msgstr "Avatar 的臉部網格必須稱為「Body」，才能在 MMD world 中被識別。您可以使用 「MIM Rename Face For MMD」 組件來修正此問題。"
 
 msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "找不到 Avatar 的臉部網格！"

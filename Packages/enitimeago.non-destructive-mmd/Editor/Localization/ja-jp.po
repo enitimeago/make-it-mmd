@@ -5,6 +5,12 @@ msgstr ""
 msgid "locale:ja-jp"
 msgstr "日本語"
 
+msgid "Common:FixThis"
+msgstr "修正する"
+
+msgid "Common:Ignore"
+msgstr "無視する"
+
 msgid "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"
 msgstr "現在、複数のブレンドシェイプを複数フレームで組み合わせることはサポートされていません。この機能をリクエストしたい場合は、本ツールの開発者にお問い合わせしてお願いいたします。"
 
@@ -30,7 +36,7 @@ msgid "CommonChecks:AvatarNoFaceMeshSet"
 msgstr "アバターのFace Meshが設定されていません！"
 
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
-msgstr "アバターのFace Meshは「Body」と名前を付ける必要があります！"
+msgstr "アバターの Face Mesh は MMD ワールドで認識されるために 「Body」 と名前を付ける必要があります。 本ツールの 「MIM Rename Face For MMD」 コンポーネントを使用してこれを修正できます。"
 
 msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "アバターのFace Meshに、メッシュが設定されていません！"

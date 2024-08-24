@@ -78,6 +78,8 @@ namespace enitimeago.NonDestructiveMMD
 
         public int dataVersion;
 
+        public bool ignoreFaceMeshName = false;
+
         [FormerlySerializedAs("blendShapeMappings")]
         [SerializeField]
         internal List<MMDToAvatarBlendShape> _blendShapeMappings = new List<MMDToAvatarBlendShape>();
