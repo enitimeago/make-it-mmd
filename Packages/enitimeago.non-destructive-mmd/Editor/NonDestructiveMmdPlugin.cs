@@ -14,11 +14,11 @@ namespace enitimeago.NonDestructiveMMD
         {
             var seq = InPhase(BuildPhase.Transforming);
             seq.AfterPlugin("nadena.dev.modular-avatar");
-            seq.Run(BlendShapeMappingsPass.Instance);
             seq.WithRequiredExtension(typeof(AnimationServicesContext), _ =>
             {
                 seq.Run(RenameFaceForMmdPass.Instance);
             });
+            seq.Run(BlendShapeMappingsPass.Instance);
             seq.Run(RemoveAnimatorLayersPass.Instance);
             seq.Run(WriteDefaultsPass.Instance);
         }

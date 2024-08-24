@@ -5,6 +5,12 @@ msgstr ""
 msgid "locale:en-us"
 msgstr "English"
 
+msgid "Common:FixThis"
+msgstr "Fix this"
+
+msgid "Common:Ignore"
+msgstr "Ignore"
+
 msgid "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"
 msgstr "Currently, combining multiple blend shapes with more than one frame is unsupported. Please contact the developer if you would like to request this feature."
 
@@ -30,7 +36,7 @@ msgid "CommonChecks:AvatarNoFaceMeshSet"
 msgstr "Avatar has not set a face mesh!"
 
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
-msgstr "Avatar face mesh must be called \"Body\"!"
+msgstr "Avatar face mesh must be called \"Body\" to be recognized in MMD worlds. You can use the \"MIM Rename Face For MMD\" component to fix this."
 
 msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "Avatar face mesh is missing!"

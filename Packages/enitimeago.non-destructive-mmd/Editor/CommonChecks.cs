@@ -18,7 +18,7 @@ namespace enitimeago.NonDestructiveMMD
             _isEditor = isEditor;
         }
 
-        public bool RunChecks(GameObject avatarRootObject)
+        public bool RunChecks(GameObject avatarRootObject, bool isBuildTime = true)
         {
             var avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
             var mappingsComponents = avatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
@@ -38,7 +38,7 @@ namespace enitimeago.NonDestructiveMMD
                 LogLocalized(Severity.Error, "CommonChecks:MultipleMMDComponents");
                 return false;
             }
-            if (!RunChecks(mappingsComponents.First()) || !RunChecks(avatarDescriptor))
+            if (!RunChecks(mappingsComponents.First()) || !RunChecks(avatarDescriptor, isBuildTime))
             {
                 return false;
             }
@@ -73,7 +73,7 @@ namespace enitimeago.NonDestructiveMMD
         }
 
         // TODO: use an enum or types to decide what checks to skip?
-        public bool RunChecks(VRCAvatarDescriptor avatarDescriptor, bool ignoreBodyName = false)
+        public bool RunChecks(VRCAvatarDescriptor avatarDescriptor, bool isBuildTime = true)
         {
             if (avatarDescriptor == null)
             {
@@ -88,7 +88,7 @@ namespace enitimeago.NonDestructiveMMD
                 return false;
             }
 
-            if (visemeSkinnedMesh.name != "Body" && !ignoreBodyName)
+            if (visemeSkinnedMesh.name != "Body" && isBuildTime)
             {
                 LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotCalledBody");
                 return false;
