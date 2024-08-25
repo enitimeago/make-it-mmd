@@ -47,6 +47,12 @@ msgstr "MMD blendshape「{0}」引用了此 Avatar 上不存在的 blendshape「
 msgid "MappingsEditor:OpenEditor"
 msgstr "開啟編輯器"
 
+msgid "MappingsEditor:ShareMenuLabel"
+msgstr "分享..."
+
+msgid "MappingsEditor:MoreMenuLabel"
+msgstr "更多..."
+
 msgid "MappingsEditor:ShareAsUnitypackage"
 msgstr "以 .unitypackage 匯出"
 

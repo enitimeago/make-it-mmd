@@ -56,6 +56,12 @@ msgstr "MMD morph \"{0}\" references a blend shape \"{1}\" which doesn't exist o
 msgid "MappingsEditor:OpenEditor"
 msgstr "Open Editor"
 
+msgid "MappingsEditor:ShareMenuLabel"
+msgstr "Share..."
+
+msgid "MappingsEditor:MoreMenuLabel"
+msgstr "More..."
+
 msgid "MappingsEditor:ShareAsUnitypackage"
 msgstr "Share as .unitypackage..."
 

@@ -25,9 +25,10 @@ namespace enitimeago.NonDestructiveMMD
             var data = (BlendShapeMappings)target;
             var avatar = data.GetComponentInParent<VRCAvatarDescriptor>();
 
-            EditorGUILayout.BeginHorizontal();
-            L.DrawLanguagePicker();
-            EditorGUILayout.EndHorizontal();
+            var titleStyle = new GUIStyle(EditorStyles.boldLabel);
+            titleStyle.fontSize = 16;
+            titleStyle.alignment = TextAnchor.MiddleCenter;
+            GUILayout.Label("Make It MMD 1.2", titleStyle);
 
             // Run asserts, however continue rendering GUI if errors are encountered.
             bool avatarOkay = _commonChecks.RunChecks(avatar.gameObject, isBuildTime: false);
@@ -100,26 +101,36 @@ namespace enitimeago.NonDestructiveMMD
                 EditorGUILayout.EndHorizontal();
             }
 
-            EditorGUILayout.BeginHorizontal();
-
-            if (GUILayout.Button(L.Tr("MappingsEditor:OpenEditor")))
+            var openEditorButtonStyle = new GUIStyle(GUI.skin.button);
+            openEditorButtonStyle.fontSize = 20;
+            openEditorButtonStyle.padding = new RectOffset(10, 10, 10, 10);
+            if (GUILayout.Button(L.Tr("MappingsEditor:OpenEditor"), openEditorButtonStyle))
             {
                 BlendShapeMappingsEditorWindow.ShowWindow(data);
             }
 
-            // Extras menu
-            if (GUILayout.Button("▼", EditorStyles.miniButton, GUILayout.Width(20)))
+            EditorGUILayout.BeginHorizontal();
+
+            GUI.enabled = avatarOkay;
+            if (GUILayout.Button(L.Tr("MappingsEditor:ShareMenuLabel")))
             {
                 var menu = new GenericMenu();
-                if (avatarOkay)
-                {
-                    menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
-                    menu.AddSeparator("");
-                }
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
+                menu.ShowAsContext();
+            }
+            GUI.enabled = true;
+
+            if (GUILayout.Button(L.Tr("MappingsEditor:MoreMenuLabel")))
+            {
+                var menu = new GenericMenu();
                 menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShowStoredData")), _showStoredData, () => _showStoredData = !_showStoredData);
                 menu.ShowAsContext();
             }
 
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            L.DrawLanguagePicker();
             EditorGUILayout.EndHorizontal();
 
             if (_showStoredData)

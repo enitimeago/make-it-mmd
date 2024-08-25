@@ -56,6 +56,12 @@ msgstr "MMDモーフ「{0}」はこのアバターに存在しないブレンド
 msgid "MappingsEditor:OpenEditor"
 msgstr "エディターを開く"
 
+msgid "MappingsEditor:ShareMenuLabel"
+msgstr "共有..."
+
+msgid "MappingsEditor:MoreMenuLabel"
+msgstr "その他..."
+
 msgid "MappingsEditor:ShareAsUnitypackage"
 msgstr ".unitypackageで共有する..."
 
