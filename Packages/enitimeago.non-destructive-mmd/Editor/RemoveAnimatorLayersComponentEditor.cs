@@ -36,7 +36,7 @@ namespace enitimeago.NonDestructiveMMD
             EditorGUILayout.EndHorizontal();
 
             // Run asserts, however continue rendering GUI if errors are encountered.
-            _commonChecks.RunChecks(avatar);
+            _commonChecks.RunChecks(avatar, isBuildTime: false);
 
             var fxController = FindFxAnimatorController(avatar);
             if (!_persistentData._isInitialized)
