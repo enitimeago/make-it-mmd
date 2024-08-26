@@ -113,6 +113,11 @@ namespace enitimeago.NonDestructiveMMD
                     LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotCalledBody");
                 }
 
+                if (visemeSkinnedMesh.transform.parent?.gameObject != avatarDescriptor.gameObject)
+                {
+                    LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotAtRoot");
+                }
+
                 if (AvatarHasWriteDefaultOff(avatarDescriptor))
                 {
                     LogLocalized(Severity.Warning, "CommonChecks:AvatarWriteDefaultOffFound");

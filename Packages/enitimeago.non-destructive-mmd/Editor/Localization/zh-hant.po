@@ -29,6 +29,9 @@ msgstr "Avatar 尚未設定臉部網格！"
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
 msgstr "Avatar 的臉部網格必須稱為「Body」，才能在 MMD world 中被識別。您可以使用 「MIM Rename Face For MMD」 組件來修正此問題。"
 
+msgid "CommonChecks:AvatarFaceSMRNotAtRoot"
+msgstr "Avatar 的臉部網格必須在層級結構中直接位於 Avatar 下方，才能在 MMD world 中被識別。如果您使用 Modular Avatar，您可以嘗試使用「MA Bone Proxy」來修正此問題。"
+
 msgid "CommonChecks:AvatarWriteDefaultOffFound"
 msgstr "Avatar 的 Animator State 設置了 Write Default 為關閉，這可能會導致與 MMD world 的不兼容。您可以使用 「MIM Avatar Write Defaults」 組件來修正此問題。"
 

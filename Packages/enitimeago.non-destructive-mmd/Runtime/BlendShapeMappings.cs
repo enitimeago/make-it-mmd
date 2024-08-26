@@ -79,6 +79,7 @@ namespace enitimeago.NonDestructiveMMD
         public int dataVersion;
 
         public bool ignoreFaceMeshName = false;
+        public bool ignoreFaceMeshNotAtRoot = false;
         public bool ignoreWriteDefaultsOff = false;
 
         [FormerlySerializedAs("blendShapeMappings")]

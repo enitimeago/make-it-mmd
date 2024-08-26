@@ -38,6 +38,9 @@ msgstr "アバターのFace Meshが設定されていません！"
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
 msgstr "アバターの Face Mesh は MMD ワールドで認識されるために 「Body」 と名前を付ける必要があります。 「MIM Rename Face For MMD」 コンポーネントを使用してこれを修正できます。"
 
+msgid "CommonChecks:AvatarFaceSMRNotAtRoot"
+msgstr "アバターの Face Mesh は MMD ワールドで認識されるために、ヒエラルキー内でアバターの直下に配置する必要があります。 Modular Avatar を使用している場合は 「MA Bone Proxy」 で解決できる可能性があります。"
+
 msgid "CommonChecks:AvatarWriteDefaultOffFound"
 msgstr "アバターの Animator State に Write Default が無効になっている設定が見つかりました。 MMD ワールドでの非互換性の原因となります。 「MIM Avatar Write Defaults」 コンポーネントを使用してこれを修正できます。"
 

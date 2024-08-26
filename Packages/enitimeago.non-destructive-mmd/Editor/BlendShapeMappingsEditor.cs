@@ -51,6 +51,18 @@ namespace enitimeago.NonDestructiveMMD
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.EndHorizontal();
             }
+            if (!data.ignoreFaceMeshNotAtRoot && visemeSkinnedMesh.transform.parent?.gameObject != avatar?.gameObject)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.HelpBox(L.Tr("CommonChecks:AvatarFaceSMRNotAtRoot"), MessageType.Info);
+                EditorGUILayout.BeginVertical();
+                if (GUILayout.Button(L.Tr("Common:Ignore")))
+                {
+                    data.ignoreFaceMeshNotAtRoot = true;
+                }
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
+            }
             var writeDefaultsComponents = avatar?.gameObject.GetComponentsInChildren<WriteDefaultsComponent>();
             if (!data.ignoreWriteDefaultsOff && _commonChecks.AvatarHasWriteDefaultOff(avatar) && writeDefaultsComponents.All(x => !x.forceAvatarWriteDefaults))
             {
