@@ -21,6 +21,11 @@ namespace enitimeago.NonDestructiveMMD
 
         public bool RunChecks(GameObject avatarRootObject, bool isBuildTime = true)
         {
+            if (avatarRootObject == null)
+            {
+                LogLocalized(Severity.Warning, "CommonChecks:AvatarNotFound");
+                return false;
+            }
             var avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
             var mappingsComponents = avatarRootObject.GetComponentsInChildren<BlendShapeMappings>();
             var writeDefaultsComponents = avatarRootObject.GetComponentsInChildren<WriteDefaultsComponent>();

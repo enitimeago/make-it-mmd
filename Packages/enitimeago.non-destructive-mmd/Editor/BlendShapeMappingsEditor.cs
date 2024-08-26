@@ -31,11 +31,11 @@ namespace enitimeago.NonDestructiveMMD
             GUILayout.Label("Make It MMD 1.2", titleStyle);
 
             // Run asserts, however continue rendering GUI if errors are encountered.
-            bool avatarOkay = _commonChecks.RunChecks(avatar.gameObject, isBuildTime: false);
+            bool avatarOkay = _commonChecks.RunChecks(avatar?.gameObject, isBuildTime: false);
 
             var visemeSkinnedMesh = avatar?.VisemeSkinnedMesh;
             var renameFaceForMmdComponents = avatar?.gameObject.GetComponentsInChildren<RenameFaceForMmdComponent>();
-            if (!data.ignoreFaceMeshName && visemeSkinnedMesh.name != "Body" && renameFaceForMmdComponents.Count() == 0)
+            if (!data.ignoreFaceMeshName && visemeSkinnedMesh?.name != "Body" && renameFaceForMmdComponents.Count() == 0)
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.HelpBox(L.Tr("CommonChecks:AvatarFaceSMRNotCalledBody"), MessageType.Info);
