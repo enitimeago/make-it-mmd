@@ -11,6 +11,15 @@ msgstr "修正"
 msgid "Common:Ignore"
 msgstr "忽略"
 
+msgid "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"
+msgstr "目前不支持合併多個非單幀的 blendshape。如果你希望有此功能，請聯繫開發者。"
+
+msgid "BlendShapeMappingsPass:MissingSourceBlendShapes"
+msgstr "合併 {2} 個 blendshape 時，MMD blendshape「{0}」引用了找不到的 blendshape {1}。這些 blendshape 可能已被其他工具刪除。如果這不符合預期，請向開發者報告此問題，並盡可能提供你專案中安裝的工具資訊。"
+
+msgid "BlendShapeMappingsPass:SkippingMmdMorph"
+msgstr "生成 MMD blendshape「{0}」時發現錯誤，此 blendshape 將不會生成。"
+
 msgid "CommonChecks:NoMMDComponents"
 msgstr "未在 Avatar 中發現 「Make It MMD」 元件，無事可做"
 
@@ -27,13 +36,10 @@ msgid "CommonChecks:AvatarNoFaceMeshSet"
 msgstr "Avatar 尚未設定臉部網格！"
 
 msgid "CommonChecks:AvatarFaceSMRNotCalledBody"
-msgstr "Avatar 的臉部網格必須稱為「Body」，才能在 MMD world 中被識別。您可以使用 「MIM Rename Face For MMD」 組件來修正此問題。"
-
-msgid "CommonChecks:AvatarFaceSMRNotAtRoot"
-msgstr "Avatar 的臉部網格必須在層級結構中直接位於 Avatar 下方，才能在 MMD world 中被識別。如果您使用 Modular Avatar，您可以嘗試使用「MA Bone Proxy」來修正此問題。"
+msgstr "Avatar 的臉部網格名稱必須為「Body」，才能在 MMD 世界中被識別。你可以使用「MIM Rename Face For MMD」元件來修正此問題。"
 
 msgid "CommonChecks:AvatarWriteDefaultOffFound"
-msgstr "Avatar 的 Animator State 設置了 Write Default 為關閉，這可能會導致與 MMD world 的不兼容。您可以使用 「MIM Avatar Write Defaults」 組件來修正此問題。"
+msgstr "Avatar 的 Animator State 設有 Write Default Off，這可能會導致不兼容 MMD 世界。你可以使用「MIM Avatar Write Defaults」元件來修正此問題。"
 
 msgid "CommonChecks:AvatarFaceSMRNoMesh"
 msgstr "找不到 Avatar 的臉部網格！"
@@ -45,7 +51,7 @@ msgid "CommonChecks:AvatarFaceSMRExistingBlendShapesUnsupported"
 msgstr "目前不支援已有 MMD blendshapes 的 Avatar！"
 
 msgid "CommonChecks:MorphReferencesNonExistingBlendShape"
-msgstr "MMD blendshape「{0}」引用了此 Avatar 上不存在的 blendshape「{1}」。此 MMD blendshape 將不被生成。"
+msgstr "MMD blendshape「{0}」引用了此 Avatar 上不存在的 blendshape「{1}」。此 MMD blendshape 將不會生成。"
 
 msgid "MappingsEditor:OpenEditor"
 msgstr "開啟編輯器"
@@ -72,10 +78,10 @@ msgid "MappingsEditorWindow:SelectMMDMorph"
 msgstr "選擇一個 MMD 的 blendshape"
 
 msgid "MappingsEditorWindow:EditingBlendShapesFor"
-msgstr "正在編輯 「{0}」 的 blendshapes..."
+msgstr "正在編輯「{0}」的 blendshapes..."
 
 msgid "MappingsEditorWindow:ViewingBlendShapesForInPlayMode"
-msgstr "正在查看 「{0}」 的 blendshapes（退出播放模式以進行編輯）..."
+msgstr "正在查看「{0}」的 blendshapes（退出播放模式以進行編輯）..."
 
 msgid "MappingsEditorWindow:SelectedBlendShapes"
 msgstr "已選擇的 blendshapes"
@@ -108,10 +114,10 @@ msgid "MmdScanAndImportWindow:NotFoundHeading"
 msgstr "找不到原始 blendshapes："
 
 msgid "MmdScanAndImportWindow:ImportToField"
-msgstr "匯入至"
+msgstr "匯入到"
 
 msgid "MmdScanAndImportWindow:WillImportToField"
-msgstr "將會匯入至"
+msgstr "將會匯入到"
 
 msgid "MmdScanAndImportWindow:ReplaceExistingToggle"
 msgstr "替換現有的 blendshapes"
@@ -123,7 +129,7 @@ msgid "MmdScanAndImportWindow:ImportButton"
 msgstr "匯入 {0} 個新的 blendshape 至 Make It MMD 編輯器"
 
 msgid "MmdScanAndImportWindow:ImportToSelectedGameObjectButton"
-msgstr "匯入至選定的對象"
+msgstr "匯入到選定的對象"
 
 msgid "MmdScanAndImportWindow:ImportToNewBrandedGameObjectButton"
 msgstr "匯入到新的 Make It MMD 物件"
@@ -172,3 +178,18 @@ msgstr "不安全的移除"
 
 msgid "RemoveAnimatorLayersComponentEditor:CustomLayersToRemove"
 msgstr "要移除的自定義 Layers"
+
+msgid "RenameFaceForMmdComponentEditor:AlreadyCalledBody"
+msgstr "Avatar 的臉部網格已命名為「Body」。不需要此元件。"
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerform"
+msgstr "此元件將非破壞性地將 Avatar 的臉部網格從「{0}」重新命名為 MMD 所需的名稱「Body」。"
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerformHasConflicts"
+msgstr "Avatar 已經有另一個名為「Body」的非臉部網格，它也將被重新命名。"
+
+msgid "RenameFaceForMmdComponentEditor:ActionToPerformSuffix"
+msgstr "將進行以下重命名："
+
+msgid "RenameFaceForMmdComponentEditor:IsPlaying"
+msgstr "目前處於播放模式。已套用重命名（如果需要）。"
