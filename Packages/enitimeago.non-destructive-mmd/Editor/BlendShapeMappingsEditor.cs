@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using enitimeago.ExportPackgeWithVpai;
 using UnityEditor;
@@ -12,12 +14,17 @@ namespace enitimeago.NonDestructiveMMD
     public class BlendShapeMappingsEditor : Editor
     {
         private CommonChecks _commonChecks;
+        private string _versionCached = "unknown";
         private bool _showStoredData = false;
         private float _hasMmdShapeKeysHelpBoxHeight = 0;
+
+        [Serializable] private struct PackageInfo { public string version; }
 
         public void OnEnable()
         {
             _commonChecks = new CommonChecks(isEditor: true);
+            var packageInfo = JsonUtility.FromJson<PackageInfo>(File.ReadAllText(AssetDatabase.GUIDToAssetPath("adaa91d2f75c28248a6d5f5e949bbd0f")));
+            _versionCached = packageInfo.version ?? "unknkown";
         }
 
         public override void OnInspectorGUI()
@@ -28,11 +35,13 @@ namespace enitimeago.NonDestructiveMMD
             var titleStyle = new GUIStyle(EditorStyles.boldLabel);
             titleStyle.fontSize = 16;
             titleStyle.alignment = TextAnchor.MiddleCenter;
-            GUILayout.Label("Make It MMD 1.2", titleStyle);
+            GUILayout.Label($"Make It MMD {_versionCached}", titleStyle);
 
             // Run asserts, however continue rendering GUI if errors are encountered.
             bool avatarOkay = _commonChecks.RunChecks(avatar?.gameObject, isBuildTime: false);
 
+            // TODO: maybe I should have something like a class for errors that describes how errors check themselves
+            // and when they expect to be run, and then run those checks here and at build time
             var visemeSkinnedMesh = avatar?.VisemeSkinnedMesh;
             var renameFaceForMmdComponents = avatar?.gameObject.GetComponentsInChildren<RenameFaceForMmdComponent>();
             if (!data.ignoreFaceMeshName && visemeSkinnedMesh?.name != "Body" && renameFaceForMmdComponents.Count() == 0)
