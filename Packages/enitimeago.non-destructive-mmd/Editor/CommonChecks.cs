@@ -106,6 +106,8 @@ namespace enitimeago.NonDestructiveMMD
                 return false;
             }
 
+            // TODO: need to introduce ignore for build time too?
+            // e.g. if another tool handles these. or maybe just rely on ordering?
             if (isBuildTime)
             {
                 if (visemeSkinnedMesh.name != "Body")
@@ -118,7 +120,8 @@ namespace enitimeago.NonDestructiveMMD
                     LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotAtRoot");
                 }
 
-                if (AvatarHasWriteDefaultOff(avatarDescriptor))
+                var writeDefaultsComponents = avatarDescriptor.gameObject.GetComponentsInChildren<WriteDefaultsComponent>();
+                if (writeDefaultsComponents.Count() == 0 && AvatarHasWriteDefaultOff(avatarDescriptor))
                 {
                     LogLocalized(Severity.Warning, "CommonChecks:AvatarWriteDefaultOffFound");
                 }
