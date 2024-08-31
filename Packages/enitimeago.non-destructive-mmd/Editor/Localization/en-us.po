@@ -71,6 +71,9 @@ msgstr "Share as .unitypackage..."
 msgid "MappingsEditor:ExportAsJson"
 msgstr "Export as .json..."
 
+msgid "MappingsEditor:ImportFromJson"
+msgstr "Import from .json..."
+
 msgid "MappingsEditor:ShowStoredData"
 msgstr "Show stored data"
 
@@ -152,11 +155,32 @@ msgstr "Imported {0} MMD blend shapes"
 msgid "MmdScanAndImportWindow:ImportCompleteDialogOKButton"
 msgstr "OK"
 
+msgid "Import:ImportFailed"
+msgstr "Import failed"
+
+msgid "Import:ErrorFileIsEmpty"
+msgstr "File is empty"
+
+msgid "Import:ErrorFailedToReadFile"
+msgstr "Failed to read file: {0}"
+
+msgid "Import:ErrorFailedToParseFile"
+msgstr "Failed to parse file: {0}"
+
+msgid "Import:ErrorGeneric"
+msgstr "Import failed with error: {0}"
+
+msgid "Import:ErrorFileFromNewerVersion"
+msgstr "File seems to be from a newer version of Make It MMD"
+
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr "Save .unitypackage"
 
 msgid "SaveFilePanel:SaveJson"
 msgstr "Save .json"
+
+msgid "OpenFilePanel:OpenJson"
+msgstr "Open .json"
 
 msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"
 msgstr "Force all FX Write Defaults ON"

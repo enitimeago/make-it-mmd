@@ -138,6 +138,7 @@ namespace enitimeago.NonDestructiveMMD
                 var menu = new GenericMenu();
                 menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportAsPackage(data));
                 menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ExportAsJson")), false, () => ExportAsJson(data, SafeFilename(avatar.name)));
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ImportFromJson")), false, () => ImportFromJson(data));
                 menu.ShowAsContext();
             }
             GUI.enabled = true;
@@ -160,6 +161,72 @@ namespace enitimeago.NonDestructiveMMD
                 var mappings = serializedObject.FindProperty(nameof(BlendShapeMappings.blendShapeMappings));
                 EditorGUILayout.PropertyField(mappings);
             }
+        }
+
+        // TODO: move logic into BlendShapeMappings.cs, add tests for various cases.
+        private void ImportFromJson(BlendShapeMappings mappingsComponent)
+        {
+            string jsonPath = EditorUtility.OpenFilePanel(
+                L.Tr("OpenFilePanel:OpenJson"),
+                "",
+                "json");
+            if (string.IsNullOrEmpty(jsonPath))
+            {
+                return;
+            }
+
+            string json;
+            try
+            {
+                json = File.ReadAllText(jsonPath);
+            }
+            catch (Exception e)
+            {
+                EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), string.Format(L.Tr("Import:ErrorFailedToReadFile"), e), "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), L.Tr("Import:ErrorFileIsEmpty"), "OK");
+                return;
+            }
+
+            var dryRunContainer = new GameObject("TEMPORARY DELETE ME");
+            var dryRun = dryRunContainer.AddComponent<BlendShapeMappings>();
+            try
+            {
+                try
+                {
+                    JsonUtility.FromJsonOverwrite(json, dryRun);
+                }
+                catch (Exception e)
+                {
+                    EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), string.Format(L.Tr("Import:ErrorFailedToParseFile"), e), "OK");
+                    return;
+                }
+                if (dryRun.dataVersion > BlendShapeMappings.CURRENT_DATA_VERSION)
+                {
+                    EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), L.Tr("Import:ErrorFileFromNewerVersion"), "OK");
+                    return;
+                }
+            }
+            finally
+            {
+                DestroyImmediate(dryRunContainer);
+            }
+
+            Undo.RecordObject(mappingsComponent, "Import MIM .json file");
+            try
+            {
+                JsonUtility.FromJsonOverwrite(json, mappingsComponent);
+            }
+            catch (Exception e)
+            {
+                EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), string.Format(L.Tr("Import:ErrorGeneric"), e), "OK");
+                return;
+            }
+            EditorUtility.DisplayDialog(L.Tr("MmdScanAndImportWindow:ImportCompleteDialogTitle"), L.Tr("MmdScanAndImportWindow:ImportCompleteDialogTitle"), "OK");
         }
 
         private string SafeFilename(string name)

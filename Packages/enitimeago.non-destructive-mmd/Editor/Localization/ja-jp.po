@@ -71,6 +71,9 @@ msgstr ".unitypackageで共有する..."
 msgid "MappingsEditor:ExportAsJson"
 msgstr ".jsonでエクスポートする..."
 
+msgid "MappingsEditor:ImportFromJson"
+msgstr ".jsonからインポートする..."
+
 msgid "MappingsEditor:ShowStoredData"
 msgstr "保存データを表示"
 
@@ -152,8 +155,32 @@ msgstr "{0}個のMMDブレンドシェイプをインポートしました"
 msgid "MmdScanAndImportWindow:ImportCompleteDialogOKButton"
 msgstr "OK"
 
+msgid "Import:ImportFailed"
+msgstr "インポートが失敗しました"
+
+msgid "Import:ErrorFileIsEmpty"
+msgstr "ファイルが空です"
+
+msgid "Import:ErrorFailedToReadFile"
+msgstr "ファイルの読み取りに失敗しました: {0}"
+
+msgid "Import:ErrorFailedToParseFile"
+msgstr "ファイルの解析に失敗しました: {0}"
+
+msgid "Import:ErrorGeneric"
+msgstr "エラーが発生してインポートに失敗しました: {0}"
+
+msgid "Import:ErrorFileFromNewerVersion"
+msgstr "ファイルは Make It MMD の新しいバージョンからのようです"
+
 msgid "SaveFilePanel:SaveUnitypackage"
 msgstr ".unitypackageで保存"
+
+msgid "SaveFilePanel:SaveJson"
+msgstr ".jsonで保存"
+
+msgid "OpenFilePanel:OpenJson"
+msgstr ".jsonファイルを選択"
 
 msgid "WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"
 msgstr "FX の WriteDefaults を全て強制的に有効化する"
