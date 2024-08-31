@@ -68,6 +68,9 @@ msgstr "その他..."
 msgid "MappingsEditor:ShareAsUnitypackage"
 msgstr ".unitypackageで共有する..."
 
+msgid "MappingsEditor:ExportAsJson"
+msgstr ".jsonでエクスポートする..."
+
 msgid "MappingsEditor:ShowStoredData"
 msgstr "保存データを表示"
 

@@ -136,7 +136,8 @@ namespace enitimeago.NonDestructiveMMD
             if (GUILayout.Button(L.Tr("MappingsEditor:ShareMenuLabel")))
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportPackage(data));
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportAsPackage(data));
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ExportAsJson")), false, () => ExportAsJson(data, SafeFilename(avatar.name)));
                 menu.ShowAsContext();
             }
             GUI.enabled = true;
@@ -161,14 +162,39 @@ namespace enitimeago.NonDestructiveMMD
             }
         }
 
-        private void ExportPackage(BlendShapeMappings mappingsComponent)
+        private string SafeFilename(string name)
+        {
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+            return name;
+        }
+
+        private void ExportAsJson(BlendShapeMappings mappingsComponent, string defaultName)
+        {
+            string jsonPath = EditorUtility.SaveFilePanel(
+                L.Tr("SaveFilePanel:SaveJson"),
+                "",
+                defaultName,
+                "json");
+            if (string.IsNullOrEmpty(jsonPath))
+            {
+                return;
+            }
+
+            string json = JsonUtility.ToJson(mappingsComponent, prettyPrint: true);
+
+            File.WriteAllText(jsonPath, json);
+        }
+
+        private void ExportAsPackage(BlendShapeMappings mappingsComponent)
         {
             string packagePath = EditorUtility.SaveFilePanel(
                 L.Tr("SaveFilePanel:SaveUnitypackage"),
                 "",
                 "",
                 "unitypackage");
-
             if (string.IsNullOrEmpty(packagePath))
             {
                 return;
