@@ -3,9 +3,10 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://enitimeago.github.io/make-it-mmd/',
+    site: 'https://enitimeago.github.io',
+    base: 'make-it-mmd',
     redirects: {
-        '/': '/ja/'
+        '/': '/make-it-mmd/ja/'
     },
 	integrations: [
 		starlight({
