@@ -8,9 +8,9 @@ export default defineConfig({
     redirects: {
         '/': '/make-it-mmd/ja/'
     },
-	integrations: [
-		starlight({
-			title: 'Make It MMD',
+    integrations: [
+        starlight({
+            title: 'Make It MMD',
             customCss: [
                 './src/styles/custom.scss',
                 '@fontsource-variable/public-sans/wght.css',
@@ -28,27 +28,27 @@ export default defineConfig({
                     label: '日本語',
                 },
             },
-			social: {
-				github: 'https://github.com/enitimeago/make-it-mmd',
-			},
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						{
+            social: {
+                github: 'https://github.com/enitimeago/make-it-mmd',
+            },
+            sidebar: [
+                {
+                    label: 'Guides',
+                    items: [
+                        {
                             label: 'Getting Started',
                             slug: 'guides/getting-started',
                             translations: {
                                 'ja': 'セットアップガイド',
                             },
                         },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
-				},
-			],
-		}),
-	],
+                    ],
+                },
+                {
+                    label: 'Reference',
+                    autogenerate: { directory: 'reference' },
+                },
+            ],
+        }),
+    ],
 });
