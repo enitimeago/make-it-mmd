@@ -14,6 +14,9 @@ dependencies:
   '@astrojs/starlight':
     specifier: ^0.26.1
     version: 0.26.1(astro@4.15.2)
+  '@fontsource-variable/public-sans':
+    specifier: ^5.0.19
+    version: 5.0.19
   astro:
     specifier: ^4.15.2
     version: 4.15.2(typescript@5.5.4)
@@ -703,6 +706,10 @@ packages:
     resolution: {integrity: sha512-/k9eWVZSCs+uEKHR++22Uu6eIbHWEciVHbIuD8frT8DlqTtHYaaiwHPncO6KFWnGDz5i/gL7oyl6XmOi/E6GVg==}
     dependencies:
       '@expressive-code/core': 0.35.6
+    dev: false
+
+  /@fontsource-variable/public-sans@5.0.19:
+    resolution: {integrity: sha512-Tc1V139visg0xUgSe2vQy86OwHEGb0dO57vcrD6Cw2vDRf42sZ4fD7nTuY0Q0AjVNemT7RicmkR9qnB/MfJ6ug==}
     dev: false
 
   /@img/sharp-darwin-arm64@0.33.5:

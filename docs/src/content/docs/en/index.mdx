@@ -1,15 +1,15 @@
 ---
-title: Non-destructive MMD tool for VRChat
+title: Non-destructive MMD tooling
 description: Make your avatars compatible with VRChat MMD worlds!
 template: splash
 hero:
-  tagline: Make your avatars compatible with VRChat MMD worlds!
-  image:
-    file: ../../../assets/screenshot.png
+  tagline: For VRChat avatars. Free. Open Source. Powered by NDMF.
   actions:
-    - text: Download via VCC
+    - text: Add to VCC
       link: https://enitimeago.github.io/vpm-repos/
       icon: external
+      attrs:
+        target: _blank
     - text: Documentation
       link: /make-it-mmd/en/guides/getting-started/
       icon: right-arrow
@@ -17,6 +17,10 @@ hero:
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import screenshot from '../../../assets/screenshot.png';
+
+<Image src={screenshot} alt="" />
 
 ## Next steps
 

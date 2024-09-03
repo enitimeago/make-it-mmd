@@ -1,19 +1,22 @@
 ---
-title: 変更可能のMMD表情設定
+title: 変更可能なMMD表情設定
 description: VRChatのアバターをMMDワールドに対応させるツール
 template: splash
 hero:
-  tagline: VRChatのアバターをMMDワールドに対応させるツール
-  image:
-    file: ../../../assets/screenshot.png
+  tagline: VRChat Avatars向けの非破壊的MMDシェイプキー生成とワールド対応調整。新しいメッシュを生成せず、元のアバターをそのまま。
   actions:
     - text: BOOTHで無料ダウンロード
       link: https://eni.booth.pm/items/5530958
       icon: external
+      attrs:
+        target: _blank
+        data-booth-link: true
     - text: VCC
       link: https://enitimeago.github.io/vpm-repos/
       icon: external
       variant: minimal
+      attrs:
+        target: _blank
     - text: 説明書
       link: /make-it-mmd/ja/guides/getting-started/
       icon: right-arrow
@@ -21,6 +24,10 @@ hero:
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import screenshot from '../../../assets/screenshot.png';
+
+<Image src={screenshot} alt="" />
 
 ## Next steps
 

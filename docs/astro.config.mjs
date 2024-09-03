@@ -11,6 +11,10 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Make It MMD',
+            customCss: [
+                './src/styles/custom.css',
+                '@fontsource-variable/public-sans/wght.css',
+            ],
             defaultLocale: 'en',
             locales: {
                 en: {

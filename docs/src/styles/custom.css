@@ -1,0 +1,57 @@
+/* Dark mode colors. */
+:root {
+	--sl-color-accent-low: #28154d;
+	--sl-color-accent: #7d00fb;
+	--sl-color-accent-high: #cbbeff;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #ecedf1;
+	--sl-color-gray-2: #c1c2c6;
+	--sl-color-gray-3: #898b93;
+	--sl-color-gray-4: #56585f;
+	--sl-color-gray-5: #36383f;
+	--sl-color-gray-6: #25262d;
+	--sl-color-black: #17181b;
+}
+/* Light mode colors. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #d8cfff;
+	--sl-color-accent: #7f00ff;
+	--sl-color-accent-high: #3a1673;
+	--sl-color-white: #17181b;
+	--sl-color-gray-1: #25262d;
+	--sl-color-gray-2: #36383f;
+	--sl-color-gray-3: #56585f;
+	--sl-color-gray-4: #898b93;
+	--sl-color-gray-5: #c1c2c6;
+	--sl-color-gray-6: #ecedf1;
+	--sl-color-gray-7: #f6f6f8;
+	--sl-color-black: #ffffff;
+}
+
+/* Fonts. */
+:root {
+    --sl-font: "Public Sans";
+}
+
+/* Customizations. */
+.hero h1 {
+    background: linear-gradient(transparent 70%, var(--sl-color-accent-low) 70%, var(--sl-color-accent-low) 90%, transparent 90%);
+}
+.hero h1::after {
+    content: ".";
+}
+html[lang=ja] .hero h1::after {
+    content: "。";
+}
+.hero .sl-link-button.primary {
+    font-weight: bold;
+}
+.hero .sl-link-button.primary[data-booth-link] {
+    --sl-color-text-accent: #fc4d50;
+    --sl-color-black: #ffffff;
+}
+@media (min-width: 50rem) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+}
