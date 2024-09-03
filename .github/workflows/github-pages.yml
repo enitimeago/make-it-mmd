@@ -18,8 +18,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Checkout brand assets
+        uses: actions/checkout@v4
+        if: github.repository_owner == 'enitimeago'
+        with:
+          repository: enitimeago/brand-assets
+          path: .github/brand-assets
+
+      - name: Inject logo assets
+        if: github.repository_owner == 'enitimeago'
+        run: |
+          cp -f .github/brand-assets/make-it-mmd/Logo@2x.png docs/src/assets/logo.png
+          git apply --whitespace=fix .github/branding-astro-config.patch
+          git apply --whitespace=fix .github/branding-docs-footer.patch
+
       - name: Install, build, and upload your site
         uses: withastro/action@v2
         with:

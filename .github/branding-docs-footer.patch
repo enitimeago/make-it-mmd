@@ -1,0 +1,8 @@
+diff --git a/docs/src/components/Footer.astro b/docs/src/components/Footer.astro
+index 67542a5..233ab71 100644
+--- a/docs/src/components/Footer.astro
++++ b/docs/src/components/Footer.astro
+@@ -17,2 +17,3 @@ import { Icon } from '@astrojs/starlight/components';
+         <p>The Make It MMD software is released under the MIT License.</p>
++        <p>The Make It MMD logo is &copy; 2024 enitimeago. All Rights Reserved.</p>
+         <a class="kudos sl-flex" href="https://starlight.astro.build" target="_blank">

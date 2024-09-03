@@ -1,0 +1,11 @@
+diff --git a/docs/astro.config.mjs b/docs/astro.config.mjs
+index 04905ae..f276e8f 100644
+--- a/docs/astro.config.mjs
++++ b/docs/astro.config.mjs
+@@ -13,2 +13,6 @@ export default defineConfig({
+             title: 'Make It MMD',
++            logo: {
++                replacesTitle: true,
++                src: './src/assets/logo.png',
++            },
+             customCss: [
