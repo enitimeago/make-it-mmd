@@ -31,6 +31,7 @@ jobs:
       - name: Inject logo assets
         if: github.repository_owner == 'enitimeago'
         run: |
+          cp -f .github/brand-assets/make-it-mmd/Favicon.png docs/public/favicon.png
           cp -f .github/brand-assets/make-it-mmd/Logo@2x.png docs/src/assets/logo.png
           git apply --whitespace=fix .github/branding-astro-config.patch
           git apply --whitespace=fix .github/branding-docs-footer.patch
