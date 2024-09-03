@@ -1,5 +1,4 @@
-/* Dark mode colors. */
-:root {
+@mixin dark-colors {
 	--sl-color-accent-low: #28154d;
 	--sl-color-accent: #7d00fb;
 	--sl-color-accent-high: #cbbeff;
@@ -12,8 +11,7 @@
 	--sl-color-gray-6: #25262d;
 	--sl-color-black: #17181b;
 }
-/* Light mode colors. */
-:root[data-theme='light'] {
+@mixin light-colors {
 	--sl-color-accent-low: #d8cfff;
 	--sl-color-accent: #7f00ff;
 	--sl-color-accent-high: #3a1673;
@@ -27,13 +25,19 @@
 	--sl-color-gray-7: #f6f6f8;
 	--sl-color-black: #ffffff;
 }
+:root {
+    @include dark-colors;
+}
+:root[data-theme='light'] {
+    @include light-colors;
+}
 
 /* Fonts. */
 :root {
     --sl-font: "Public Sans";
 }
 
-/* Customizations. */
+/* Homepage. */
 .hero h1 {
     background: linear-gradient(transparent 70%, var(--sl-color-accent-low) 70%, var(--sl-color-accent-low) 90%, transparent 90%);
 }
@@ -54,4 +58,23 @@ html[lang=ja] .hero h1::after {
     .hero {
         grid-template-columns: 1fr;
     }
+}
+
+/* Header. */
+header.header {
+    backdrop-filter: blur(16px);
+    border-bottom: none;
+    --sl-color-text-accent: #ffffff;
+    --sl-color-bg-nav: #1C0C28;
+    background: rgb(from var(--sl-color-bg-nav) r g b / 0.85);
+    .title-wrapper, .right-group {
+        @include dark-colors;
+    }
+}
+
+/* Footer. */
+.copyright {
+    margin: 1.5rem 0 0;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
 }

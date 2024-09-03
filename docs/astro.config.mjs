@@ -12,9 +12,13 @@ export default defineConfig({
 		starlight({
 			title: 'Make It MMD',
             customCss: [
-                './src/styles/custom.css',
+                './src/styles/custom.scss',
                 '@fontsource-variable/public-sans/wght.css',
             ],
+            credits: true,
+            components: {
+                Footer: './src/components/Footer.astro',
+            },
             defaultLocale: 'en',
             locales: {
                 en: {
