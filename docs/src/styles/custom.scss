@@ -38,8 +38,44 @@
 }
 
 /* Homepage. */
+body:has(.hero) {
+    // Make background same as hero color.
+    background: #2F1B3F;
+    header.header {
+        --sl-color-bg-nav: #2F1B3F;
+    }
+    .content-panel {
+        // Remove gap from header to hero.
+        padding-top: 0;
+    }
+    .main-frame > :first-child {
+        background: var(--sl-color-black);
+    }
+}
+.hero {
+    position: relative;
+    padding-bottom: 240px;
+    margin-bottom: -220px;
+    font-weight: 600;
+    @include dark-colors;
+    .tagline {
+        color: var(--sl-color-gray-1);
+    }
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX( -50%);
+        height: 100%;
+        width: 100vw;
+        background: #2F1B3F url("/hero-blob.svg") no-repeat;
+        background-position: calc(50% - 50px) 10px;
+        z-index: -2;
+    }
+}
 .hero h1 {
-    background: linear-gradient(transparent 70%, var(--sl-color-accent-low) 70%, var(--sl-color-accent-low) 90%, transparent 90%);
+    background: linear-gradient(transparent 70%, #7F00FF 70%, #7F00FF 90%, transparent 90%);
 }
 .hero h1::after {
     content: ".";
@@ -48,7 +84,24 @@ html[lang=ja] .hero h1::after {
     content: "。";
 }
 .hero .sl-link-button.primary {
+    background: #259EB3;
+    border-color: #259EB3;
+    color: var(--sl-color-white);
     font-weight: bold;
+    transition: 1s transform, 1s border-radius;
+    border-radius: 22% 21% 26% 23% / 38% 74% 44% 69%;
+    transform: rotate(-2deg);
+    svg {
+        transition: .4s transform;
+    }
+    &:hover {
+        color: var(--sl-color-white);
+        border-radius: 20% 24% 29% 20% / 38% 74% 44% 69%;
+        transform: rotate(-0.5deg);
+        svg {
+            transform: translateX(2px);
+        }
+    }
 }
 .hero .sl-link-button.primary[data-booth-link] {
     --sl-color-text-accent: #fc4d50;
