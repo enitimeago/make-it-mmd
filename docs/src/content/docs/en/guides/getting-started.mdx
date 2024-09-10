@@ -1,0 +1,57 @@
+---
+title: Getting Started
+description: How to get started with Make It MMD for VRChat avatars
+---
+
+import { Aside, Tabs, TabItem, Steps, LinkButton } from '@astrojs/starlight/components';
+
+Make It MMD helps set up your VRChat avatars for MMD worlds, based on their existing facial expressions.
+
+- 🌟 It's **non-destructive**. It runs only when you build your avatar, so its original data is never modified.
+- ✏️ Settings are **editable any time**. We never bake your settings into your avatar's mesh, so you don't have to start again from scratch.
+- 🤖 Scans and auto-fixes for **common issues**. We take care of Write Default and face mesh renaming for you. Of course, your animator controllers are handled non-destructively.
+- 💌 Plus **import and export** tools. If you've used a destructive tool before, you can bring in your existing data (only 1:1 blend shape copies supported). And export only shares the expressions chosen, no need to worry about sharing your avatar's mesh data.
+
+## Installation
+
+<Tabs>
+
+<TabItem label="VCC">
+
+Installation via VRChat Creator Companion is recommended.
+
+<Steps>
+
+1. Click the below link to add our repository to your VRChat Creator Companion.
+   
+   <LinkButton href="vcc://vpm/addRepo?url=https://enitimeago.github.io/vpm-repos/index.json">Add to VCC</LinkButton>
+
+   You'll need to select "I Understand, Add Repository" for it to complete.
+
+2. Next, navigate to the project you wish to install to.
+
+3. In the packages list, click the `+` on the far-right side where "Make It MMD" is listed.
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="Other">
+
+Alternatively, .unitypackage files can be downloaded from the official GitHub repository.
+
+<Aside type="caution" title="Caution">Updating requires manually downloading the latest release every time, so this is not recommended.</Aside>
+
+<Steps>
+
+1. Download the newest .unitypackage from the official GitHub repository's [Releases](https://github.com/enitimeago/make-it-mmd/releases) page.
+
+2. In Unity, open the project you'd like to install to.
+
+3. Open the downloaded .unitypackage, or drag & drop it to the Unity window to install.
+
+</Steps>
+
+</TabItem>
+
+</Tabs>

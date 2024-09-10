@@ -33,18 +33,24 @@ export default defineConfig({
             sidebar: [
                 {
                     label: 'Guides',
+                    translations: {
+                        'ja': 'ガイド',
+                    },
                     items: [
                         {
                             label: 'Getting Started',
                             slug: 'guides/getting-started',
                             translations: {
-                                'ja': 'セットアップガイド',
+                                'ja': 'はじめに',
                             },
                         },
                     ],
                 },
                 {
                     label: 'Reference',
+                    translations: {
+                        'ja': 'ドキュメント',
+                    },
                     autogenerate: { directory: 'reference' },
                 },
             ],

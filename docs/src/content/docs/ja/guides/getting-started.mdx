@@ -1,0 +1,70 @@
+---
+title: はじめに
+description: VRChatアバター用ツールMake It MMDのセットアップガイド
+---
+
+import { Aside, Tabs, TabItem, Steps, LinkButton } from '@astrojs/starlight/components';
+
+Make It MMDは、VRChatアバターの既存の表情からMMDシェイプキーを**生成すること**を始め、さまざまな**自動修正**を提供するMMDワールドに対応させるツールです。
+
+- 🌟 **安全な適応**：アバターの元のデータ（メッシュ、アニメーションコントローラーなど）を上書きせずに処理を行います。
+- ✏️ **簡単な表情変更**：表情設定エディターでいつでも選択した表情を変更できます。
+- 🤖 **一般問題のスキャンと自動修正**：Write Defaultやフェイスメッシュの名前変更を自動で処理します。アニメーターコントローラーも非破壊的に処理されます。
+- 💌 **インポートとエクスポート機能**：以前に破壊的なツールを使用した場合でも、既存のMMDシェイプキーが元のアバターのシェイプキーと同等している場合は取り込むことができます。エクスポートでは選択された表情のみが共有され、アバターのメッシュデータを共有する恐れがありません。
+
+## インストールの方法
+
+いくつかのインストールの方法があります。以下の種類からどちらでも可能です。
+
+<Tabs>
+
+<TabItem label="VCC">
+
+VRChat Creator Companionでインストールすると、最新バージョンが自動にインストールします。
+
+<Steps>
+
+1. 下のボタンをクリックしてVRChat Creator Companionのリポジトリ登録の画面が開きます。
+   
+   <LinkButton href="vcc://vpm/addRepo?url=https://enitimeago.github.io/vpm-repos/index.json">VCCに追加</LinkButton>
+
+   画面の「I Understand, Add Repository」をクリックすると、登録が完了します。
+
+2. リポジトリ登録後、導入先のプロジェクトの管理画面を開きます。
+
+3. パッケージ一覧に「Make It MMD」の右端の`+`ボタンをクリックしてインストールが完了します。
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="BOOTH">
+
+BOOTHで配布している.unitypackageは、自動に最新バージョンをダウンロードとインストールを行います。
+したがって、この.unitypackageを使う場合はインターネット回線が必要です。
+
+1. 下のボタンをクリックしてBOOTHのページからダウンロードできます。
+   
+   <LinkButton href="https://eni.booth.pm/items/5530958">BOOTHで無料ダウンロード</LinkButton>
+
+2. Unityで導入したいプロジェクトを開きます。
+
+3. ダウンロードした.zipファイルを展開し、入っている.unitypackageを開き、または.unitypackageをUnityのウィンドウにドラッグ&ドロップすることでインポートできます。
+
+</TabItem>
+
+<TabItem label="その他">
+
+オフラインでも使える.unitypackageが公式GitHubで配布しています。
+
+<Aside type="caution" title="注意">アップデートたびにダReleasesページから再ダウンロードする必要があるため非推奨です。</Aside>
+
+1. 公式GitHubリポジトリの[Releases](https://github.com/enitimeago/make-it-mmd/releases)ページで最新の.unitypackageをダウンロードできます。
+
+2. Unityで導入したいプロジェクトを開きます。
+
+3. .unitypackageを開き、または.unitypackageをUnityのウィンドウにドラッグ&ドロップすることでインポートできます。
+
+</TabItem>
+
+</Tabs>

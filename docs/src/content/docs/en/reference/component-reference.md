@@ -1,14 +1,6 @@
 ---
-title: Getting Started
-description: How to get started with Make It MMD for VRChat avatars
+title: Component Reference
 ---
-
-Make It MMD helps set up your VRChat avatars for MMD worlds, based on their existing facial expressions.
-
-- 🌟 It's **non-destructive**. It runs only when you build your avatar, so its original data is never modified.
-- ✏️ Settings are **editable any time**. We never bake your settings into your avatar's mesh, so you don't have to start again from scratch.
-- 🤖 Scans and auto-fixes for **common issues**. We take care of Write Default and face mesh renaming for you. Of course, your animator controllers are handled non-destructively.
-- 💌 Plus **import and export** tools. If you've used a destructive tool before, you can bring in your existing data (only 1:1 blend shape copies supported). And export only shares the expressions chosen, no need to worry about sharing your avatar's mesh data.
 
 In order to support facial animations in popular VRChat MMD worlds, your avatar must meet the following conditions:
 
