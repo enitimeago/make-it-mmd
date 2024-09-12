@@ -36,6 +36,11 @@
 :root {
     --sl-font: "Public Sans";
 }
+figcaption {
+    text-align: center;
+    font-style: italic;
+    color: var(--sl-color-gray-3);
+}
 
 /* Homepage. */
 body:has(.hero) {

@@ -44,6 +44,13 @@ export default defineConfig({
                                 'ja': 'はじめに',
                             },
                         },
+                        {
+                            label: 'Basic Usage',
+                            slug: 'guides/basic-usage',
+                            translations: {
+                                'ja': '基本な使い方',
+                            },
+                        },
                     ],
                 },
                 {
