@@ -11,7 +11,7 @@ jobs:
   test:
     strategy:
       matrix:
-        unity_version: [ "2019.4.31f1", "2022.3.6f1" ]
+        unity_version: [ "2022.3.22f1" ]
 
     runs-on: ubuntu-latest
 
@@ -20,10 +20,6 @@ jobs:
       with:
         submodules: recursive
         ref: ${{ github.event.pull_request.head.sha }}
-
-    - name: Upgrade to Unity 2022
-      if: ${{ matrix.unity_version == '2022.3.6f1' }}
-      run: git apply --whitespace=fix .github/unity2022.patch
 
     - uses: anatawa12/sh-actions/resolve-vpm-packages@master
       with:
@@ -86,10 +82,7 @@ jobs:
         # vpm-manifest.json is modified.
         # TODO: does this have lockfile semantics? would committing it help?
         allowDirtyBuild: true
-        # Use this for >2021
-        # https://davidmfinol.com/gameci-2_testing.html
-        #buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
-        buildMethod: UnityEditor.SyncVS.SyncSolution
+        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
     - uses: actions/setup-dotnet@v4
       with:
