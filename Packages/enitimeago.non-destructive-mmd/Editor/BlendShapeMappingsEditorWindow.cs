@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor;
+using Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -198,10 +199,9 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0)
             {
-                GUILayout.Label(
-                    string.Format(
-                        EditorApplication.isPlaying ? L.Tr("MappingsEditorWindow:ViewingBlendShapesForInPlayMode") : L.Tr("MappingsEditorWindow:EditingBlendShapesFor"),
-                        MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
+                GUILayout.Label(EditorApplication.isPlaying ?
+                    L.Tr("MappingsEditorWindow:ViewingBlendShapesForInPlayMode", ("morphName", (FluentString)MmdBlendShapeNames.All[_currentMmdKeyIndex].Name)) :
+                    L.Tr("MappingsEditorWindow:EditingBlendShapesFor", ("morphName", (FluentString)MmdBlendShapeNames.All[_currentMmdKeyIndex].Name)));
             }
             else
             {

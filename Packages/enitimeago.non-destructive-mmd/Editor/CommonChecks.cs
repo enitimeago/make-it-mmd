@@ -1,6 +1,7 @@
 ﻿#if NDMMD_VRCSDK3_AVATARS
 
 using System.Linq;
+using Linguini.Shared.Types.Bundle;
 using nadena.dev.ndmf;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -56,7 +57,7 @@ namespace enitimeago.NonDestructiveMMD
                 {
                     if (mesh.GetBlendShapeIndex(avatarKey) < 0)
                     {
-                        LogLocalized(Severity.Warning, "CommonChecks:MorphReferencesNonExistingBlendShape", mapping.Key, avatarKey);
+                        LogLocalized(Severity.Warning, "CommonChecks:MorphReferencesNonExistingBlendShape", ("morphName", (FluentString)mapping.Key), ("blendShapeName", (FluentString)avatarKey));
                         foundNonExistingReference = true;
                     }
                 }
@@ -166,9 +167,9 @@ namespace enitimeago.NonDestructiveMMD
 #if UNITY_2021_3_OR_NEWER
         [HideInCallstackAttribute]
 #endif
-        private void LogLocalized(Severity severity, string key, params object[] args)
+        private void LogLocalized(Severity severity, string key, params (string, IFluentType)[] args)
         {
-            string message = string.Format(L.Tr(key), args);
+            string message = L.Tr(key, key, args);
             if (_isEditor)
             {
                 switch (severity)
@@ -181,13 +182,13 @@ namespace enitimeago.NonDestructiveMMD
             }
             else
             {
-                switch (severity)
-                {
-                    case Severity.Debug: Debug.Log(message); break;
-                    case Severity.Warning: ErrorReport.ReportError(L.Localizer, ErrorSeverity.NonFatal, key, args); break;
-                    case Severity.Error: ErrorReport.ReportError(L.Localizer, ErrorSeverity.Error, key, args); break;
-                    default: ErrorReport.ReportError(L.Localizer, ErrorSeverity.InternalError, $"Unknown severity type raised with message \"${key}\""); break;
-                }
+                // switch (severity)
+                // {
+                //     case Severity.Debug: Debug.Log(message); break;
+                //     case Severity.Warning: ErrorReport.ReportError(L.Localizer, ErrorSeverity.NonFatal, key, args); break;
+                //     case Severity.Error: ErrorReport.ReportError(L.Localizer, ErrorSeverity.Error, key, args); break;
+                //     default: ErrorReport.ReportError(L.Localizer, ErrorSeverity.InternalError, $"Unknown severity type raised with message \"${key}\""); break;
+                // }
             }
         }
 

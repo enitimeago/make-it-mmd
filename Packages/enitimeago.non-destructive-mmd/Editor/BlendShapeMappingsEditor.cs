@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using enitimeago.ExportPackgeWithVpai;
+using Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -167,7 +168,7 @@ namespace enitimeago.NonDestructiveMMD
         private void ImportFromJson(BlendShapeMappings mappingsComponent)
         {
             string jsonPath = EditorUtility.OpenFilePanel(
-                L.Tr("OpenFilePanel:OpenJson"),
+                L.Tr("OpenFilePanel-OpenJson"),
                 "",
                 "json");
             if (string.IsNullOrEmpty(jsonPath))
@@ -182,13 +183,13 @@ namespace enitimeago.NonDestructiveMMD
             }
             catch (Exception e)
             {
-                EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), string.Format(L.Tr("Import:ErrorFailedToReadFile"), e), "OK");
+                EditorUtility.DisplayDialog(L.Tr("Import-ImportFailed"), L.Tr("Import-ErrorFailedToReadFile", ("fileName", (FluentString)e.ToString())), "OK");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(json))
             {
-                EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), L.Tr("Import:ErrorFileIsEmpty"), "OK");
+                EditorUtility.DisplayDialog(L.Tr("Import-ImportFailed"), L.Tr("Import-ErrorFileIsEmpty"), "OK");
                 return;
             }
 
@@ -202,12 +203,12 @@ namespace enitimeago.NonDestructiveMMD
                 }
                 catch (Exception e)
                 {
-                    EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), string.Format(L.Tr("Import:ErrorFailedToParseFile"), e), "OK");
+                    EditorUtility.DisplayDialog(L.Tr("Import-ImportFailed"), L.Tr("Import-ErrorFailedToParseFile", ("fileName", (FluentString)e.ToString())), "OK");
                     return;
                 }
                 if (dryRun.dataVersion > BlendShapeMappings.CURRENT_DATA_VERSION)
                 {
-                    EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), L.Tr("Import:ErrorFileFromNewerVersion"), "OK");
+                    EditorUtility.DisplayDialog(L.Tr("Import-ImportFailed"), L.Tr("Import-ErrorFileFromNewerVersion"), "OK");
                     return;
                 }
             }
@@ -223,10 +224,10 @@ namespace enitimeago.NonDestructiveMMD
             }
             catch (Exception e)
             {
-                EditorUtility.DisplayDialog(L.Tr("Import:ImportFailed"), string.Format(L.Tr("Import:ErrorGeneric"), e), "OK");
+                EditorUtility.DisplayDialog(L.Tr("Import-ImportFailed"), L.Tr("Import-ErrorGeneric", ("errorMessage", (FluentString)e.ToString())), "OK");
                 return;
             }
-            EditorUtility.DisplayDialog(L.Tr("MmdScanAndImportWindow:ImportCompleteDialogTitle"), L.Tr("MmdScanAndImportWindow:ImportCompleteDialogTitle"), "OK");
+            EditorUtility.DisplayDialog(L.Tr("MmdScanAndImportWindow-ImportCompleteDialogTitle"), L.Tr("MmdScanAndImportWindow-ImportCompleteDialogMessage"), L.Tr("MmdScanAndImportWindow-ImportCompleteDialogOKButton"));
         }
 
         private string SafeFilename(string name)

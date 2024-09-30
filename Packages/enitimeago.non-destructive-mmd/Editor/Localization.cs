@@ -2,6 +2,12 @@
 using nadena.dev.ndmf.localization;
 using UnityEditor;
 using UnityEngine;
+using Linguini.Bundle.Builder;
+using System.Globalization;
+using Linguini.Bundle;
+using System.IO;
+using Linguini.Shared.Types.Bundle;
+using System.Collections.Generic;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -10,10 +16,9 @@ namespace enitimeago.NonDestructiveMMD
         private class Locale
         {
             public string IsoCode;
-            public LocalizationAsset Asset;
+            public FluentBundle Bundle;
         }
 
-        public static Localizer Localizer { get; private set; }
         private static Locale[] _locales = new Locale[]
         {
             new Locale { IsoCode = "en-us" },
@@ -24,26 +29,24 @@ namespace enitimeago.NonDestructiveMMD
 
         static Localization()
         {
-            Localizer = new Localizer("en-us", () =>
-                _locales.Select(locale =>
+            string localizationDir = AssetDatabase.GUIDToAssetPath("28b1340a11795724997e5bcda57804da");
+            foreach (var locale in _locales)
+            {
+                if (locale.Bundle == null)
                 {
-                    if (locale.Asset == null)
+                    string text = File.ReadAllText($"{localizationDir}/{locale.IsoCode}.ftl");
+                    if (string.IsNullOrEmpty(text))
                     {
-                        string localizationDir = AssetDatabase.GUIDToAssetPath("28b1340a11795724997e5bcda57804da");
-                        locale.Asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>($"{localizationDir}/{locale.IsoCode}.po");
-                        if (locale.Asset != null)
-                        {
-                            Debug.Log($"Make It MMD successfully loaded LocalizationAsset for {locale.IsoCode}");
-                        }
-                        else
-                        {
-                            Debug.LogError($"Make It MMD failed to load LocalizationAsset for {locale.IsoCode}");
-                        }
+                        Debug.LogError($"Make It MMD failed to read LocalizationAsset for {locale.IsoCode}");
+                        continue;
                     }
-                    return locale.Asset;
-                })
-                .Where(asset => asset != null)
-                .ToList());
+                    Debug.Log($"Make It MMD successfully read LocalizationAsset for {locale.IsoCode}");
+                    locale.Bundle = LinguiniBuilder.Builder()
+                        .CultureInfo(new CultureInfo(locale.IsoCode))
+                        .AddResource(text)
+                        .UncheckedBuild();
+                }
+            }
             LanguagePrefs.RegisterLanguageChangeCallback(typeof(Localization), _ => OnLanguageChange());
             OnLanguageChange();
         }
@@ -53,7 +56,7 @@ namespace enitimeago.NonDestructiveMMD
             int newLocaleIndex = EditorGUILayout.Popup(
                 _currentLocaleIndex,
                 _locales
-                    .Select(locale => locale.Asset?.GetLocalizedString($"locale:{locale.IsoCode}") ?? locale.IsoCode)
+                    .Select(locale => /*locale.Asset?.GetLocalizedString($"locale:{locale.IsoCode}") ??*/ locale.IsoCode)
                     .ToArray());
             if (newLocaleIndex != _currentLocaleIndex)
             {
@@ -62,14 +65,20 @@ namespace enitimeago.NonDestructiveMMD
             }
         }
 
-        public static string Tr(string key)
+        public static string Tr(string key, params (string, IFluentType)[] args)
         {
-            return Tr(key, key);
+            return Tr(key, key, args);
         }
 
-        public static string Tr(string key, string fallback)
+        public static string Tr(string key, string fallback, params (string, IFluentType)[] args)
         {
-            if (Localizer != null && Localizer.TryGetLocalizedString(key, out var value))
+            key = key.Replace(':', '-');
+            var dictionary = new Dictionary<string, IFluentType>(args.Length);
+            foreach (var (k, v) in args)
+            {
+                dictionary.Add(k, v);
+            }
+            if (_locales[_currentLocaleIndex].Bundle.TryGetAttrMessage(key, dictionary, out _, out var value))
             {
                 return value;
             }

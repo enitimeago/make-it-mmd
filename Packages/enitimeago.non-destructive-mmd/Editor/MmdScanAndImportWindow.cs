@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -51,7 +52,7 @@ namespace enitimeago.NonDestructiveMMD
                 var newMappings = mappingsComponent == null ? _mmdToNonMmdBlendShapeMappings.ToList()
                     : _mmdToNonMmdBlendShapeMappings.Where(mapping => !mappingsComponent.HasBlendShapeMappings(mapping.Key)).ToList();
 
-                GUILayout.Label(string.Format(L.Tr("MmdScanAndImportWindow:ScanReport"), totalBlendShapes, _mmdToNonMmdBlendShapeMappings.Count, _mmdBlendShapes.Count));
+                GUILayout.Label(L.Tr("MmdScanAndImportWindow:ScanReport", ("totalScanned", (FluentNumber)totalBlendShapes), ("matchingShapes", (FluentNumber)_mmdToNonMmdBlendShapeMappings.Count), ("knownShapes", (FluentNumber)_mmdBlendShapes.Count)));
                 _blendShapeScrollPosition = EditorGUILayout.BeginScrollView(_blendShapeScrollPosition);
                 foreach (var entry in _mmdToNonMmdBlendShapeMappings)
                 {
@@ -81,8 +82,8 @@ namespace enitimeago.NonDestructiveMMD
                         bool noNew = !_replaceExisting && existingMappings.Count == _mmdToNonMmdBlendShapeMappings.Count;
                         EditorGUI.BeginDisabledGroup(noNew);
                         if (GUILayout.Button(noNew || (_replaceExisting && existingMappings.Count > 0)
-                            ? string.Format(L.Tr("MmdScanAndImportWindow:ImportWithReplacementsButton"), newMappings.Count, existingMappings.Count)
-                            : string.Format(L.Tr("MmdScanAndImportWindow:ImportButton"), newMappings.Count)))
+                            ? L.Tr("MmdScanAndImportWindow:ImportWithReplacementsButton", ("existingCount", (FluentNumber)newMappings.Count), ("newCount", (FluentNumber)existingMappings.Count))
+                            : L.Tr("MmdScanAndImportWindow:ImportButton", ("newCount", (FluentNumber)newMappings.Count))))
                         {
                             ImportTo(mappingsComponent, _mmdToNonMmdBlendShapeMappings, _replaceExisting);
                             EditorGUIUtility.PingObject(mappingsComponent.gameObject);
@@ -160,7 +161,7 @@ namespace enitimeago.NonDestructiveMMD
             {
                 EditorUtility.DisplayDialog(
                     L.Tr("MmdScanAndImportWindow:ImportCompleteDialogTitle"),
-                    string.Format(L.Tr("MmdScanAndImportWindow:ImportCompleteDialogMessage"), mappingsImported),
+                    L.Tr("MmdScanAndImportWindow:ImportCompleteDialogMessage", ("importedCount", (FluentNumber)mappingsImported)),
                     L.Tr("MmdScanAndImportWindow:ImportCompleteDialogOKButton"));
             }
         }

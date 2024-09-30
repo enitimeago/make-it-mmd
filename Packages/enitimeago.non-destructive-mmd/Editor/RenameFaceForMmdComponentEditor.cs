@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Linguini.Shared.Types.Bundle;
+using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
@@ -40,7 +41,7 @@ namespace enitimeago.NonDestructiveMMD
                 }
                 else
                 {
-                    GUILayout.Label(string.Format(L.Tr("RenameFaceForMmdComponentEditor:ActionToPerform"), avatar.VisemeSkinnedMesh.name), EditorStyles.wordWrappedLabel);
+                    GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor:ActionToPerform", ("currentName", (FluentString)avatar.VisemeSkinnedMesh.name)), EditorStyles.wordWrappedLabel);
 
                     var toRenames = RenameFaceForMmdPass.DetermineRenames(avatar.GetComponentsInChildren<SkinnedMeshRenderer>());
                     if (toRenames.Count > 0)
