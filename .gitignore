@@ -16,6 +16,7 @@
 !/[Aa]ssets/**/*.meta
 
 # Exclude certain directories and meta data for local testing purposes
+Assets/XR*
 Assets/Amatousagi*
 Assets/Examples and Samples Have Moved*
 Assets/lilToon*
