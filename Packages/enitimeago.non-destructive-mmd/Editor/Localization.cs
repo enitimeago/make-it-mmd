@@ -19,6 +19,11 @@ namespace enitimeago.NonDestructiveMMD
             public FluentBundle Bundle;
         }
 
+#if NDMMD_DEBUG
+        private static FileSystemWatcher _fileSystemWatcher;
+#endif
+        // This isn't a dictionary because OrderedDictionary isn't generic ¯\_(ツ)_/¯
+        // Need ordering to always render a consistently-ordered EditorGUILayout.Popup
         private static Locale[] _locales = new Locale[]
         {
             new Locale { IsoCode = "en-us" },
@@ -30,25 +35,55 @@ namespace enitimeago.NonDestructiveMMD
         static Localization()
         {
             string localizationDir = AssetDatabase.GUIDToAssetPath("28b1340a11795724997e5bcda57804da");
-            foreach (var locale in _locales)
+            if (string.IsNullOrEmpty(localizationDir))
             {
-                if (locale.Bundle == null)
-                {
-                    string text = File.ReadAllText($"{localizationDir}/{locale.IsoCode}.ftl");
-                    if (string.IsNullOrEmpty(text))
-                    {
-                        Debug.LogError($"Make It MMD failed to read LocalizationAsset for {locale.IsoCode}");
-                        continue;
-                    }
-                    Debug.Log($"Make It MMD successfully read LocalizationAsset for {locale.IsoCode}");
-                    locale.Bundle = LinguiniBuilder.Builder()
-                        .CultureInfo(new CultureInfo(locale.IsoCode))
-                        .AddResource(text)
-                        .UncheckedBuild();
-                }
+                Debug.LogError($"Make It MMD failed to find localization files!");
+                return;
+            }
+
+            foreach (var locale in _locales.Where(l => l.Bundle == null))
+            {
+                LoadLocale(locale, $"{localizationDir}/{locale.IsoCode}.ftl");
             }
             LanguagePrefs.RegisterLanguageChangeCallback(typeof(Localization), _ => OnLanguageChange());
             OnLanguageChange();
+
+#if NDMMD_DEBUG
+            _fileSystemWatcher = new FileSystemWatcher(localizationDir);
+            _fileSystemWatcher.Filter = "*.ftl";
+            _fileSystemWatcher.EnableRaisingEvents = true;
+            _fileSystemWatcher.Changed += (sender, e) =>
+            {
+                string isoCode = Path.GetFileNameWithoutExtension(e.FullPath);
+                var locale = _locales.FirstOrDefault(l => l.IsoCode == isoCode);
+                if (locale != null)
+                {
+                    Debug.Log($"Reloading from {e.FullPath}");
+                    LoadLocale(locale, e.FullPath);
+                }
+            };
+#endif
+        }
+
+        private static void LoadLocale(Locale locale, string path)
+        {
+            string text = File.ReadAllText(path);
+            if (string.IsNullOrEmpty(text))
+            {
+                Debug.LogError($"Make It MMD failed to read LocalizationAsset for {locale.IsoCode}");
+                return;
+            }
+            Debug.Log($"Make It MMD successfully read LocalizationAsset for {locale.IsoCode}");
+            locale.Bundle = LinguiniBuilder.Builder()
+                .CultureInfo(new CultureInfo(locale.IsoCode))
+                .AddResource(text)
+                .UncheckedBuild();
+        }
+
+        private static void OnLanguageChange()
+        {
+            _currentLocaleIndex = _locales.TakeWhile(locale => locale.IsoCode != LanguagePrefs.Language.ToLower()).Count();
+            Debug.Log($"currentLocale {_currentLocaleIndex}");
         }
 
         public static void DrawLanguagePicker()
@@ -83,12 +118,6 @@ namespace enitimeago.NonDestructiveMMD
                 return value;
             }
             return fallback;
-        }
-
-        private static void OnLanguageChange()
-        {
-            _currentLocaleIndex = _locales.TakeWhile(locale => locale.IsoCode != LanguagePrefs.Language.ToLower()).Count();
-            Debug.Log($"currentLocale {_currentLocaleIndex}");
         }
     }
 }
