@@ -48,13 +48,13 @@ namespace enitimeago.NonDestructiveMMD
             if (!data.ignoreFaceMeshName && visemeSkinnedMesh?.name != "Body" && renameFaceForMmdComponents.Count() == 0)
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.HelpBox(L.Tr("CommonChecks:AvatarFaceSMRNotCalledBody"), MessageType.Info);
+                EditorGUILayout.HelpBox(L.Tr("CommonChecks-AvatarFaceSMRNotCalledBody"), MessageType.Info);
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button(L.Tr("Common:FixThis")))
+                if (GUILayout.Button(L.Tr("Common-FixThis")))
                 {
                     data.gameObject.AddComponent<RenameFaceForMmdComponent>();
                 }
-                if (GUILayout.Button(L.Tr("Common:Ignore")))
+                if (GUILayout.Button(L.Tr("Common-Ignore")))
                 {
                     data.ignoreFaceMeshName = true;
                 }
@@ -64,9 +64,9 @@ namespace enitimeago.NonDestructiveMMD
             if (!data.ignoreFaceMeshNotAtRoot && visemeSkinnedMesh.transform.parent?.gameObject != avatar?.gameObject)
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.HelpBox(L.Tr("CommonChecks:AvatarFaceSMRNotAtRoot"), MessageType.Info);
+                EditorGUILayout.HelpBox(L.Tr("CommonChecks-AvatarFaceSMRNotAtRoot"), MessageType.Info);
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button(L.Tr("Common:Ignore")))
+                if (GUILayout.Button(L.Tr("Common-Ignore")))
                 {
                     data.ignoreFaceMeshNotAtRoot = true;
                 }
@@ -77,9 +77,9 @@ namespace enitimeago.NonDestructiveMMD
             if (!data.ignoreWriteDefaultsOff && _commonChecks.AvatarHasWriteDefaultOff(avatar) && writeDefaultsComponents.All(x => !x.forceAvatarWriteDefaults))
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.HelpBox(L.Tr("CommonChecks:AvatarWriteDefaultOffFound"), MessageType.Info);
+                EditorGUILayout.HelpBox(L.Tr("CommonChecks-AvatarWriteDefaultOffFound"), MessageType.Info);
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button(L.Tr("Common:FixThis")))
+                if (GUILayout.Button(L.Tr("Common-FixThis")))
                 {
                     if (writeDefaultsComponents.Count() == 0)
                     {
@@ -91,7 +91,7 @@ namespace enitimeago.NonDestructiveMMD
                         writeDefaultsComponents.First().forceAvatarWriteDefaults = true;
                     }
                 }
-                if (GUILayout.Button(L.Tr("Common:Ignore")))
+                if (GUILayout.Button(L.Tr("Common-Ignore")))
                 {
                     data.ignoreWriteDefaultsOff = true;
                 }
@@ -113,10 +113,10 @@ namespace enitimeago.NonDestructiveMMD
             {
                 EditorGUILayout.BeginHorizontal();
                 var helpBoxRect = EditorGUILayout.BeginVertical();
-                EditorGUILayout.HelpBox(L.Tr("MappingsEditor:ImportBlendShapesSuggestion"), MessageType.Info);
+                EditorGUILayout.HelpBox(L.Tr("MappingsEditor-ImportBlendShapesSuggestion"), MessageType.Info);
                 EditorGUILayout.EndVertical();
                 _hasMmdShapeKeysHelpBoxHeight = helpBoxRect.height > 2 ? helpBoxRect.height - 2 : _hasMmdShapeKeysHelpBoxHeight;
-                if (GUILayout.Button(L.Tr("MappingsEditor:ImportBlendShapesButton"), GUILayout.MinHeight(_hasMmdShapeKeysHelpBoxHeight)))
+                if (GUILayout.Button(L.Tr("MappingsEditor-ImportBlendShapesButton"), GUILayout.MinHeight(_hasMmdShapeKeysHelpBoxHeight)))
                 {
                     MmdScanAndImportWindow.ShowWindow(avatar);
                 }
@@ -126,7 +126,7 @@ namespace enitimeago.NonDestructiveMMD
             var openEditorButtonStyle = new GUIStyle(GUI.skin.button);
             openEditorButtonStyle.fontSize = 20;
             openEditorButtonStyle.padding = new RectOffset(10, 10, 10, 10);
-            if (GUILayout.Button(L.Tr("MappingsEditor:OpenEditor"), openEditorButtonStyle))
+            if (GUILayout.Button(L.Tr("MappingsEditor-OpenEditor"), openEditorButtonStyle))
             {
                 BlendShapeMappingsEditorWindow.ShowWindow(data);
             }
@@ -134,20 +134,20 @@ namespace enitimeago.NonDestructiveMMD
             EditorGUILayout.BeginHorizontal();
 
             GUI.enabled = avatarOkay;
-            if (GUILayout.Button(L.Tr("MappingsEditor:ShareMenuLabel")))
+            if (GUILayout.Button(L.Tr("MappingsEditor-ShareMenuLabel")))
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShareAsUnitypackage")), false, () => ExportAsPackage(data));
-                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ExportAsJson")), false, () => ExportAsJson(data, SafeFilename(avatar.name)));
-                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ImportFromJson")), false, () => ImportFromJson(data));
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor-ShareAsUnitypackage")), false, () => ExportAsPackage(data));
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor-ExportAsJson")), false, () => ExportAsJson(data, SafeFilename(avatar.name)));
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor-ImportFromJson")), false, () => ImportFromJson(data));
                 menu.ShowAsContext();
             }
             GUI.enabled = true;
 
-            if (GUILayout.Button(L.Tr("MappingsEditor:MoreMenuLabel")))
+            if (GUILayout.Button(L.Tr("MappingsEditor-MoreMenuLabel")))
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent(L.Tr("MappingsEditor:ShowStoredData")), _showStoredData, () => _showStoredData = !_showStoredData);
+                menu.AddItem(new GUIContent(L.Tr("MappingsEditor-ShowStoredData")), _showStoredData, () => _showStoredData = !_showStoredData);
                 menu.ShowAsContext();
             }
 
@@ -242,7 +242,7 @@ namespace enitimeago.NonDestructiveMMD
         private void ExportAsJson(BlendShapeMappings mappingsComponent, string defaultName)
         {
             string jsonPath = EditorUtility.SaveFilePanel(
-                L.Tr("SaveFilePanel:SaveJson"),
+                L.Tr("SaveFilePanel-SaveJson"),
                 "",
                 defaultName,
                 "json");
@@ -259,7 +259,7 @@ namespace enitimeago.NonDestructiveMMD
         private void ExportAsPackage(BlendShapeMappings mappingsComponent)
         {
             string packagePath = EditorUtility.SaveFilePanel(
-                L.Tr("SaveFilePanel:SaveUnitypackage"),
+                L.Tr("SaveFilePanel-SaveUnitypackage"),
                 "",
                 "",
                 "unitypackage");

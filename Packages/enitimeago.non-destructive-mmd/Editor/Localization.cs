@@ -139,8 +139,6 @@ namespace enitimeago.NonDestructiveMMD
 
         public static string Tr(string key, string fallback, params (string, IFluentType)[] args)
         {
-            // placeholder until all strings are fixed
-            key = key.Replace(':', '-');
             var dictionary = new Dictionary<string, IFluentType>(args.Length);
             foreach (var (k, v) in args)
             {

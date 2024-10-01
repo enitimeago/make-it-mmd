@@ -36,9 +36,9 @@ namespace enitimeago.NonDestructiveMMD
         {
             L.DrawLanguagePicker();
 
-            _avatar = (VRCAvatarDescriptor)EditorGUILayout.ObjectField(L.Tr("MmdScanAndImportWindow:AvatarToScanField"), _avatar, typeof(VRCAvatarDescriptor), true);
+            _avatar = (VRCAvatarDescriptor)EditorGUILayout.ObjectField(L.Tr("MmdScanAndImportWindow-AvatarToScanField"), _avatar, typeof(VRCAvatarDescriptor), true);
             EditorGUI.BeginDisabledGroup(_avatar == null);
-            if (GUILayout.Button(_avatar == null ? L.Tr("MmdScanAndImportWindow:ScanButtonNoValidAvatar") : L.Tr("MmdScanAndImportWindow:ScanButton")))
+            if (GUILayout.Button(_avatar == null ? L.Tr("MmdScanAndImportWindow-ScanButtonNoValidAvatar") : L.Tr("MmdScanAndImportWindow-ScanButton")))
             {
                 Scan();
             }
@@ -52,7 +52,7 @@ namespace enitimeago.NonDestructiveMMD
                 var newMappings = mappingsComponent == null ? _mmdToNonMmdBlendShapeMappings.ToList()
                     : _mmdToNonMmdBlendShapeMappings.Where(mapping => !mappingsComponent.HasBlendShapeMappings(mapping.Key)).ToList();
 
-                GUILayout.Label(L.Tr("MmdScanAndImportWindow:ScanReport", ("totalScanned", (FluentNumber)totalBlendShapes), ("matchingShapes", (FluentNumber)_mmdToNonMmdBlendShapeMappings.Count), ("knownShapes", (FluentNumber)_mmdBlendShapes.Count)));
+                GUILayout.Label(L.Tr("MmdScanAndImportWindow-ScanReport", ("totalScanned", (FluentNumber)totalBlendShapes), ("matchingShapes", (FluentNumber)_mmdToNonMmdBlendShapeMappings.Count), ("knownShapes", (FluentNumber)_mmdBlendShapes.Count)));
                 _blendShapeScrollPosition = EditorGUILayout.BeginScrollView(_blendShapeScrollPosition);
                 foreach (var entry in _mmdToNonMmdBlendShapeMappings)
                 {
@@ -60,7 +60,7 @@ namespace enitimeago.NonDestructiveMMD
                 }
                 if (_mmdToNonMmdBlendShapeMappings.Count < _mmdBlendShapes.Count)
                 {
-                    GUILayout.Label(L.Tr("MmdScanAndImportWindow:NotFoundHeading"));
+                    GUILayout.Label(L.Tr("MmdScanAndImportWindow-NotFoundHeading"));
                     foreach (var unknown in _mmdBlendShapes.Where(blendShape => !_mmdToNonMmdBlendShapeMappings.ContainsKey(blendShape.Item1)))
                     {
                         GUILayout.Label(unknown.Item1);
@@ -73,17 +73,17 @@ namespace enitimeago.NonDestructiveMMD
                     if (mappingsComponent != null)
                     {
                         EditorGUI.BeginDisabledGroup(true);
-                        EditorGUILayout.ObjectField(L.Tr("MmdScanAndImportWindow:WillImportToField"), mappingsComponent, typeof(BlendShapeMappings), true);
+                        EditorGUILayout.ObjectField(L.Tr("MmdScanAndImportWindow-WillImportToField"), mappingsComponent, typeof(BlendShapeMappings), true);
                         EditorGUI.EndDisabledGroup();
 
                         var existing = _mmdToNonMmdBlendShapeMappings.Where(mapping => mappingsComponent.HasBlendShapeMappings(mapping.Key));
-                        _replaceExisting = EditorGUILayout.Toggle(L.Tr("MmdScanAndImportWindow:ReplaceExistingToggle"), _replaceExisting);
+                        _replaceExisting = EditorGUILayout.Toggle(L.Tr("MmdScanAndImportWindow-ReplaceExistingToggle"), _replaceExisting);
 
                         bool noNew = !_replaceExisting && existingMappings.Count == _mmdToNonMmdBlendShapeMappings.Count;
                         EditorGUI.BeginDisabledGroup(noNew);
                         if (GUILayout.Button(noNew || (_replaceExisting && existingMappings.Count > 0)
-                            ? L.Tr("MmdScanAndImportWindow:ImportWithReplacementsButton", ("existingCount", (FluentNumber)newMappings.Count), ("newCount", (FluentNumber)existingMappings.Count))
-                            : L.Tr("MmdScanAndImportWindow:ImportButton", ("newCount", (FluentNumber)newMappings.Count))))
+                            ? L.Tr("MmdScanAndImportWindow-ImportWithReplacementsButton", ("existingCount", (FluentNumber)newMappings.Count), ("newCount", (FluentNumber)existingMappings.Count))
+                            : L.Tr("MmdScanAndImportWindow-ImportButton", ("newCount", (FluentNumber)newMappings.Count))))
                         {
                             ImportTo(mappingsComponent, _mmdToNonMmdBlendShapeMappings, _replaceExisting);
                             EditorGUIUtility.PingObject(mappingsComponent.gameObject);
@@ -94,13 +94,13 @@ namespace enitimeago.NonDestructiveMMD
                     {
                         if (_chooseImportDestination)
                         {
-                            _customImportDestination = (GameObject)EditorGUILayout.ObjectField(L.Tr("MmdScanAndImportWindow:ImportToField"), _customImportDestination, typeof(GameObject), true);
+                            _customImportDestination = (GameObject)EditorGUILayout.ObjectField(L.Tr("MmdScanAndImportWindow-ImportToField"), _customImportDestination, typeof(GameObject), true);
                         }
                         EditorGUILayout.BeginHorizontal();
                         if (_chooseImportDestination)
                         {
                             EditorGUI.BeginDisabledGroup(_customImportDestination == null);
-                            if (GUILayout.Button(L.Tr("MmdScanAndImportWindow:ImportToSelectedGameObjectButton")))
+                            if (GUILayout.Button(L.Tr("MmdScanAndImportWindow-ImportToSelectedGameObjectButton")))
                             {
                                 ImportTo(AddMappingsComponentTo(_customImportDestination), _mmdToNonMmdBlendShapeMappings, false);
                                 EditorGUIUtility.PingObject(_customImportDestination);
@@ -109,7 +109,7 @@ namespace enitimeago.NonDestructiveMMD
                         }
                         else
                         {
-                            if (GUILayout.Button(L.Tr("MmdScanAndImportWindow:ImportToNewBrandedGameObjectButton")))
+                            if (GUILayout.Button(L.Tr("MmdScanAndImportWindow-ImportToNewBrandedGameObjectButton")))
                             {
                                 var importDestination = CreateGameObject(_avatar);
                                 ImportTo(AddMappingsComponentTo(importDestination), _mmdToNonMmdBlendShapeMappings, false);
@@ -119,7 +119,7 @@ namespace enitimeago.NonDestructiveMMD
                         if (GUILayout.Button("▼", EditorStyles.miniButton, GUILayout.Width(20)))
                         {
                             var menu = new GenericMenu();
-                            menu.AddItem(new GUIContent(L.Tr("MmdScanAndImportWindow:ChooseDestinationGameObjectToggle")), _chooseImportDestination, () => _chooseImportDestination = !_chooseImportDestination);
+                            menu.AddItem(new GUIContent(L.Tr("MmdScanAndImportWindow-ChooseDestinationGameObjectToggle")), _chooseImportDestination, () => _chooseImportDestination = !_chooseImportDestination);
                             menu.ShowAsContext();
                         }
                         EditorGUILayout.EndHorizontal();
@@ -160,9 +160,9 @@ namespace enitimeago.NonDestructiveMMD
             finally
             {
                 EditorUtility.DisplayDialog(
-                    L.Tr("MmdScanAndImportWindow:ImportCompleteDialogTitle"),
-                    L.Tr("MmdScanAndImportWindow:ImportCompleteDialogMessage", ("importedCount", (FluentNumber)mappingsImported)),
-                    L.Tr("MmdScanAndImportWindow:ImportCompleteDialogOKButton"));
+                    L.Tr("MmdScanAndImportWindow-ImportCompleteDialogTitle"),
+                    L.Tr("MmdScanAndImportWindow-ImportCompleteDialogMessage", ("importedCount", (FluentNumber)mappingsImported)),
+                    L.Tr("MmdScanAndImportWindow-ImportCompleteDialogOKButton"));
             }
         }
 
