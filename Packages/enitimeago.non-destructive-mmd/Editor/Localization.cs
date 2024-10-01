@@ -91,7 +91,7 @@ namespace enitimeago.NonDestructiveMMD
             int newLocaleIndex = EditorGUILayout.Popup(
                 _currentLocaleIndex,
                 _locales
-                    .Select(locale => /*locale.Asset?.GetLocalizedString($"locale:{locale.IsoCode}") ??*/ locale.IsoCode)
+                    .Select(locale => locale.Bundle.GetMessage($"locale-{locale.IsoCode}"))
                     .ToArray());
             if (newLocaleIndex != _currentLocaleIndex)
             {
