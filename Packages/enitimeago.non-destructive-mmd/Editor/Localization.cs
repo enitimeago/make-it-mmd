@@ -83,7 +83,9 @@ namespace enitimeago.NonDestructiveMMD
         private static void OnLanguageChange()
         {
             _currentLocaleIndex = _locales.TakeWhile(locale => locale.IsoCode != LanguagePrefs.Language.ToLower()).Count();
+#if NDMMD_DEBUG
             Debug.Log($"currentLocale {_currentLocaleIndex}");
+#endif
         }
 
         public static void DrawLanguagePicker()
