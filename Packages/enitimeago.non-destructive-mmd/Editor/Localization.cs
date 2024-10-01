@@ -1,13 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using nadena.dev.ndmf;
 using nadena.dev.ndmf.localization;
+using Linguini.Bundle.Builder;
+using Linguini.Bundle;
+using Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
-using Linguini.Bundle.Builder;
-using System.Globalization;
-using Linguini.Bundle;
-using System.IO;
-using Linguini.Shared.Types.Bundle;
-using System.Collections.Generic;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -17,6 +19,34 @@ namespace enitimeago.NonDestructiveMMD
         {
             public string IsoCode;
             public FluentBundle Bundle;
+        }
+
+        /// <summary>
+        /// Wrapper around NDMF's <see cref="SimpleError"> for using Project Fluent strings and args.
+        /// This is necessary because NDMF errors at time of writing only supports basic param substitutions
+        /// using <c>{0}, {1} .. {n}</c>, and isn't capable of passing through typed args.
+        /// </summary>
+        internal class LocalizedError : SimpleError
+        {
+            public override Localizer Localizer { get; }
+            public override ErrorSeverity Severity { get; }
+            public override string TitleKey { get; }
+            public IReadOnlyDictionary<string, IFluentType> Args { get; }
+            private Dictionary<string, IFluentType> _args;
+
+            public LocalizedError(ErrorSeverity severity, string titleKey, params (string, IFluentType)[] args)
+            {
+                _args = new Dictionary<string, IFluentType>(args.Length);
+                foreach (var (k, v) in args)
+                {
+                    _args.Add(k, v);
+                }
+                Severity = severity;
+                TitleKey = titleKey;
+                Localizer = new Localizer("en-us", () => _locales.Select<Locale, (string, Func<string, string>)>(
+                    // TODO: support DetailsKey and HintKey so the : hack for :description and :hint isn't needed
+                    locale => (locale.IsoCode, key => key.Contains(":") ? "" : locale.Bundle.GetMessage(key, null, _args))).ToList());
+            }
         }
 
 #if NDMMD_DEBUG
@@ -109,6 +139,7 @@ namespace enitimeago.NonDestructiveMMD
 
         public static string Tr(string key, string fallback, params (string, IFluentType)[] args)
         {
+            // placeholder until all strings are fixed
             key = key.Replace(':', '-');
             var dictionary = new Dictionary<string, IFluentType>(args.Length);
             foreach (var (k, v) in args)
