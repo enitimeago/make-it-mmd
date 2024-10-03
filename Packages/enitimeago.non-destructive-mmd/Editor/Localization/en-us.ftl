@@ -44,7 +44,18 @@ MappingsEditorWindow-ThumbnailSize = Thumbnail size
 MmdScanAndImportWindow-AvatarToScanField = Avatar to Scan
 MmdScanAndImportWindow-ScanButtonNoValidAvatar = Select a Valid Avatar
 MmdScanAndImportWindow-ScanButton = Scan MMD Blend Shapes
-MmdScanAndImportWindow-ScanReport = Scanned {$totalScanned} blend shapes, found matching blend shapes for {$matchingShapes}/{$knownShapes} known MMD blend shapes.
+MmdScanAndImportWindow-ScanReport =
+    Scanned {$totalScanned ->
+        [one] one blend shape
+       *[other] {$totalScanned} blend shapes
+    }, found {$matchingShapes ->
+        [zero] zero matches
+        [one] one match
+       *[other] {$matchingShapes} matches
+    } out of {$knownShapes ->
+        [one] known MMD blend shape.
+       *[other] {$knownShapes} known MMD blend shapes.
+    }
 MmdScanAndImportWindow-NotFoundHeading = Couldn't find original blend shapes for:
 MmdScanAndImportWindow-ImportToField = Import to
 MmdScanAndImportWindow-WillImportToField = Will Import to
@@ -55,7 +66,10 @@ MmdScanAndImportWindow-ImportToSelectedGameObjectButton = Import to Selected Obj
 MmdScanAndImportWindow-ImportToNewBrandedGameObjectButton = Import to New Make It MMD Object
 MmdScanAndImportWindow-ChooseDestinationGameObjectToggle = Choose Destination GameObject
 MmdScanAndImportWindow-ImportCompleteDialogTitle = Import complete
-MmdScanAndImportWindow-ImportCompleteDialogMessage = Imported {$importedCount} MMD blend shapes
+MmdScanAndImportWindow-ImportCompleteDialogMessage = Imported {$importedCount ->
+        [one] 1 MMD blend shape
+       *[other] {$importedCount} MMD blend shapes
+    }
 MmdScanAndImportWindow-ImportCompleteDialogOKButton = OK
 
 Import-ImportFailed = Import failed
