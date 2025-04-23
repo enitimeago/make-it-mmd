@@ -21,6 +21,14 @@ jobs:
         submodules: recursive
         ref: ${{ github.event.pull_request.head.sha }}
 
+    # TODO: can this be moved somewhere common?
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "8.x"
+    - name: Prepare deps
+      run: dotnet build
+      working-directory: ./third_party/Linguini/PluralRules.Generator
+
     - uses: anatawa12/sh-actions/resolve-vpm-packages@master
       with:
         repos: |
@@ -59,6 +67,14 @@ jobs:
       with:
         submodules: recursive
         ref: ${{ github.event.pull_request.head.sha }}
+
+    # TODO: can this be moved somewhere common?
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "8.x"
+    - name: Prepare deps
+      run: dotnet build
+      working-directory: ./third_party/Linguini/PluralRules.Generator
 
     - uses: anatawa12/sh-actions/resolve-vpm-packages@master
       with:
