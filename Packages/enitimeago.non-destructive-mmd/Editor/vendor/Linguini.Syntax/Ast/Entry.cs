@@ -1,0 +1,1 @@
+../../../../../../third_party/Linguini/Linguini.Syntax/Ast/Entry.cs

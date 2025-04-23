@@ -1,0 +1,25 @@
+﻿suites:
+  - name: Linguini dynamic reference attribute
+    resources:
+      - source: |-
+          -creature-fairy = fairy
+          -creature-elf = elf
+             .StartsWith = vowel
+          
+          you-see = You see { $$object.StartsWith ->
+              [vowel] an { $$object }
+              *[consonant] a { $$object }
+          }.
+    bundles:
+      - useExperimental: true
+    tests:
+      - name: regular reference
+        asserts:
+          - id: you-see
+            args:
+              object: "creature-elf"
+            value: "You see an elf."
+          - id: you-see
+            args:
+              object: "creature-fairy"
+            value: "You see a fairy."

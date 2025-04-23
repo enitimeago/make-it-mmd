@@ -1,0 +1,28 @@
+[
+  {
+    "kind": "ExpectedToken",
+    "message": "Expected  \",\" or \")\" found \"$\" instead",
+    "row": 2,
+    "position": {
+      "start": 22,
+      "end": 23
+    },
+    "slice": {
+      "start": 11,
+      "end": 32
+    }
+  },
+  {
+    "kind": "ExpectedToken",
+    "message": "Expected  \",\" or \")\" found \"$\" instead",
+    "row": 5,
+    "position": {
+      "start": 54,
+      "end": 55
+    },
+    "slice": {
+      "start": 43,
+      "end": 60
+    }
+  }
+]

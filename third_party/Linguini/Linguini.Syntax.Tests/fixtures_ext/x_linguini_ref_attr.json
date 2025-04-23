@@ -1,0 +1,150 @@
+﻿{
+    "type": "Resource",
+    "body": [
+        {
+            "type": "Term",
+            "id": {
+                "type": "Identifier",
+                "name": "creature-fairy"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "fairy"
+                    }
+                ]
+            },
+            "attributes": []
+        },
+        {
+            "type": "Term",
+            "id": {
+                "type": "Identifier",
+                "name": "creature-elf"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "elf"
+                    }
+                ]
+            },
+            "attributes": [
+                {
+                    "type": "Attribute",
+                    "id": {
+                        "type": "Identifier",
+                        "name": "StartsWith"
+                    },
+                    "value": {
+                        "type": "Pattern",
+                        "elements": [
+                            {
+                                "type": "TextElement",
+                                "value": "vowel"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "you-see"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "You see "
+                    },
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "SelectExpression",
+                            "selector": {
+                                "type": "DynamicReference",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "object"
+                                },
+                                "attribute": {
+                                    "type": "Identifier",
+                                    "name": "StartsWith"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "type": "Variant",
+                                    "key": {
+                                        "type": "Identifier",
+                                        "name": "vowel"
+                                    },
+                                    "value": {
+                                        "type": "Pattern",
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "an "
+                                            },
+                                            {
+                                                "type": "Placeable",
+                                                "expression": {
+                                                    "type": "DynamicReference",
+                                                    "id": {
+                                                        "type": "Identifier",
+                                                        "name": "object"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "default": false
+                                },
+                                {
+                                    "type": "Variant",
+                                    "key": {
+                                        "type": "Identifier",
+                                        "name": "consonant"
+                                    },
+                                    "value": {
+                                        "type": "Pattern",
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "a "
+                                            },
+                                            {
+                                                "type": "Placeable",
+                                                "expression": {
+                                                    "type": "DynamicReference",
+                                                    "id": {
+                                                        "type": "Identifier",
+                                                        "name": "object"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "."
+                    }
+                ]
+            },
+            "attributes": []
+        }
+    ]
+}
