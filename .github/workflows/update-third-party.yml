@@ -23,7 +23,20 @@ jobs:
   update:
     runs-on: ubuntu-latest
 
+    env:
+      USE_BAZEL_VERSION: 7.6.1
+      BAZELISK_BASE_URL: https://github.com/bazelbuild/bazel/releases/download
+
     steps:
+    - uses: bazel-contrib/setup-bazel@0.14.0
+      with:
+        # Avoid downloading Bazel every time.
+        bazelisk-cache: true
+        # Store build cache per workflow.
+        disk-cache: ${{ github.workflow }}
+        # Share repository cache between workflows.
+        repository-cache: true
+
     - name: Get bot token
       id: get_workflow_token
       uses: peter-murray/workflow-application-token-action@v3
@@ -35,7 +48,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: google/copybara
-        ref: 165ebedf7e493b650ba9680b97626acdd438dfec
+        ref: c4cf60695a656d16c1e70e79eea0654e05e5a945
 
     - name: Cache Copybara
       uses: actions/cache@v3
