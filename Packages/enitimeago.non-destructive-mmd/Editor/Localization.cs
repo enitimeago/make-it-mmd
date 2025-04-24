@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Builder;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.localization;
-using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Builder;
-using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle;
-using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
 
