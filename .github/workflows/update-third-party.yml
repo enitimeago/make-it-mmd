@@ -9,7 +9,7 @@ on:
         type: choice
         options:
         - blendshape-viewer
-        - blendshape-combiner
+        - linguini
       force:
         description: 'Force'
         required: false

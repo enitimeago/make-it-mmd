@@ -199,13 +199,13 @@ linguini_license = """// Linguini
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
- """
+"""
  
 core.workflow(
     name = "linguini",
     origin = git.origin(
-        url = "https://github.com/Ygg01/Linguinir.git",
-        ref = "master",
+        url = "https://github.com/Ygg01/Linguini.git",
+        ref = "21b67654fc373a85c4f791d48b14e3c5ffa7e071",
     ),
     destination = git.github_pr_destination(
         url = "https://github.com/enitimeago/make-it-mmd.git",
