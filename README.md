@@ -43,6 +43,24 @@ Then run:
 vrc-get resolve --project .
 ```
 
+### Dependency management
+
+Copybara is used to clone some external dependencies into this repo directly.
+Usage is motivated by two reasons:
+
+1. Applying significant patches reproducibly
+2. Avoiding submodules so this repo can work independent from upstream
+
+If upstream hasn't broken the patches then you don't have to touch Copybara,
+the GitHub Action `.github/update-third-party.yml` abstracts updates.
+
+Some notes in case you do have to touch it:
+
+- Downloading the [pre-compiled .jar](https://github.com/google/copybara/releases) is much easier than compiling from scratch
+- On Windows you can work around the missing `$HOME` error by specifying `--output-root`
+  - e.g. `java -jar copybara_deploy.jar --output-root C:\Users\[USERNAME]\copybara\out help`
+- On Windows PowerShell if you use `--dry-run` then the correct way to check is `$env:GIT_DIR='foo'; git log`
+
 ### Code style
 
 This project uses `dotnet format` with `.editorconfig` to enforce style guidelines.
