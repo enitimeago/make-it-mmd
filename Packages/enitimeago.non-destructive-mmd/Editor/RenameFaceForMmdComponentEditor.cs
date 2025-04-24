@@ -1,4 +1,4 @@
-﻿using Linguini.Shared.Types.Bundle;
+﻿using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;

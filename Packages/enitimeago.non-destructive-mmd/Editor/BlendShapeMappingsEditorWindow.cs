@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor;
-using Linguini.Shared.Types.Bundle;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;

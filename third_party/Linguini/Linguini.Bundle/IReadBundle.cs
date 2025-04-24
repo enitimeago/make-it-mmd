@@ -1,18 +1,39 @@
-﻿using System;
+﻿// Linguini
+//
+// MIT License
+//
+// Copyright 2021 Daniel Fath
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is furnished to do
+// so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Linguini.Bundle.Errors;
-using Linguini.Bundle.Types;
-using Linguini.Shared.Types.Bundle;
-using Linguini.Syntax.Ast;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Errors;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Types;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast;
 
-// ReSharper disable UnusedMemberInSuper.Global
-
-namespace Linguini.Bundle
+namespace enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle
 {
     /// <summary>
-    /// Represents an interface for reading language bundles. Read-only bundles only implement this interface.
+    /// Represents an interface for reading language bundles.
     /// </summary>
     public interface IReadBundle
     {
@@ -23,29 +44,8 @@ namespace Linguini.Bundle
         /// 
         bool HasMessage(string identifier);
 
-        /// <summary>
-        /// Converts a <see cref="Pattern"/> to a string using given arguments.
-        /// </summary>
-        /// <param name="pattern">The pattern to format.</param>
-        /// <param name="args">The dictionary of arguments to replace the variables.</param>
-        /// <param name="errors">The list of FluentErrors, if any occurred during formatting.</param>
-        /// <returns>The formatted string.</returns>
         string FormatPattern(Pattern pattern, IDictionary<string, IFluentType>? args,
-            [NotNullWhen(false)] out IList<FluentError>? errors)
-        {
-            errors = null;
-            return FormatPatternErrRef(pattern, args, ref errors);
-        }
-
-        /// <summary>
-        /// Converts a <see cref="Pattern"/> to a string using given arguments.
-        /// </summary>
-        /// <param name="pattern">The pattern to format.</param>
-        /// <param name="args">The dictionary of arguments to replace the variables.</param>
-        /// <param name="errors">The reference to a list of FluentErrors, will be full if any occurred during formatting.</param>
-        /// <returns>The formatted string.</returns>
-        string FormatPatternErrRef(Pattern pattern, IDictionary<string, IFluentType>? args,
-            [NotNullWhen(false)] ref IList<FluentError>? errors);
+            [NotNullWhen(false)] out IList<FluentError>? errors);
 
         /// <summary>
         /// Tries to get the AstMessage associated with the specified ident.
@@ -102,7 +102,7 @@ namespace Linguini.Bundle
 
         /// <summary>
         /// Tries to retrieve a message based on the provided ID and arguments.
-        /// A convenience method for <see cref="TryGetMessage(string, string?, System.Collections.Generic.IDictionary{string,Linguini.Shared.Types.Bundle.IFluentType}?,out System.Collections.Generic.IList{Linguini.Bundle.Errors.FluentError}?,out string?)"/>
+        /// A convenience method for <see cref="TryGetMessage(string, string?, System.Collections.Generic.IDictionary{string,enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle.IFluentType}?,out System.Collections.Generic.IList{enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Errors.FluentError}?,out string?)"/>
         /// </summary>
         /// <param name="id">The ID of the message to retrieve.</param>
         /// <param name="args">Optional. A dictionary of arguments to be inserted into the message.</param>
@@ -114,8 +114,7 @@ namespace Linguini.Bundle
         bool TryGetMessage(string id, IDictionary<string, IFluentType>? args,
             [NotNullWhen(false)] out IList<FluentError>? errors, [NotNullWhen(true)] out string? message)
         {
-            errors = null;
-            return TryGetMessageErrRef(id, null, args, ref errors, out message);
+            return TryGetMessage(id, null, args, out errors, out message);
         }
 
 
@@ -177,21 +176,6 @@ namespace Linguini.Bundle
         bool TryGetAttrMessage(string msgWithAttr, IDictionary<string, IFluentType>? args,
             [NotNullWhen(false)] out IList<FluentError>? errors, [NotNullWhen(true)] out string? message)
         {
-            errors = null;
-            return TryGetAttrMessageErrRef(msgWithAttr, args, ref errors, out message);
-        }
-
-        /// <summary>
-        /// Tries to retrieve an attribute message.
-        /// </summary>
-        /// <param name="msgWithAttr">The message with attribute.</param>
-        /// <param name="args">The arguments passed with the message.</param>
-        /// <param name="errors">The list of errors that occurred during the message retrieval process.</param>
-        /// <param name="message">The retrieved message.</param>
-        /// <returns>True if the attribute message is found; otherwise, false.</returns>
-        bool TryGetAttrMessageErrRef(string msgWithAttr, IDictionary<string, IFluentType>? args,
-            [NotNullWhen(false)] ref IList<FluentError>? errors, [NotNullWhen(true)] out string? message)
-        {
             if (msgWithAttr.Contains("."))
             {
                 var split = msgWithAttr.Split('.');
@@ -213,48 +197,30 @@ namespace Linguini.Bundle
         public bool TryGetMessage(string id, string? attribute, IDictionary<string, IFluentType>? args,
             [NotNullWhen(false)] out IList<FluentError>? errors, [NotNullWhen(true)] out string? message)
         {
-            errors = null;
-            return TryGetMessageErrRef(id, attribute, args, ref errors, out message);
-        }
-
-        /// <summary>
-        /// Tries to get a message based on the provided parameters.
-        /// </summary>
-        /// <param name="id">The identifier of the message.</param>
-        /// <param name="attribute">The attribute of the message.</param>
-        /// <param name="args">The arguments to format the message with.</param>
-        /// <param name="errors">The reference to list of errors that occurred during the message retrieval process.</param>
-        /// <param name="message">The retrieved message.</param>
-        /// <returns>True if the message was successfully retrieved, otherwise false.</returns>
-        public bool TryGetMessageErrRef(string id, string? attribute, IDictionary<string, IFluentType>? args,
-            [NotNullWhen(false)] ref IList<FluentError>? errors, [NotNullWhen(true)] out string? message)
-        {
+            string? value = null;
             errors = new List<FluentError>();
-            var msg = attribute == null
-                ? id
-                : $"{id}.{attribute}";
 
-            if (!TryGetAstMessage(id, out var astMessage))
+            if (TryGetAstMessage(id, out var astMessage))
             {
-                errors.Add(ResolverFluentError.NoValue($"{msg}"));
-                message = null;
-                return false;
+                var pattern = attribute != null
+                    ? astMessage.GetAttribute(attribute)?.Value
+                    : astMessage.Value;
+
+                if (pattern == null)
+                {
+                    var msg = attribute == null
+                        ? id
+                        : $"{id}.{attribute}";
+                    errors.Add(ResolverFluentError.NoValue($"{msg}"));
+                    message = FluentNone.None.ToString();
+                    return false;
+                }
+
+                value = FormatPattern(pattern, args, out errors);
             }
 
-            var pattern = attribute != null
-                ? astMessage.GetAttribute(attribute)?.Value
-                : astMessage.Value;
-
-            if (pattern == null)
-            {
-                errors.Add(ResolverFluentError.NoValue($"{msg}"));
-                message = FluentNone.None.ToString();
-                return false;
-            }
-
-            errors = null;
-            message = FormatPattern(pattern, args, out errors);
-            return true;
+            message = value;
+            return message != null;
         }
     }
 
@@ -284,7 +250,7 @@ namespace Linguini.Bundle
                 Culture = frozenBundle.Culture
             };
         }
-
+        
         /// <summary>
         /// Convenience method for <see cref="IReadBundle.HasAttrMessage"/>
         /// </summary>
@@ -348,7 +314,7 @@ namespace Linguini.Bundle
         }
 
         /// <summary>
-        /// Convenience method for <see cref="IReadBundle.TryGetMessage(string,string?,System.Collections.Generic.IDictionary{string,Linguini.Shared.Types.Bundle.IFluentType}?,out System.Collections.Generic.IList{Linguini.Bundle.Errors.FluentError}?,out string?)"/>
+        /// Convenience method for <see cref="IReadBundle.TryGetMessage(string,string?,System.Collections.Generic.IDictionary{string,enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle.IFluentType}?,out System.Collections.Generic.IList{enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Errors.FluentError}?,out string?)"/>
         /// </summary>
         /// <param name="bundle">The bundle to retrieve the message from.</param>
         /// <param name="id">The identifier of the message.</param>

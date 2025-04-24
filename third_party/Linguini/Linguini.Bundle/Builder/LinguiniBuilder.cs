@@ -1,22 +1,41 @@
-﻿using System;
+﻿// Linguini
+//
+// MIT License
+//
+// Copyright 2021 Daniel Fath
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is furnished to do
+// so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Linguini.Bundle.Errors;
-using Linguini.Bundle.Types;
-using Linguini.Shared.Types.Bundle;
-using Linguini.Syntax.Ast;
-using Linguini.Syntax.Parser;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Errors;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Types;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Parser;
 
-namespace Linguini.Bundle.Builder
+namespace enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Builder
 {
     public static class LinguiniBuilder
     {
-        /// <summary>
-        /// Builder class for constructing Fluent bundles.
-        /// </summary>
-        /// <param name="useExperimental">Sets the <see cref="FluentBundleOption.EnableExtensions"/> flag. Defaults to <c>false</c></param>
         public static ILocaleStep Builder(bool useExperimental = false)
         {
             return new StepBuilder(useExperimental);
@@ -151,9 +170,9 @@ namespace Linguini.Bundle.Builder
 
                 foreach (var resource in _resources)
                 {
-                    if (!bundle.AddResource(resource, out var resErr))
+                    if (!bundle.AddResource(resource,out var resErr))
                     {
-                        errors ??= new List<FluentError>();
+                        errors ??= new List<FluentError>(); 
                         errors.AddRange(resErr);
                     }
                 }

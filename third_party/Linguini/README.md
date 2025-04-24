@@ -35,7 +35,7 @@ You can also follow other NuGet installation instructions. E.g. :
 Or copy this code to your [PackageReference](https://learn.microsoft.com/en-gb/nuget/consume-packages/package-references-in-project-files)
 
 ```xml
-<PackageReference Include="Linguini.Bundle" Version="0.8.2" />
+<PackageReference Include="Linguini.Bundle" Version="0.7.0" />
 ```
 
 # How to use it?
@@ -85,33 +85,6 @@ Let's go line by line and see how `LinguiniBuilder` works.
    ```csharp
    bundler.GetAttrMessage("hello-user",  ("username", (FluentString)"Test"));
    ```
-
-# How to develop for it?
-
-To develop you need to install [Git](https://git-scm.com/) and [.NET SDK](https://dotnet.microsoft.com/en-us/download) first.
-
-Installation of these tools is out of the scope of the document
-
-```shell
-git clone https://github.com/Ygg01/Linguini.git
-cd Linguini
-dotnet test
-```
-
-## Build documentation
-
-To build API documentation for `Linguini`.
-
-1. Install [`docfx`](https://github.com/dotnet/docfx)
-```shell
-dotnet tool install -g docfx
-```
-2. Build documentation
-```shell
-docfx build .\docfx_project\docfx.json --serve
-```
-3. Open http://localhost:8080/api
-
 
 # Quick questions and answers
 

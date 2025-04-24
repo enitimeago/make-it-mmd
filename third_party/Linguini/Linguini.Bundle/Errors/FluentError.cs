@@ -1,39 +1,40 @@
-﻿using System;
-using Linguini.Syntax.Ast;
-using Linguini.Syntax.Parser.Error;
+﻿// Linguini
+//
+// MIT License
+//
+// Copyright 2021 Daniel Fath
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is furnished to do
+// so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+using System;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Parser.Error;
 
-// ReSharper disable UnusedMember.Global
-// ReSharper disable MemberCanBePrivate.Global
-
-namespace Linguini.Bundle.Errors
+namespace enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Errors
 {
-    /// <summary>
-    /// Provides base record for Linguini's Fluent related errors.
-    /// </summary>
     public abstract record FluentError
     {
-        /// <summary>
-        /// What type of error was encountered
-        /// </summary>
-        /// <returns>Enumeration describing error.</returns>
         public abstract ErrorType ErrorKind();
 
-        /// <summary>
-        /// Where in file was error encountered.
-        /// </summary>
-        /// <returns>Position of error in file</returns>
         public virtual ErrorSpan? GetSpan()
         {
             return null;
         }
-
-
-
-        /// <summary>
-        /// String representation of the error.
-        /// </summary>
-        /// <returns>Error represented as string</returns>
-        public override string ToString() => $"Error (${ErrorKind()})";
     }
 
     /// <summary>
@@ -48,133 +49,123 @@ namespace Linguini.Bundle.Errors
     {
     }
 
-    /// <summary>
-    /// Represents an error that occurs when there is an attempt to override an existing entry in a FluentBundle.
-    /// </summary>
     public record OverrideFluentError : FluentError
     {
+        private readonly string _id;
         private readonly EntryKind _kind;
-        private readonly string? _location;
 
-        /// <summary>
-        /// Id of term or message that was overriden.
-        /// </summary>
-        public string Id { get; }
-
-        /// <summary>
-        /// Constructs an <see cref="OverrideFluentError"/>
-        /// </summary>
-        /// <param name="id">Duplicated identifier</param>
-        /// <param name="kind">Enumeration showing what kind of identifier was duplicate <c>MESSAGE | TERM | FUNCTION</c></param>
-        /// <param name="location">Location where the error originated. Due to backwards compatibility it defaults to null</param>
-        public OverrideFluentError(string id, EntryKind kind, string? location = null)
+        public OverrideFluentError(string id, EntryKind kind)
         {
-            Id = id;
+            _id = id;
             _kind = kind;
-            _location = location;
         }
 
-        /// <inheritdoc/>
         public override ErrorType ErrorKind()
         {
             return ErrorType.Overriding;
         }
 
-
-        /// <inheritdoc/>
         public override string ToString()
         {
-            return $"For id:{Id} already exist entry of type: {_kind.ToString()}";
+            return $"For id:{_id} already exist entry of type: {_kind.ToString()}";
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public record ResolverFluentError : FluentError
     {
         private readonly string _description;
         private readonly ErrorType _kind;
-        private readonly string? _location;
 
-        private ResolverFluentError(string desc, ErrorType kind, string? location)
+        private ResolverFluentError(string desc, ErrorType kind)
         {
             _description = desc;
             _kind = kind;
-            _location = location;
         }
 
-        /// <inheritdoc/>
         public override ErrorType ErrorKind()
         {
             return _kind;
         }
 
-
-        /// <inheritdoc/>
         public override string ToString()
         {
             return _description;
         }
 
-        public static ResolverFluentError NoValue(ReadOnlyMemory<char> idName, string? location = null)
+        public static ResolverFluentError NoValue(ReadOnlyMemory<char> idName)
         {
-            return new($"No value: {idName.Span.ToString()}", ErrorType.NoValue, location);
+            return new($"No value: {idName.Span.ToString()}", ErrorType.NoValue);
         }
 
-        public static ResolverFluentError NoValue(string pattern, string? location = null)
+        public static ResolverFluentError NoValue(string pattern)
         {
-            return new($"No value: {pattern}", ErrorType.NoValue, location);
+            return new($"No value: {pattern}", ErrorType.NoValue);
         }
 
-        public static ResolverFluentError UnknownVariable(VariableReference outType, string? location = null)
+        public static ResolverFluentError UnknownVariable(VariableReference outType)
         {
-            return new($"Unknown variable: ${outType.Id}", ErrorType.Reference, location);
+            return new($"Unknown variable: ${outType.Id}", ErrorType.Reference);
         }
 
-        public static ResolverFluentError TooManyPlaceables(string? location = null)
+        public static ResolverFluentError TooManyPlaceables()
         {
-            return new("Too many placeables", ErrorType.TooManyPlaceables,  location);
+            return new("Too many placeables", ErrorType.TooManyPlaceables);
         }
 
-        public static ResolverFluentError Reference(IInlineExpression self, string? location = null)
+        public static ResolverFluentError Reference(IInlineExpression self)
         {
-            return self switch
+            // TODO only allow references here
+            if (self is FunctionReference funcRef)
             {
-                FunctionReference funcRef => new($"Unknown function: {funcRef.Id}()", ErrorType.Reference, location),
-                MessageReference msgRef when msgRef.Attribute == null => new($"Unknown message: {msgRef.Id}",
-                    ErrorType.Reference, location),
-                MessageReference msgRef => new($"Unknown attribute: {msgRef.Id}.{msgRef.Attribute}",
-                    ErrorType.Reference, location),
-                TermReference termReference when termReference.Attribute == null => new(
-                    $"Unknown term: -{termReference.Id}", ErrorType.Reference, location),
-                TermReference termReference => new($"Unknown attribute: -{termReference.Id}.{termReference.Attribute}",
-                    ErrorType.Reference, location),
-                VariableReference varRef => new($"Unknown variable: ${varRef.Id}", ErrorType.Reference, location),
-                _ => throw new ArgumentException($"Expected reference got ${self.GetType()}")
-            };
+                return new($"Unknown function: {funcRef.Id}()", ErrorType.Reference);
+            }
+
+            if (self is MessageReference msgRef)
+            {
+                if (msgRef.Attribute == null)
+                {
+                    return new($"Unknown message: {msgRef.Id}", ErrorType.Reference);
+                }
+
+                return new($"Unknown attribute: {msgRef.Id}.{msgRef.Attribute}", ErrorType.Reference);
+            }
+
+            if (self is TermReference termReference)
+            {
+                if (termReference.Attribute == null)
+                {
+                    return new($"Unknown term: -{termReference.Id}", ErrorType.Reference);
+                }
+
+                return new($"Unknown attribute: -{termReference.Id}.{termReference.Attribute}", ErrorType.Reference);
+            }
+
+            if (self is VariableReference varRef)
+            {
+                return new($"Unknown variable: ${varRef.Id}", ErrorType.Reference);
+            }
+
+            throw new ArgumentException($"Expected reference got ${self.GetType()}");
         }
 
-        public static ResolverFluentError Cyclic(Pattern pattern, string? location = null)
+        public static ResolverFluentError Cyclic(Pattern pattern)
         {
-            return new($"Cyclic reference in {pattern.Stringify()} detected!", ErrorType.Cyclic, location);
+            return new($"Cyclic reference in {pattern.Stringify()} detected!", ErrorType.Cyclic);
         }
 
-        public static ResolverFluentError MissingDefault(string? location = null)
+        public static ResolverFluentError MissingDefault()
         {
-            return new("No default", ErrorType.MissingDefault, location);
+            return new("No default", ErrorType.MissingDefault);
         }
     }
 
     public record ParserFluentError : FluentError
     {
         private readonly ParseError _error;
-        private readonly string? _location;
 
-        private ParserFluentError(ParseError error, string? location = null)
+        private ParserFluentError(ParseError error)
         {
             _error = error;
-            _location = location;
         }
 
         public static ParserFluentError ParseError(ParseError parseError)
@@ -182,19 +173,16 @@ namespace Linguini.Bundle.Errors
             return new(parseError);
         }
 
-        /// <inheritdoc/>
         public override ErrorType ErrorKind()
         {
             return ErrorType.Parser;
         }
 
-        /// <inheritdoc/>
         public override string ToString()
         {
             return _error.Message;
         }
 
-        /// <inheritdoc/>
         public override ErrorSpan? GetSpan()
         {
             if (_error.Slice == null)
@@ -205,9 +193,6 @@ namespace Linguini.Bundle.Errors
         }
     }
 
-    /// <summary>
-    /// Enumeration showing which kind of Entry was duplicated.
-    /// </summary>
     public enum EntryKind : byte
     {
         Message,
@@ -219,12 +204,12 @@ namespace Linguini.Bundle.Errors
     {
         public static EntryKind ToKind(this IEntry self)
         {
-            return self switch
+            if (self is AstTerm)
             {
-                AstTerm => EntryKind.Term,
-                AstMessage => EntryKind.Message,
-                _ =>  EntryKind.Func
-            };
+                return EntryKind.Term;
+            }
+
+            return self is AstMessage ? EntryKind.Message : EntryKind.Func;
         }
     }
 

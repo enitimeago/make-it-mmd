@@ -1,11 +1,34 @@
-﻿using System.Diagnostics;
+﻿// Linguini
+//
+// MIT License
+//
+// Copyright 2021 Daniel Fath
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is furnished to do
+// so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Linguini.Serialization.Converters;
-using Linguini.Syntax.Ast;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Serialization.Converters;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast;
 using NUnit.Framework;
-using Attribute = Linguini.Syntax.Ast.Attribute;
+using Attribute = enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast.Attribute;
 
 
 namespace Linguini.Serialization.Test;
@@ -50,13 +73,13 @@ public class SerializeAndDeserializeTest
         yield return new Junk("Test".AsMemory());
         yield return new MessageReference("message", "attribute");
         yield return new AstMessage(
-            new Identifier("x"), 
-            new PatternBuilder(3).Build(), 
+            new Identifier("x"),
+            new PatternBuilder(3).Build(),
             new List<Attribute>()
             {
                 new("attr1", new PatternBuilder("value1")),
                 new("attr2", new PatternBuilder("value2"))
-            }, 
+            },
             new(CommentLevel.ResourceComment, new()
             {
                 "test".AsMemory()

@@ -1,12 +1,35 @@
-﻿using System;
+﻿// Linguini
+//
+// MIT License
+//
+// Copyright 2021 Daniel Fath
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is furnished to do
+// so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Linguini.Bundle.Errors;
-using Linguini.Bundle.Resolver;
-using Linguini.Bundle.Types;
-using Linguini.Shared.Types.Bundle;
-using Linguini.Syntax.Ast;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Errors;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Resolver;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle.Types;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast;
 #if NET8_0_OR_GREATER
 using System.Collections.Frozen;
 #elif NET6_0_OR_GREATER
@@ -14,7 +37,7 @@ using System.Collections.Immutable;
 #endif
 
 
-namespace Linguini.Bundle
+namespace enitimeago.NonDestructiveMMD.vendor.Linguini.Bundle
 {
     /// <summary>
     /// Represents a frozen bundle i.e. a bundle to which no items can be added or removed.
@@ -122,8 +145,8 @@ namespace Linguini.Bundle
         }
 
         /// <inheritdoc/>
-        public string FormatPatternErrRef(Pattern pattern, IDictionary<string, IFluentType>? args,
-            [NotNullWhen(false)] ref IList<FluentError>? errors)
+        public string FormatPattern(Pattern pattern, IDictionary<string, IFluentType>? args,
+            [NotNullWhen(false)] out IList<FluentError>? errors)
         {
             var scope = new Scope(this, args);
             var value = pattern.Resolve(scope);

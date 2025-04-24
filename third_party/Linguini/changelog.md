@@ -206,11 +206,3 @@ version 0.8.1
 
 ## What's changed 
 * Add `AddResourceOverriding(Resource res)`.
-
-version 0.8.2
-========
-
-## What's changed
-* `TryGetMessage` returns error if no message was found.
-* Adds methods `FormatPatternErrRef`, `TryGetMessageErrRef`, `TryGetAttrMessageErrRef`, `TryGetMessageErrRef` in `IReadBundle` and
-  associated classes.

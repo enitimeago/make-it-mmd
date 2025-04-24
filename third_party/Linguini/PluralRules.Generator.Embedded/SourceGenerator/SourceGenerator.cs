@@ -41,8 +41,8 @@ namespace PluralRules.Generator.SourceGenerator
             // begin creating the source we'll inject into the users compilation
             var sourceBuilder = new StringBuilder($@"
 using System;
-using Linguini.Shared.Util;
-using Linguini.Shared.Types;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Util;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types;
 
 namespace PluralRulesGenerated
 {{
@@ -100,7 +100,7 @@ namespace PluralRulesGenerated
 ");
             var testBuilder = new StringBuilder($@"
 using System;
-using Linguini.Shared.Types;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types;
 
 namespace PluralRulesGenerated.Test
 {{

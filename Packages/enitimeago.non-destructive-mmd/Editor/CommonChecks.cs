@@ -1,7 +1,7 @@
 ﻿#if NDMMD_VRCSDK3_AVATARS
 
 using System.Linq;
-using Linguini.Shared.Types.Bundle;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using nadena.dev.ndmf;
 using NUnit.Framework;
 using UnityEditor;
