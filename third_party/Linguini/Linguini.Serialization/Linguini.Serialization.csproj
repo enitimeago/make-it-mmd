@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageVersion>0.8.0</PackageVersion>
+        <PackageIcon>linguini.jpg</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>serialization, linguini, utility</PackageTags>
+        <Description>Optional serialization library for Linguini</Description>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Linguini.Syntax\Linguini.Syntax.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <None Include="..\linguini.jpg">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+        <Link>linguini.jpg</Link>
+      </None>
+      <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+</Project>

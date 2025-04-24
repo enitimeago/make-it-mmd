@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <Title>Linguini Bundle - Fluent implementation</Title>
+        <Description>Linguini Bundle is the C# implementation of Project Fluent, a localization system developed by Mozilla
+
+It provides easy to use and extend system for describing translations.</Description>
+        <Copyright>Copyright (c) Daniel Fath 2021</Copyright>
+        <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/Ygg01/Linguini</RepositoryUrl>
+        <PackageTags>fluent, i18n, internationalization, l10n, l20n, globalization, translation </PackageTags>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <SignAssembly>true</SignAssembly>
+        <ApplicationIcon />
+        <OutputType>Library</OutputType>
+        <StartupObject />
+        <Win32Resource />
+        <PackageProjectUrl>https://github.com/Ygg01/Linguini</PackageProjectUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageVersion>0.8.1</PackageVersion>
+        <TargetFrameworks>net8.0;netstandard2.1;net6.0</TargetFrameworks>
+        <PackageIcon>linguini.jpg</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Linguini.Syntax\Linguini.Syntax.csproj" />
+        <ProjectReference Include="..\Linguini.Shared\Linguini.Shared.csproj" />
+        <ProjectReference Include="..\PluralRules.Generator\PluralRules.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="..\PluralRules.Generator\cldr_data\ordinals.xml" />
+        <AdditionalFiles Include="..\PluralRules.Generator\cldr_data\plurals.xml" />
+    </ItemGroup>
+    
+
+    <ItemGroup>
+      <None Include="..\linguini.jpg" PackagePath="">
+        <Pack>True</Pack>
+          <Link>linguini.jpg</Link>
+      </None>
+      <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+</Project>

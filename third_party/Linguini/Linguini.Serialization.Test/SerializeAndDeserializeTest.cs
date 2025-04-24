@@ -25,7 +25,7 @@ using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using enitimeago.NonDestructiveMMD.vendor.Linguini.Serialization.Converters;
+using Linguini.Serialization.Converters;
 using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast;
 using NUnit.Framework;
 using Attribute = enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast.Attribute;
@@ -73,13 +73,13 @@ public class SerializeAndDeserializeTest
         yield return new Junk("Test".AsMemory());
         yield return new MessageReference("message", "attribute");
         yield return new AstMessage(
-            new Identifier("x"),
-            new PatternBuilder(3).Build(),
+            new Identifier("x"), 
+            new PatternBuilder(3).Build(), 
             new List<Attribute>()
             {
                 new("attr1", new PatternBuilder("value1")),
                 new("attr2", new PatternBuilder("value2"))
-            },
+            }, 
             new(CommentLevel.ResourceComment, new()
             {
                 "test".AsMemory()

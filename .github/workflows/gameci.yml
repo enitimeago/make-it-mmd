@@ -100,10 +100,6 @@ jobs:
         allowDirtyBuild: true
         buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: "5.0.x"
-
     - name: dotnet format Editor
       run: dotnet format --verify-no-changes --verbosity diagnostic enitimeago.non-destructive-mmd.editor.csproj --exclude ./Packages/enitimeago.non-destructive-mmd/Editor/vendor
 

@@ -3,8 +3,9 @@ name: Deploy to GitHub Pages
 on:
   # Trigger the workflow every time you push to the `main` branch
   # Using a different branch name? Replace `main` with your branch’s name
-  push:
-    branches: [ main ]
+  # TODO: this workflow has been broken sometime between Sep 2024 and now, fix it
+  # push:
+  #   branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
 

@@ -24,7 +24,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using enitimeago.NonDestructiveMMD.vendor.Linguini.Serialization.Converters;
+using Linguini.Serialization.Converters;
 using NUnit.Framework;
 
 namespace Linguini.Serialization.Test

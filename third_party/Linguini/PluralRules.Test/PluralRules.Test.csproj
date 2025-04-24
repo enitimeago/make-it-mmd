@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <Nullable>enable</Nullable>
+        <RootNamespace>PluralRules.Test</RootNamespace>
+        <OutputType>Library</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <PackageVersion>0.8.0</PackageVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NUnit" Version="4.0.1" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\PluralRules.Generator\PluralRules.Generator.csproj" />
+        <ProjectReference Include="..\Linguini.Shared\Linguini.Shared.csproj" />
+    </ItemGroup>
+
+</Project>

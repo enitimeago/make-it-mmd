@@ -27,7 +27,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using FluentAssertions.Json;
-using enitimeago.NonDestructiveMMD.vendor.Linguini.Serialization.Converters;
+using Linguini.Serialization.Converters;
 using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Ast;
 using enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Parser;
 using Newtonsoft.Json.Linq;
@@ -243,7 +243,7 @@ namespace enitimeago.NonDestructiveMMD.vendor.Linguini.Syntax.Tests.Parser
             var path = GetFullPathFor(file);
             var res = ParseFtlFile(@$"{path}.ftl", true);
             var ftlAstJson = JsonSerializer.Serialize(res, TestJsonOptions);
-
+        
             var expected = JToken.Parse(File.ReadAllText($@"{path}.json"));
             var actual = JToken.Parse(ftlAstJson);
             actual.Should().BeEquivalentTo(expected);
