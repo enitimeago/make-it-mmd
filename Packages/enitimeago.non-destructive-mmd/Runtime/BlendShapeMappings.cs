@@ -75,6 +75,7 @@ namespace enitimeago.NonDestructiveMMD
     public class BlendShapeMappings : MonoBehaviour, ISerializationCallbackReceiver, VRC.SDKBase.IEditorOnly
     {
         public const int CURRENT_DATA_VERSION = 1;
+        public const string BLEND_SHAPE_MAPPINGS_SERIALIZED_PATH = "_blendShapeMappings";
 
         public int dataVersion;
 

@@ -159,7 +159,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_showStoredData)
             {
-                var mappings = serializedObject.FindProperty(nameof(BlendShapeMappings.blendShapeMappings));
+                var mappings = serializedObject.FindProperty(BlendShapeMappings.BLEND_SHAPE_MAPPINGS_SERIALIZED_PATH);
                 EditorGUILayout.PropertyField(mappings);
             }
         }
