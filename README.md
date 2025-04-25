@@ -37,13 +37,13 @@ All development occurs on the `main` branch:
 
 #### Windows
 
-Run prepare.py from the repo root.
+Run prepare.py from the repo root, or run `dotnet build` from `third_party/Linguini/PluralRules.Generator`.
 
 #### macOS
 
-Run prepare.py from the repo root.
+Run prepare.py from the repo root, or run `dotnet build` from `third_party/Linguini/PluralRules.Generator`.
 
-You will need `vrc-get` which you can install with `brew install vrc-get`.
+Then you will need `vrc-get` which you can install with `brew install vrc-get`.
 
 Then run:
 
