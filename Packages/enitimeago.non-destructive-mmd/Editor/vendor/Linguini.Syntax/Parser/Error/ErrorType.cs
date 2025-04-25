@@ -1,0 +1,1 @@
+../../../../../../../third_party/Linguini/Linguini.Syntax/Parser/Error/ErrorType.cs

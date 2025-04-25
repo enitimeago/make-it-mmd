@@ -1,7 +1,9 @@
 ﻿#if NDMMD_VRCSDK3_AVATARS
 
 using System.Linq;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using nadena.dev.ndmf;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -23,7 +25,7 @@ namespace enitimeago.NonDestructiveMMD
         {
             if (avatarRootObject == null)
             {
-                LogLocalized(Severity.Warning, "CommonChecks:AvatarNotFound");
+                LogLocalized(Severity.Warning, "CommonChecks-AvatarNotFound");
                 return false;
             }
             var avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
@@ -31,17 +33,17 @@ namespace enitimeago.NonDestructiveMMD
             var writeDefaultsComponents = avatarRootObject.GetComponentsInChildren<WriteDefaultsComponent>();
             if (mappingsComponents.Length == 0)
             {
-                LogLocalized(Severity.Debug, "CommonChecks:NoMMDComponents");
+                LogLocalized(Severity.Debug, "CommonChecks-NoMMDComponents");
                 return false;
             }
             if (mappingsComponents.Length > 1)
             {
-                LogLocalized(Severity.Error, "CommonChecks:MultipleMMDComponents");
+                LogLocalized(Severity.Error, "CommonChecks-MultipleMMDComponents");
                 return false;
             }
             if (writeDefaultsComponents.Length > 1)
             {
-                LogLocalized(Severity.Error, "CommonChecks:MultipleMMDComponents");
+                LogLocalized(Severity.Error, "CommonChecks-MultipleMMDComponents");
                 return false;
             }
             if (!RunChecks(mappingsComponents.First()) || !RunChecks(avatarDescriptor, isBuildTime))
@@ -56,7 +58,7 @@ namespace enitimeago.NonDestructiveMMD
                 {
                     if (mesh.GetBlendShapeIndex(avatarKey) < 0)
                     {
-                        LogLocalized(Severity.Warning, "CommonChecks:MorphReferencesNonExistingBlendShape", mapping.Key, avatarKey);
+                        LogLocalized(Severity.Warning, "CommonChecks-MorphReferencesNonExistingBlendShape", ("morphName", (FluentString)mapping.Key), ("blendShapeName", (FluentString)avatarKey));
                         foundNonExistingReference = true;
                     }
                 }
@@ -72,7 +74,7 @@ namespace enitimeago.NonDestructiveMMD
         {
             if (blendShapeMappings.dataVersion > BlendShapeMappings.CURRENT_DATA_VERSION)
             {
-                LogLocalized(Severity.Error, "CommonChecks:NewerDataVersion");
+                LogLocalized(Severity.Error, "CommonChecks-NewerDataVersion");
                 return false;
             }
             return true;
@@ -83,26 +85,26 @@ namespace enitimeago.NonDestructiveMMD
         {
             if (avatarDescriptor == null)
             {
-                LogLocalized(Severity.Warning, "CommonChecks:AvatarNotFound");
+                LogLocalized(Severity.Warning, "CommonChecks-AvatarNotFound");
                 return false;
             }
 
             var visemeSkinnedMesh = avatarDescriptor.VisemeSkinnedMesh;
             if (visemeSkinnedMesh == null)
             {
-                LogLocalized(Severity.Warning, "CommonChecks:AvatarNoFaceMeshSet");
+                LogLocalized(Severity.Warning, "CommonChecks-AvatarNoFaceMeshSet");
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh == null)
             {
-                LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNoMesh");
+                LogLocalized(Severity.Warning, "CommonChecks-AvatarFaceSMRNoMesh");
                 return false;
             }
 
             if (visemeSkinnedMesh.sharedMesh.blendShapeCount == 0)
             {
-                LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNoBlendShapes");
+                LogLocalized(Severity.Warning, "CommonChecks-AvatarFaceSMRNoBlendShapes");
                 return false;
             }
 
@@ -112,18 +114,18 @@ namespace enitimeago.NonDestructiveMMD
             {
                 if (visemeSkinnedMesh.name != "Body")
                 {
-                    LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotCalledBody");
+                    LogLocalized(Severity.Warning, "CommonChecks-AvatarFaceSMRNotCalledBody");
                 }
 
                 if (visemeSkinnedMesh.transform.parent?.gameObject != avatarDescriptor.gameObject)
                 {
-                    LogLocalized(Severity.Warning, "CommonChecks:AvatarFaceSMRNotAtRoot");
+                    LogLocalized(Severity.Warning, "CommonChecks-AvatarFaceSMRNotAtRoot");
                 }
 
                 var writeDefaultsComponents = avatarDescriptor.gameObject.GetComponentsInChildren<WriteDefaultsComponent>();
                 if (writeDefaultsComponents.Count() == 0 && AvatarHasWriteDefaultOff(avatarDescriptor))
                 {
-                    LogLocalized(Severity.Warning, "CommonChecks:AvatarWriteDefaultOffFound");
+                    LogLocalized(Severity.Warning, "CommonChecks-AvatarWriteDefaultOffFound");
                 }
             }
 
@@ -166,9 +168,9 @@ namespace enitimeago.NonDestructiveMMD
 #if UNITY_2021_3_OR_NEWER
         [HideInCallstackAttribute]
 #endif
-        private void LogLocalized(Severity severity, string key, params object[] args)
+        private void LogLocalized(Severity severity, string key, params (string, IFluentType)[] args)
         {
-            string message = string.Format(L.Tr(key), args);
+            string message = L.Tr(key, key, args);
             if (_isEditor)
             {
                 switch (severity)
@@ -184,9 +186,9 @@ namespace enitimeago.NonDestructiveMMD
                 switch (severity)
                 {
                     case Severity.Debug: Debug.Log(message); break;
-                    case Severity.Warning: ErrorReport.ReportError(L.Localizer, ErrorSeverity.NonFatal, key, args); break;
-                    case Severity.Error: ErrorReport.ReportError(L.Localizer, ErrorSeverity.Error, key, args); break;
-                    default: ErrorReport.ReportError(L.Localizer, ErrorSeverity.InternalError, $"Unknown severity type raised with message \"${key}\""); break;
+                    case Severity.Warning: ErrorReport.ReportError(new L.LocalizedError(ErrorSeverity.NonFatal, key, args)); break;
+                    case Severity.Error: ErrorReport.ReportError(new L.LocalizedError(ErrorSeverity.Error, key, args)); break;
+                    default: ErrorReport.ReportError(new L.LocalizedError(ErrorSeverity.InternalError, $"Unknown severity type raised with message \"${key}\"")); break;
                 }
             }
         }

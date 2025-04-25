@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using nadena.dev.ndmf;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -89,8 +90,8 @@ namespace enitimeago.NonDestructiveMMD
                 var missingBlendShapes = sourceBlendShapes.Where(sourceBlendShape => originalMesh.GetBlendShapeIndex(sourceBlendShape.Key) < 0);
                 if (missingBlendShapes.Any())
                 {
-                    ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:MissingSourceBlendShape", destBlendShape, string.Join(",", missingBlendShapes.Select(x => x.Key)), sourceBlendShapes.Count);
-                    ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:SkippingMmdMorph", destBlendShape);
+                    ErrorReport.ReportError(new L.LocalizedError(ErrorSeverity.Information, "BlendShapeMappingsPass-MissingSourceBlendShape", ("morphName", (FluentString)destBlendShape), ("missingShapes", (FluentString)string.Join(",", missingBlendShapes.Select(x => x.Key))), ("totalShapes", (FluentNumber)sourceBlendShapes.Count)));
+                    ErrorReport.ReportError(new L.LocalizedError(ErrorSeverity.Information, "BlendShapeMappingsPass-SkippingMmdMorph", ("morphName", (FluentString)destBlendShape)));
                     continue;
                 }
 
@@ -129,8 +130,8 @@ namespace enitimeago.NonDestructiveMMD
                     {
                         // Do not handle multiple frames for now, as it's not common and interpolation doesn't seem straightforward.
                         // TODO: show error in the UI as well.
-                        ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported");
-                        ErrorReport.ReportError(L.Localizer, ErrorSeverity.Information, "BlendShapeMappingsPass:SkippingMmdMorph", destBlendShape);
+                        ErrorReport.ReportError(new L.LocalizedError(ErrorSeverity.Information, "BlendShapeMappingsPass:CombiningWithMultipleFramesUnsupported"));
+                        ErrorReport.ReportError(new L.LocalizedError(ErrorSeverity.Information, "BlendShapeMappingsPass:SkippingMmdMorph", ("morphName", (FluentString)destBlendShape)));
                         continue;
                     }
 

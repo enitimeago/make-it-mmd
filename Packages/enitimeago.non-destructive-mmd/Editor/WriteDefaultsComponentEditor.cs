@@ -29,14 +29,14 @@ namespace enitimeago.NonDestructiveMMD
 
             Undo.RecordObject(target, "Toggle");
             EditorGUI.BeginChangeCheck();
-            bool forceAvatarWriteDefaults = EditorGUILayout.Toggle(L.Tr("WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOn"), data.forceAvatarWriteDefaults);
+            bool forceAvatarWriteDefaults = EditorGUILayout.Toggle(L.Tr("WriteDefaultsComponentEditor-ForceAvatarWriteDefaultsOn"), data.forceAvatarWriteDefaults);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(target, "Toggle");
                 data.forceAvatarWriteDefaults = forceAvatarWriteDefaults;
             }
 
-            GUILayout.Label(L.Tr("WriteDefaultsComponentEditor:ForceAvatarWriteDefaultsOnDescription"), EditorStyles.wordWrappedLabel);
+            GUILayout.Label(L.Tr("WriteDefaultsComponentEditor-ForceAvatarWriteDefaultsOnDescription"), EditorStyles.wordWrappedLabel);
         }
     }
 }

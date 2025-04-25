@@ -1,0 +1,1 @@
+../../../../../../third_party/Linguini/Linguini.Bundle/Resolver/Scope.cs

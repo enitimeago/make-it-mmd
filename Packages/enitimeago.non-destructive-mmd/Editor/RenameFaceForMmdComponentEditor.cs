@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
+using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using L = enitimeago.NonDestructiveMMD.Localization;
@@ -36,18 +37,18 @@ namespace enitimeago.NonDestructiveMMD
                 // Let the user know what will happen.
                 if (avatar.VisemeSkinnedMesh.name == "Body")
                 {
-                    EditorGUILayout.HelpBox(L.Tr("RenameFaceForMmdComponentEditor:AlreadyCalledBody"), MessageType.Info);
+                    EditorGUILayout.HelpBox(L.Tr("RenameFaceForMmdComponentEditor-AlreadyCalledBody"), MessageType.Info);
                 }
                 else
                 {
-                    GUILayout.Label(string.Format(L.Tr("RenameFaceForMmdComponentEditor:ActionToPerform"), avatar.VisemeSkinnedMesh.name), EditorStyles.wordWrappedLabel);
+                    GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor-ActionToPerform", ("currentName", (FluentString)avatar.VisemeSkinnedMesh.name)), EditorStyles.wordWrappedLabel);
 
                     var toRenames = RenameFaceForMmdPass.DetermineRenames(avatar.GetComponentsInChildren<SkinnedMeshRenderer>());
                     if (toRenames.Count > 0)
                     {
-                        GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor:ActionToPerformHasConflicts"), EditorStyles.wordWrappedLabel);
+                        GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor-ActionToPerformHasConflicts"), EditorStyles.wordWrappedLabel);
                     }
-                    GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor:ActionToPerformSuffix"), EditorStyles.wordWrappedLabel);
+                    GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor-ActionToPerformSuffix"), EditorStyles.wordWrappedLabel);
 
                     // TODO: can this be a table so that the columns are the same width?
                     EditorGUI.indentLevel++;
@@ -73,7 +74,7 @@ namespace enitimeago.NonDestructiveMMD
             }
             else
             {
-                GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor:IsPlaying"), EditorStyles.wordWrappedLabel);
+                GUILayout.Label(L.Tr("RenameFaceForMmdComponentEditor-IsPlaying"), EditorStyles.wordWrappedLabel);
             }
         }
     }

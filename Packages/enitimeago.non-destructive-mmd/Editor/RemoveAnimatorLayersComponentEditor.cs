@@ -50,7 +50,7 @@ namespace enitimeago.NonDestructiveMMD
             if (fxController != null && fxController.layers.Length > 0)
             {
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(L.Tr("RemoveAnimatorLayersComponentEditor:FXAnimatorControllerLayers"));
+                GUILayout.Label(L.Tr("RemoveAnimatorLayersComponentEditor-FXAnimatorControllerLayers"));
                 GUILayout.FlexibleSpace();
                 var settingsButtonContent = EditorGUIUtility.IconContent("_Popup");
                 if (GUILayout.Button(settingsButtonContent))
@@ -58,18 +58,18 @@ namespace enitimeago.NonDestructiveMMD
                     var menu = new GenericMenu();
                     if (_persistentData.customLayersToRemove.Length == 0)
                     {
-                        menu.AddItem(new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor:AllowCustomLayers")), _allowCustomLayers, () => _allowCustomLayers = !_allowCustomLayers);
+                        menu.AddItem(new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor-AllowCustomLayers")), _allowCustomLayers, () => _allowCustomLayers = !_allowCustomLayers);
                     }
                     else
                     {
-                        menu.AddDisabledItem(new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor:AllowCustomLayers")), true);
+                        menu.AddDisabledItem(new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor-AllowCustomLayers")), true);
                     }
-                    menu.AddItem(new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor:AllowUnsafeRemovals")), _allowUnsafeRemovals, () => _allowUnsafeRemovals = !_allowUnsafeRemovals);
+                    menu.AddItem(new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor-AllowUnsafeRemovals")), _allowUnsafeRemovals, () => _allowUnsafeRemovals = !_allowUnsafeRemovals);
                     menu.ShowAsContext();
                 }
                 EditorGUILayout.EndHorizontal();
                 GUILayout.Label(
-                    EditorApplication.isPlaying ? L.Tr("RemoveAnimatorLayersComponentEditor:PlayModeLayersExplanation") : L.Tr("RemoveAnimatorLayersComponentEditor:EditModeLayersExplanation"),
+                    EditorApplication.isPlaying ? L.Tr("RemoveAnimatorLayersComponentEditor-PlayModeLayersExplanation") : L.Tr("RemoveAnimatorLayersComponentEditor-EditModeLayersExplanation"),
                     EditorStyles.wordWrappedLabel);
 
                 EditorGUI.indentLevel++;
@@ -99,7 +99,7 @@ namespace enitimeago.NonDestructiveMMD
                         EditorGUI.BeginDisabledGroup(!safeToRemove.Contains(i) && !_allowUnsafeRemovals);
                         bool toggled = data.layersToRemove.Contains(layer.name);
                         bool newToggled = EditorGUILayout.ToggleLeft(layer.name, toggled);
-                        EditorGUILayout.LabelField(safeToRemove.Contains(i) ? L.Tr("RemoveAnimatorLayersComponentEditor:SafeToRemove") : L.Tr("RemoveAnimatorLayersComponentEditor:UnsafeToRemove"));
+                        EditorGUILayout.LabelField(safeToRemove.Contains(i) ? L.Tr("RemoveAnimatorLayersComponentEditor-SafeToRemove") : L.Tr("RemoveAnimatorLayersComponentEditor-UnsafeToRemove"));
                         EditorGUI.EndDisabledGroup();
                         EditorGUILayout.EndHorizontal();
 
@@ -134,7 +134,7 @@ namespace enitimeago.NonDestructiveMMD
                 {
                     var persistentData = new SerializedObject(_persistentData);
                     var customLayersToRemoveProperty = persistentData.FindProperty(nameof(PersistentData.customLayersToRemove));
-                    EditorGUILayout.PropertyField(customLayersToRemoveProperty, new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor:CustomLayersToRemove")));
+                    EditorGUILayout.PropertyField(customLayersToRemoveProperty, new GUIContent(L.Tr("RemoveAnimatorLayersComponentEditor-CustomLayersToRemove")));
                     persistentData.ApplyModifiedProperties();
                 }
                 EditorGUI.EndDisabledGroup();

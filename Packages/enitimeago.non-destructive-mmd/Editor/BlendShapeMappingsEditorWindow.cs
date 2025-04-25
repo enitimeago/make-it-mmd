@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using enitimeago.NonDestructiveMMD.vendor.BlendshapeViewer.Scripts.Editor;
+using enitimeago.NonDestructiveMMD.vendor.Linguini.Shared.Types.Bundle;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -198,14 +199,13 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0)
             {
-                GUILayout.Label(
-                    string.Format(
-                        EditorApplication.isPlaying ? L.Tr("MappingsEditorWindow:ViewingBlendShapesForInPlayMode") : L.Tr("MappingsEditorWindow:EditingBlendShapesFor"),
-                        MmdBlendShapeNames.All[_currentMmdKeyIndex].Name));
+                GUILayout.Label(EditorApplication.isPlaying ?
+                    L.Tr("MappingsEditorWindow-ViewingBlendShapesForInPlayMode", ("morphName", (FluentString)MmdBlendShapeNames.All[_currentMmdKeyIndex].Name)) :
+                    L.Tr("MappingsEditorWindow-EditingBlendShapesFor", ("morphName", (FluentString)MmdBlendShapeNames.All[_currentMmdKeyIndex].Name)));
             }
             else
             {
-                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectMMDMorph"));
+                GUILayout.Label(L.Tr("MappingsEditorWindow-SelectMMDMorph"));
             }
 
             GUILayout.BeginHorizontal();
@@ -227,7 +227,7 @@ namespace enitimeago.NonDestructiveMMD
 
             if (_currentMmdKeyIndex >= 0)
             {
-                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectedBlendShapes"), EditorStyles.boldLabel);
+                GUILayout.Label(L.Tr("MappingsEditorWindow-SelectedBlendShapes"), EditorStyles.boldLabel);
 
                 foreach ((string avatarKey, float scale) in _knownBlendShapeMappings[_currentMmdKeyIndex])
                 {
@@ -267,7 +267,7 @@ namespace enitimeago.NonDestructiveMMD
             GUILayout.BeginVertical("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(L.Tr("MappingsEditorWindow:AvatarBlendShapes"), EditorStyles.boldLabel);
+            GUILayout.Label(L.Tr("MappingsEditorWindow-AvatarBlendShapes"), EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
             var settingsButtonContent = EditorGUIUtility.IconContent("_Popup");
             if (GUILayout.Button(settingsButtonContent))
@@ -284,7 +284,7 @@ namespace enitimeago.NonDestructiveMMD
                     bool newUseComputeShader;
                     int newThumbnailSize;
                     EditorGUILayout.BeginHorizontal();
-                    newShowDifferences = EditorGUILayout.ToggleLeft(L.Tr("MappingsEditorWindow:HighlightDifferences"), showDifferences, GUILayout.ExpandWidth(false));
+                    newShowDifferences = EditorGUILayout.ToggleLeft(L.Tr("MappingsEditorWindow-HighlightDifferences"), showDifferences, GUILayout.ExpandWidth(false));
                     if (newShowDifferences != showDifferences)
                     {
                         showDifferences = newShowDifferences;
@@ -292,7 +292,7 @@ namespace enitimeago.NonDestructiveMMD
                     }
                     if (SystemInfo.supportsComputeShaders)
                     {
-                        newUseComputeShader = EditorGUILayout.ToggleLeft(L.Tr("MappingsEditorWindow:EnableComputeShader"), useComputeShader, GUILayout.ExpandWidth(false));
+                        newUseComputeShader = EditorGUILayout.ToggleLeft(L.Tr("MappingsEditorWindow-EnableComputeShader"), useComputeShader, GUILayout.ExpandWidth(false));
                         if (newUseComputeShader != useComputeShader)
                         {
                             useComputeShader = newUseComputeShader;
@@ -301,7 +301,7 @@ namespace enitimeago.NonDestructiveMMD
                     }
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.BeginHorizontal();
-                    newThumbnailSize = EditorGUILayout.IntSlider(L.Tr("MappingsEditorWindow:ThumbnailSize"), thumbnailSize, 100, 300);
+                    newThumbnailSize = EditorGUILayout.IntSlider(L.Tr("MappingsEditorWindow-ThumbnailSize"), thumbnailSize, 100, 300);
                     if (newThumbnailSize != thumbnailSize)
                     {
                         thumbnailSize = newThumbnailSize;
@@ -358,7 +358,7 @@ namespace enitimeago.NonDestructiveMMD
             }
             else
             {
-                GUILayout.Label(L.Tr("MappingsEditorWindow:SelectMMDMorph"));
+                GUILayout.Label(L.Tr("MappingsEditorWindow-SelectMMDMorph"));
             }
 
             GUILayout.EndVertical();
