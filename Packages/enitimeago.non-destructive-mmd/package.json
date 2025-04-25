@@ -1,7 +1,7 @@
 {
   "name": "enitimeago.non-destructive-mmd",
   "displayName": "Make It MMD",
-  "version": "1.2.0-beta.1",
+  "version": "1.2.0-beta.2",
   "unity": "2022.3",
   "description": "Non-destructive MMD blend shape creator",
   "vrchatVersion": "2022.1.1",
