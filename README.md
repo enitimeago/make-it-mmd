@@ -35,7 +35,15 @@ All development occurs on the `main` branch:
 
 ### Setup
 
-On macOS, you will need `vrc-get` which you can install with `brew install vrc-get`.
+#### Windows
+
+Run prepare.py from the repo root.
+
+#### macOS
+
+Run prepare.py from the repo root.
+
+You will need `vrc-get` which you can install with `brew install vrc-get`.
 
 Then run:
 

@@ -14,11 +14,11 @@ public class PluralRulesChecker
 
         if (!File.Exists(fullPath))
         {
-            Debug.LogError($"The required DLL file '{dllPath}' is missing. Compilation will fail until it is restored.");
+            Debug.LogError($"PluralRules.Generator.dll is missing. Please check your Git repository to make sure it has been cloned properly.");
 
             EditorUtility.DisplayDialog(
                 "Missing DLL Detected",
-                $"The required DLL file '{dllPath}' is missing. Compilation will fail until it is restored.",
+                $"PluralRules.Generator.dll is missing. Please check your Git repository to make sure it has been cloned properly.",
                 "OK"
             );
         }
@@ -29,11 +29,11 @@ public class PluralRulesChecker
             string targetPath = Path.GetFullPath(fullPath);
             if (!File.Exists(targetPath))
             {
-                Debug.LogError($"The symlink '{dllPath}' exists but points to a missing or invalid target: {targetPath}.");
+                Debug.LogError($"The symlink '{dllPath}' exists but points to a missing or invalid target: {targetPath}. Please run 'dotnet build' from third_party/Linguini/PluralRules.Generator/ to generate it.");
 
                 EditorUtility.DisplayDialog(
                     "Broken Symlink Detected",
-                    $"The symlink '{dllPath}' exists but points to a missing or invalid target: {targetPath}. Compilation will fail until it is fixed.",
+                    $"The symlink '{dllPath}' exists but points to a missing or invalid target: {targetPath}. Please run 'dotnet build' from third_party/Linguini/PluralRules.Generator/ to generate it.",
                     "OK"
                 );
             }
