@@ -52,6 +52,14 @@ jobs:
         run: |
           cp -f .github/brand-assets/make-it-mmd/Icon_MIM_Script.png Packages/enitimeago.non-destructive-mmd/Runtime/Icons/Icon_MIM_Script.png
 
+      # TODO: can this be moved somewhere common?
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.x"
+      - name: Prepare deps
+        run: dotnet build
+        working-directory: ./third_party/Linguini/PluralRules.Generator
+
       # Get the Package version based on the package.json file
       - name: Get Version
         id: version
