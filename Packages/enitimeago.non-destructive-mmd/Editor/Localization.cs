@@ -112,9 +112,22 @@ namespace enitimeago.NonDestructiveMMD
 
         private static void OnLanguageChange()
         {
-            _currentLocaleIndex = _locales.TakeWhile(locale => locale.IsoCode != LanguagePrefs.Language.ToLower()).Count();
+            string targetLanguage = LanguagePrefs.Language?.ToLowerInvariant();
+            int foundIndex = -1;
+            if (!string.IsNullOrEmpty(targetLanguage))
+            {
+                foundIndex = Array.FindIndex(_locales, locale => locale.IsoCode == targetLanguage);
+            }
+
+            if (foundIndex == -1)
+            {
+                Debug.Log($"[Make It MMD] Language '{targetLanguage}' not found. Falling back to 'en-us'.");
+            }
+
+            _currentLocaleIndex = (foundIndex == -1) ? 0 : foundIndex;
+
 #if NDMMD_DEBUG
-            Debug.Log($"currentLocale {_currentLocaleIndex}");
+            Debug.Log($"[Make It MMD] NDMF language: '{LanguagePrefs.Language}', Using locale: '{_locales[_currentLocaleIndex].IsoCode}' (Index: {_currentLocaleIndex})");
 #endif
         }
 
