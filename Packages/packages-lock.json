@@ -210,6 +210,14 @@
         "com.unity.nuget.newtonsoft-json": "2.0.2"
       }
     },
+    "nadena.dev.modular-avatar": {
+      "version": "file:nadena.dev.modular-avatar",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.0"
+      }
+    },
     "nadena.dev.ndmf": {
       "version": "file:nadena.dev.ndmf",
       "depth": 0,
