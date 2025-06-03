@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using enitimeago.NonDestructiveMMD;
-using enitimeago.NonDestructiveMMD.vendor;
 using nadena.dev.ndmf;
+using nadena.dev.ndmf.animator;
 using NUnit.Framework;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -15,9 +15,8 @@ public class WriteDefaultsPassTests : TestBase
         var pass = new WriteDefaultsPass();
         var avatar = CreateAvatarWithFaceNameAndFX("Body");
         var buildContext = new BuildContext(avatar, null);
-        AnimationUtil.CloneAllControllers(buildContext);
 
-        pass.Execute(avatar);
+        AvatarProcessor.ProcessAvatar(avatar);
 
         // TODO: test no changes to layers.
     }
@@ -29,13 +28,12 @@ public class WriteDefaultsPassTests : TestBase
         var avatar = CreateAvatarWithFaceNameAndFX("Body");
         var descriptor = avatar.GetComponent<VRCAvatarDescriptor>();
         var buildContext = new BuildContext(avatar, null);
-        AnimationUtil.CloneAllControllers(buildContext);
         var newObject = new GameObject();
         newObject.transform.parent = avatar.transform;
         var writeDefaultsComponent = newObject.AddComponent<WriteDefaultsComponent>();
         writeDefaultsComponent.forceAvatarWriteDefaults = true;
 
-        pass.Execute(avatar);
+        AvatarProcessor.ProcessAvatar(avatar);
 
         var fxController = descriptor.baseAnimationLayers
             .First(layer => layer.type == VRCAvatarDescriptor.AnimLayerType.FX)

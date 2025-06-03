@@ -20,7 +20,6 @@ Make It MMD bundles and redistributes code from third-party software. The licens
 
 - Blendshape Viewer by Haï https://github.com/hai-vr/blendshape-viewer-vcc
 - d4rkAvatarOptimizer by d4rkpl4y3r https://github.com/d4rkc0d3r/d4rkAvatarOptimizer
-- Modular Avatar by bd_ https://github.com/bdunderscore/modular-avatar
 
 ## Development
 

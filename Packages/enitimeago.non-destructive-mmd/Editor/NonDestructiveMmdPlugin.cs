@@ -1,7 +1,7 @@
 ﻿#if NDMMD_VRCSDK3_AVATARS
 
-using enitimeago.NonDestructiveMMD.vendor;
 using nadena.dev.ndmf;
+using nadena.dev.ndmf.animator;
 
 namespace enitimeago.NonDestructiveMMD
 {
@@ -14,13 +14,16 @@ namespace enitimeago.NonDestructiveMMD
         {
             var seq = InPhase(BuildPhase.Transforming);
             seq.AfterPlugin("nadena.dev.modular-avatar");
-            seq.WithRequiredExtension(typeof(AnimationServicesContext), _ =>
+            seq.WithRequiredExtension(typeof(AnimatorServicesContext), _ =>
             {
                 seq.Run(RenameFaceForMmdPass.Instance);
             });
             seq.Run(BlendShapeMappingsPass.Instance);
-            seq.Run(RemoveAnimatorLayersPass.Instance);
-            seq.Run(WriteDefaultsPass.Instance);
+            seq.WithRequiredExtension(typeof(AnimatorServicesContext), _ =>
+            {
+                seq.Run(RemoveAnimatorLayersPass.Instance);
+                seq.Run(WriteDefaultsPass.Instance);
+            });
         }
     }
 }

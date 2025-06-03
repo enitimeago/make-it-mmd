@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using enitimeago.NonDestructiveMMD;
-using enitimeago.NonDestructiveMMD.vendor;
 using nadena.dev.ndmf;
+using nadena.dev.ndmf.animator;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -15,10 +15,8 @@ public class RenameFaceForMmdPassTests : TestBase
         var pass = new RenameFaceForMmdPass();
         var avatar = CreateAvatarWithFaceNameAndFX("Face");
         var buildContext = new BuildContext(avatar, null);
-        buildContext.ActivateExtensionContext<AnimationServicesContext>();
-        AnimationUtil.CloneAllControllers(buildContext);
 
-        pass.Execute(avatar);
+        AvatarProcessor.ProcessAvatar(avatar);
 
         var faceObject = buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject;
         Assert.AreEqual("Face", faceObject.name);
@@ -30,13 +28,11 @@ public class RenameFaceForMmdPassTests : TestBase
         var pass = new RenameFaceForMmdPass();
         var avatar = CreateAvatarWithFaceNameAndFX("Face");
         var buildContext = new BuildContext(avatar, null);
-        buildContext.ActivateExtensionContext<AnimationServicesContext>();
-        AnimationUtil.CloneAllControllers(buildContext);
         var newObject = new GameObject();
         newObject.transform.parent = avatar.transform;
         newObject.AddComponent<RenameFaceForMmdComponent>();
 
-        pass.Execute(avatar);
+        AvatarProcessor.ProcessAvatar(avatar);
 
         var faceObject = buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject;
         Assert.AreEqual("Body", faceObject.name);
@@ -48,8 +44,6 @@ public class RenameFaceForMmdPassTests : TestBase
         var pass = new RenameFaceForMmdPass();
         var avatar = CreateAvatarWithFaceNameAndFX("Face");
         var buildContext = new BuildContext(avatar, null);
-        buildContext.ActivateExtensionContext<AnimationServicesContext>();
-        AnimationUtil.CloneAllControllers(buildContext);
         var newMesh = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
         newMesh.name = "Body";
         newMesh.transform.parent = avatar.transform;
@@ -57,7 +51,7 @@ public class RenameFaceForMmdPassTests : TestBase
         newObject.transform.parent = avatar.transform;
         newObject.AddComponent<RenameFaceForMmdComponent>();
 
-        pass.Execute(avatar);
+        AvatarProcessor.ProcessAvatar(avatar);
 
         Assert.AreEqual("Body", buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject.name);
         var nonBodyNames = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").Select(gameObject => gameObject.name);
@@ -70,8 +64,6 @@ public class RenameFaceForMmdPassTests : TestBase
         var pass = new RenameFaceForMmdPass();
         var avatar = CreateAvatarWithFaceNameAndFX("Face");
         var buildContext = new BuildContext(avatar, null);
-        buildContext.ActivateExtensionContext<AnimationServicesContext>();
-        AnimationUtil.CloneAllControllers(buildContext);
         var newMesh = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
         newMesh.name = "Body";
         newMesh.transform.parent = avatar.transform;
@@ -82,7 +74,7 @@ public class RenameFaceForMmdPassTests : TestBase
         newObject.transform.parent = avatar.transform;
         newObject.AddComponent<RenameFaceForMmdComponent>();
 
-        pass.Execute(avatar);
+        AvatarProcessor.ProcessAvatar(avatar);
 
         Assert.AreEqual("Body", buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject.name);
         var nonBodyNames = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").Select(gameObject => gameObject.name);
@@ -95,8 +87,6 @@ public class RenameFaceForMmdPassTests : TestBase
         var pass = new RenameFaceForMmdPass();
         var avatar = CreateAvatarWithFaceNameAndFX("Face");
         var buildContext = new BuildContext(avatar, null);
-        buildContext.ActivateExtensionContext<AnimationServicesContext>();
-        AnimationUtil.CloneAllControllers(buildContext);
         var newMesh = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
         newMesh.name = "Body";
         newMesh.transform.parent = avatar.transform;
@@ -110,7 +100,7 @@ public class RenameFaceForMmdPassTests : TestBase
         newObject.transform.parent = avatar.transform;
         newObject.AddComponent<RenameFaceForMmdComponent>();
 
-        pass.Execute(avatar);
+        AvatarProcessor.ProcessAvatar(avatar);
 
         Assert.AreEqual("Body", buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject.name);
         var nonBodyNames = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().Where(smr => smr.gameObject.name != "Body").Select(gameObject => gameObject.name);
@@ -125,7 +115,6 @@ public class RenameFaceForMmdPassTests : TestBase
         clip.SetCurve("Face", typeof(GameObject), "m_IsActive", AnimationCurve.Constant(0, 1, 0));
         var avatar = CreateAvatarWithFaceNameAndSingleMotion("Face", clip);
         var buildContext = new BuildContext(avatar, null);
-        buildContext.ActivateExtensionContext<AnimationServicesContext>();
         var newMesh = Object.Instantiate(buildContext.AvatarDescriptor.VisemeSkinnedMesh.gameObject);
         newMesh.name = "Body";
         newMesh.transform.parent = avatar.transform;
@@ -133,8 +122,7 @@ public class RenameFaceForMmdPassTests : TestBase
         newObject.transform.parent = avatar.transform;
         newObject.AddComponent<RenameFaceForMmdComponent>();
 
-        pass.Execute(avatar);
-        buildContext.DeactivateExtensionContext<AnimationServicesContext>();
+        AvatarProcessor.ProcessAvatar(avatar);
 
         var modifiedClip = FindMotionFromCreatedAvatar(buildContext) as AnimationClip;
         var bindings = AnimationUtility.GetCurveBindings(modifiedClip);
