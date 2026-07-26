@@ -58,12 +58,14 @@ namespace enitimeago.NonDestructiveMMD
     {
         public BlendShapeSelections() { }
 
+        public BlendShapeSelections(IDictionary<string, BlendShapeSelectionOptions> dictionary) : base(dictionary) { }
+
         /// <summary>
         /// Performs a shallow clone.
         /// </summary>
         public BlendShapeSelections Clone()
         {
-            return (BlendShapeSelections)this.ToDictionary(entry => entry.Key, entry => entry.Value);
+            return new BlendShapeSelections(this);
         }
     }
 
